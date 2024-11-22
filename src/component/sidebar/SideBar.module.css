@@ -1,0 +1,11 @@
+.bar-content {
+    position: relative !important;
+    margin-top: 0;
+    overflow: auto;
+    position: fixed;
+    insetInlineStart: 0;
+    top: 0;
+    bottom: 0;
+    scrollbarWidth: thin;
+    scrollbarGutter: stable;
+}
