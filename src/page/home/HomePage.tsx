@@ -1,5 +1,5 @@
 import React from "react";
-import {MainLayout, TableContent} from "../../layout";
+import {MainLayout, PriceBasic} from "../../layout";
 
 /**
  * 构建主页面
@@ -8,7 +8,7 @@ import {MainLayout, TableContent} from "../../layout";
 export const HomePage: React.FC = () => {
     return <>
         <MainLayout>
-            <TableContent/>
+            <PriceBasic/>
         </MainLayout>
 
     </>

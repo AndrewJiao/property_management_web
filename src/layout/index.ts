@@ -1,2 +1,2 @@
 export * from "./mainlayout";
-export * from "./tablelayout";
+export * from "../page/pricebasic";

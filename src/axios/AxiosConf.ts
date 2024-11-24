@@ -1,10 +1,8 @@
-import axios, {AxiosResponse} from 'axios'
-import {message} from "antd";
-import {plainToInstance} from "class-transformer"
+import axios from 'axios'
 
 // axios.defaults.headers['x-icode'] = 'FB80558A73FA658E'
 
-const appInstance = axios.create({
+export const appInstance = axios.create({
     baseURL: "http://localhost:8080",
     timeout: 10000,
 });
@@ -24,17 +22,6 @@ const appInstance = axios.create({
 //     }
 // );
 
-/**
- * 基础价格请求
- */
-export const REQUEST_BASIC_PRICE = {
-    getData: <T>(currentPage: number, pageSize: number) => {
-        return appInstance.get<any, AxiosResponse<AppResult<T>>>(
-            `/price_basic/data?currentPage=${currentPage}&pageSize=${pageSize}`,
-        );
-    },
-    putData: (id: number, data: any) => appInstance.put<any, AxiosResponse>(`/price_basic/data/${id}`, data),
-}
 
 
 /**

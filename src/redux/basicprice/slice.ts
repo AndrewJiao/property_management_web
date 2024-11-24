@@ -1,29 +1,18 @@
 import {default_pending, default_reject, default_success, HttpBasicState} from "../HttpBasicState";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {AppResult, PaginateRequest, REQUEST_BASIC_PRICE} from "../../AxiosConf";
-import {plainToInstance} from "class-transformer";
+import {AppResult, PaginateRequest} from "../../axios";
+import {PriceBasicDto, REQUEST_PRICE_BASIC} from "../../axios";
 
-export interface BasicPriceState extends HttpBasicState {
-    result: AppResult<DataType[]>;
+export interface PriceBasicState extends HttpBasicState {
+    result: AppResult<PriceBasicDto[]>;
     request?: PaginateRequest
 }
 
 
-interface DataType {
-    key: number;
-    name: string;
-    priceNumber: number;
-    comment: string;
-    createTime: string;
-    updateTime: string;
-    createBy: string;
-    updateBy: string;
-}
-
 export const thunkBasicPriceDataGet = createAsyncThunk(
-    "basicPrice/getPage",
+    "priceBasic/getPage",
     async (param: PaginateRequest, thunkAPI) => {
-        return await REQUEST_BASIC_PRICE.getData<DataType[]>(param.currentPage, param.pageSize)
+        return await REQUEST_PRICE_BASIC.getData<PriceBasicDto[]>(param.currentPage, param.pageSize)
             .then((e) => {
                 return e.data
             })
@@ -31,9 +20,18 @@ export const thunkBasicPriceDataGet = createAsyncThunk(
 )
 
 export const basicPriceSlice = createSlice({
-    name: "basicPrice",
+    name: "priceBasic",
     initialState: default_pending(),
-    reducers: {},
+    reducers: {
+        putDataResponseUpdate: (state, action) => {
+            if (state.result.data) {
+                let index = state.result.data.findIndex(e => e.id === action.payload.id);
+                if (index !== -1) {
+                    state.result.data[index] = action.payload;
+                }
+            }
+        }
+    },
     extraReducers: (builder) => {
         builder.addCase(thunkBasicPriceDataGet.fulfilled,
             (state, action) => {
