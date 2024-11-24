@@ -1,0 +1,11 @@
+.search-content {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.search-name {
+    padding-left: 15px;
+    padding-right: 25px
+
+}
