@@ -1,15 +1,13 @@
 import styles from './PriceBasic.module.css';
-import React, {ReactElement, useEffect} from "react";
-import {Table, TableProps, Typography} from "antd";
-import {ColumnsType} from "antd/es/table";
+import React, {useEffect} from "react";
+import {Table, Typography} from "antd";
 import {useDispatch, useSelector} from "../../redux/hook";
 import {basicPriceSlice, PriceBasicState, thunkBasicPriceDataGet} from "../../redux/basicprice/slice";
-import {PAGE_DEFAULT_PAGE_REQUEST, REQUEST_PRICE_BASIC} from "../../axios";
-import {PriceBasicDto} from "../../axios";
-import {EditableCell, EditableRow} from "../../component";
+import {PaginateRequest, PriceBasicDto, REQUEST_PRICE_BASIC} from "../../axios";
+import {ColumnTypes, EditableCell, EditableRow, TablePageColumn} from "../../component";
+import {tableTimeRender} from "../../utils/Time";
 
-type ColumnTypes = Exclude<TableProps<PriceBasicDto>['columns'], undefined>;
-const defaultColumns: (ColumnTypes[number] & { editable?: boolean; dataIndex: string })[] = [
+const defaultColumns:TablePageColumn  = [
     {
         title: '名称',
         dataIndex: 'name',
@@ -35,11 +33,14 @@ const defaultColumns: (ColumnTypes[number] & { editable?: boolean; dataIndex: st
         title: '创建时间',
         dataIndex: 'createTime',
         key: 'createTime',
+        render: tableTimeRender
     },
     {
         title: '修改时间',
         dataIndex: 'updateTime',
         key: 'updateTime',
+        render: tableTimeRender
+
     },
     {
         title: '创建人',
@@ -54,27 +55,11 @@ const defaultColumns: (ColumnTypes[number] & { editable?: boolean; dataIndex: st
 ];
 
 
-interface UpdateDto {
-    name: string,
-    basicNumber: number,
-    comment: string,
-}
-
-const executeSearch = () => {
-}
-
-interface Props {
-    title: string,
-    columns: ColumnsType,
-    searchColumns: ReactElement[],
-    searchButton: ReactElement,
-}
-
-export const PriceBasic: React.FC = () => {
+export const PriceBasicTable: React.FC = () => {
     let dispatch = useDispatch();
     let state: PriceBasicState = useSelector(e => e.basicPriceSlice);
     useEffect(() => {
-        dispatch(thunkBasicPriceDataGet(PAGE_DEFAULT_PAGE_REQUEST));
+        dispatch(thunkBasicPriceDataGet(new PaginateRequest()));
     }, [])
 
     const column = defaultColumns.map(col => {

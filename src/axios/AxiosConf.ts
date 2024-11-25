@@ -1,4 +1,5 @@
 import axios from 'axios'
+import {AxiosResponse} from 'axios'
 
 // axios.defaults.headers['x-icode'] = 'FB80558A73FA658E'
 
@@ -23,7 +24,6 @@ export const appInstance = axios.create({
 // );
 
 
-
 /**
  * 通用请求
  */
@@ -35,9 +35,6 @@ export interface AppResult<T> {
     timestamp: string;
 }
 
-export const PAGE_DEFAULT_CURRENT_PAGE = 1;
-export const PAGE_DEFAULT_PAGE_SIZE = 10;
-
 /**
  * 通用请求分页
  */
@@ -45,22 +42,30 @@ export interface PaginateResult {
     currentPage: number;
     totalSize: number;
     pageSize: number;
-
-
 }
 
-export class PaginateRequest {
-    constructor(currentPage: number, pageSize: number) {
-        this.currentPage = currentPage;
-        this.pageSize = pageSize;
+export class PaginateRequest<T> {
+    constructor(currentPage?: number, pageSize?: number, searchParam?: T) {
+        this.currentPage = currentPage ? currentPage : 1;
+        this.pageSize = pageSize ? pageSize : 10;
+        this.searchParam = searchParam ? searchParam : null;
     }
 
-    currentPage: number;
-    pageSize: number;
+    currentPage: number = 1;
+    pageSize: number = 10;
+    searchParam?: T | null;
 }
 
-export const PAGE_DEFAULT_PAGE_REQUEST: PaginateRequest = {
-    currentPage: PAGE_DEFAULT_CURRENT_PAGE,
-    pageSize: PAGE_DEFAULT_PAGE_SIZE
-}
 
+export const axiosAppendIdToKey = (e: AxiosResponse<AppResult<any>>) => {
+    let item = e.data.data;
+    if (Array.isArray(item)) {
+        e.data.data = item.map(e => ({...e, key: e.id.toString()}))
+    } else {
+        e.data.data = {...item, key: item.id.toString()}
+    }
+    return e
+}
+export const axiosGetContent = (e: AxiosResponse<AppResult<any>>) => {
+    return e.data
+}

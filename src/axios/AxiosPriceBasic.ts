@@ -21,8 +21,8 @@ export interface PriceBasicDto {
     name: string;
     priceNumber: number;
     comment: string;
-    createTime: string;
-    updateTime: string;
+    createTime: Date;
+    updateTime: Date;
     createBy: string;
     updateBy: string;
 }

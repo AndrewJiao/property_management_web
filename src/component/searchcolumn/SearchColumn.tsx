@@ -13,7 +13,7 @@ export const SearchColumn: React.FC<Props> = ({width = 150, placeholder = "è¯·è¾
     return <>
         <div className={styles['search-content']}>
             <div className={styles['search-name']}>{inputName}</div>
-            <Input placeholder={placeholder} style={{width: width}} onInput={onInput}/>,
+            <Input placeholder={placeholder} style={{width: width}}/>,
         </div>
     </>
 }

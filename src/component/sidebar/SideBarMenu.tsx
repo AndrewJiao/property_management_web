@@ -1,29 +1,23 @@
 import React, {useState} from "react";
 import styles from "./SideBar.module.css";
-import {
-    AppstoreOutlined,
-    ContainerOutlined,
-    DesktopOutlined,
-    MailOutlined,
-    MenuFoldOutlined,
-    MenuUnfoldOutlined,
-    PieChartOutlined,
-} from '@ant-design/icons';
+import {ContainerOutlined, DesktopOutlined, PieChartOutlined,} from '@ant-design/icons';
 import type {MenuProps} from 'antd';
-import {Button, Menu} from 'antd';
+import {Menu} from 'antd';
+import {useNavigate} from "react-router-dom";
 
 type MenuItem = Required<MenuProps>['items'][number];
 
-const items: MenuItem[] = [
-    {key: '1', icon: <PieChartOutlined/>, label: '基础价格'},
-    {key: '2', icon: <DesktopOutlined/>, label: '住户信息'},
-    {key: '3', icon: <ContainerOutlined/>, label: '水电读数'},
-    {key: '4', icon: <ContainerOutlined/>, label: '物业费明细'},
-];
 
 export const SideBarMenu: React.FC = () => {
-    const [collapsed, setCollapsed] = useState(false);
+    let navigate = useNavigate();
+    const items: MenuItem[] = [
+        {key: '1', icon: <PieChartOutlined/>, label: '基础价格', onClick: () => navigate("/priceBasic")},
+        {key: '2', icon: <DesktopOutlined/>, label: '住户信息', onClick: () => navigate("/ownerInfo")},
+        {key: '3', icon: <ContainerOutlined/>, label: '水电读数', onClick: () => navigate("/other")},
+        {key: '4', icon: <ContainerOutlined/>, label: '物业费明细', onClick: () => navigate("/other")},
+    ];
 
+    const [collapsed, setCollapsed] = useState(false);
     const toggleCollapsed = () => {
         setCollapsed(!collapsed);
     };

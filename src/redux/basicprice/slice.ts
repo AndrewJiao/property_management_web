@@ -5,13 +5,13 @@ import {PriceBasicDto, REQUEST_PRICE_BASIC} from "../../axios";
 
 export interface PriceBasicState extends HttpBasicState {
     result: AppResult<PriceBasicDto[]>;
-    request?: PaginateRequest
+    request?: PaginateRequest<null>
 }
 
 
 export const thunkBasicPriceDataGet = createAsyncThunk(
     "priceBasic/getPage",
-    async (param: PaginateRequest, thunkAPI) => {
+    async (param: PaginateRequest<null>, thunkAPI) => {
         return await REQUEST_PRICE_BASIC.getData<PriceBasicDto[]>(param.currentPage, param.pageSize)
             .then((e) => {
                 return e.data

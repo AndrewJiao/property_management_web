@@ -10,6 +10,7 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/" Component={HomePage}/>
+                    <Route path="/:tableType" Component={HomePage}/>
                 </Routes>
             </BrowserRouter>
 

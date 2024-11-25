@@ -1,0 +1,19 @@
+.content {
+    border-left: 5px solid #d5d3d7;
+    min-height: 900px;
+}
+
+
+.search-content {
+    /*background-color: navajowhite;*/
+    /*min-height: 100px;*/
+}
+
+.button-type {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    padding-left: 20px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
