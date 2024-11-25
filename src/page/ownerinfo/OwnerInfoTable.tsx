@@ -2,16 +2,9 @@ import React from "react";
 import {AutoRow, PageTable, TablePageColumn} from "../../component";
 import {Button, Form, FormProps, Input} from "antd";
 import {ownerInfoSlice, thunkOwnerInfoDataGet} from "../../redux/ownerInfo/slice";
-import {
-    axiosAppendIdToKey,
-    axiosGetContent,
-    OwnerInfoDto,
-    OwnerInfoSearchDto,
-    PaginateRequest,
-    REQUEST_OWNER_INFO
-} from "../../axios";
+import {axiosAppendIdToKey, OwnerInfoDto, OwnerInfoSearchDto, PaginateRequest, REQUEST_OWNER_INFO} from "../../axios";
 import {useDispatch, useSelector} from "../../redux/hook";
-import {tableTimeRender} from "../../utils/Time";
+import {tableTimeRender} from "../../utils";
 import styles from "./OwnerInfoTable.module.css";
 import {useForm} from "antd/es/form/Form";
 
@@ -97,6 +90,11 @@ export const OwnerInfoTable: React.FC = () => {
         searchParam.searchParam = {ownerName: "", roomNumber: "", ...value};
         dispatch(thunkOwnerInfoDataGet(searchParam));
     };
+
+    const handleAdd = () => {
+        //     defaultOwnerInfoInsertDto
+    }
+
     return <>
         <PageTable title={`住户信息`}
                    columns={columns}
@@ -146,7 +144,8 @@ export const OwnerInfoTable: React.FC = () => {
                             </Button>
                         </Form.Item>
                         <Form.Item>
-                            <Button className={styles['button-styles']} type="primary" htmlType={"button"}>
+                            <Button className={styles['button-styles']} type="primary" htmlType={"button"}
+                                    onClick={handleAdd}>
                                 新增
                             </Button>
                         </Form.Item>

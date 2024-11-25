@@ -1,9 +1,11 @@
 import {default_pending, default_reject, default_success, HttpBasicState} from "../HttpBasicState";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {
+    AppResult,
     axiosAppendIdToKey,
-    AppResult, axiosGetContent,
+    axiosGetContent,
     OwnerInfoDto,
+    OwnerInfoInsertDto,
     OwnerInfoSearchDto,
     PaginateRequest,
     PriceBasicDto,
@@ -29,6 +31,23 @@ export const thunkOwnerInfoDataGet = createAsyncThunk(
                     e["otherBasic.carNumber"] = e.otherBasic.carNumber;
                     e["otherBasic.motorCycleNumber"] = e.otherBasic.motorCycleNumber;
                 })
+                return e
+            })
+            .then(axiosAppendIdToKey)
+            .then(axiosGetContent)
+    }
+)
+
+export const thunkOwnerInfoInsert = createAsyncThunk(
+    "ownerInfo/getPage",
+    async (param: OwnerInfoInsertDto, thunkAPI) => {
+        return await REQUEST_OWNER_INFO.postData(param)
+            .then(e => {
+                let data = e.data.data;
+                // data.for(e => {
+                //     e["otherBasic.carNumber"] = e.otherBasic.carNumber;
+                //     e["otherBasic.motorCycleNumber"] = e.otherBasic.motorCycleNumber;
+                // })
                 return e
             })
             .then(axiosAppendIdToKey)

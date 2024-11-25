@@ -20,6 +20,7 @@ export interface OwnerInfoDto {
     otherBasic: OwnerInfoState,
 }
 
+
 export interface OwnerInfoSearchDto {
     roomNumber?: string,
     ownerName?: string
@@ -32,6 +33,22 @@ export interface OwnerInfoUpdateDto {
     roomSquare: number,
     otherBasic: OwnerInfoState,
 }
+
+export type OwnerInfoInsertDto = OwnerInfoUpdateDto
+
+export const defaultOwnerInfoInsertDto = {
+    roomNumber: '',
+    ownerName: '',
+    comment: '',
+    roomSquare: 0,
+    otherBasic: {
+        carNumber: 0,
+        motorCycleNumber: 0,
+    },
+    'otherBasic.carNumber': 0,
+    'otherBasic.motorCycleNumber': 0,
+}
+
 
 export interface OwnerInfoState {
     carNumber: number,
@@ -60,6 +77,10 @@ export const REQUEST_OWNER_INFO = {
             }
         }
         return appInstance.put<any, AxiosResponse<AppResult<OwnerInfoDto>>>(`/owner_info/info/${dataId}`, searchDto)
+    },
+
+    postData: (data: OwnerInfoInsertDto) => {
+        return appInstance.post<any, AxiosResponse<AppResult<OwnerInfoDto>>>(`/owner_info/info`, data)
     }
 }
 
