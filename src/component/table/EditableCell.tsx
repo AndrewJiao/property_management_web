@@ -1,5 +1,5 @@
-import React, {useContext, useEffect, useRef, useState} from "react";
-import {Form, Input, InputRef} from "antd";
+import React, {createRef, RefObject, useContext, useEffect, useRef, useState} from "react";
+import {Form, Input, InputNumber, InputRef,} from "antd";
 import {EditableContext} from "./EditableRow";
 import {PriceBasicDto} from "../../axios";
 
@@ -10,6 +10,7 @@ interface EditableCellProps {
     dataIndex: keyof PriceBasicDto;
     record: PriceBasicDto;
     handleSave: (record: PriceBasicDto) => void;
+    columnStyle?: ('input' | 'inputNumber');
 }
 
 export const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
@@ -17,12 +18,13 @@ export const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> 
                                                                                        editable,
                                                                                        children,
                                                                                        dataIndex,
+                                                                                       columnStyle = 'input',
                                                                                        record,
                                                                                        handleSave,
                                                                                        ...restProps
                                                                                    }) => {
     const [editing, setEditing] = useState(false);
-    const inputRef = useRef<InputRef>(null);
+    const inputRef = useRef<HTMLInputElement | InputRef>(null);
     const form = useContext(EditableContext)!;
 
     useEffect(() => {
@@ -57,7 +59,11 @@ export const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> 
                     {required: false, message: `${title} is required.`},
                 ]}
             >
-                <Input ref={inputRef} onPressEnter={save} onBlur={save}/>
+                {
+                    columnStyle === 'inputNumber' ?
+                        <InputNumber ref={inputRef as RefObject<HTMLInputElement>} onPressEnter={save} onBlur={save}/> :
+                        <Input ref={inputRef as RefObject<InputRef>} onPressEnter={save} onBlur={save}/>
+                }
             </Form.Item>
         ) : (
             <div

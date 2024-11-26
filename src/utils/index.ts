@@ -1,3 +1,3 @@
 export * from './JsonUtil'
-export * from './Time'
+export * from './TimeUtils'
 

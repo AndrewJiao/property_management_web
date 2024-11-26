@@ -8,7 +8,7 @@ export interface OwnerInfoDto {
     id: number,
     roomNumber: string,
     ownerName: string,
-    roomSquare: number,
+    roomSquare: number | null,
     createBy: string,
     updateBy: string,
     createTime: Date,
@@ -30,7 +30,7 @@ export interface OwnerInfoUpdateDto {
     roomNumber: string,
     ownerName: string,
     comment: string,
-    roomSquare: number,
+    roomSquare: number | null,
     otherBasic: OwnerInfoState,
 }
 
@@ -45,8 +45,8 @@ export const defaultOwnerInfoInsertDto = {
         carNumber: 0,
         motorCycleNumber: 0,
     },
-    'otherBasic.carNumber': 0,
-    'otherBasic.motorCycleNumber': 0,
+    // 'otherBasic.carNumber': 0,
+    // 'otherBasic.motorCycleNumber': 0,
 }
 
 
@@ -69,18 +69,21 @@ export const REQUEST_OWNER_INFO = {
     },
 
     putData: (dataId: number, updateData: OwnerInfoDto) => {
-        let searchDto: OwnerInfoUpdateDto = {
+        let updateDto: OwnerInfoUpdateDto = {
             ...updateData,
             otherBasic: {
                 carNumber: updateData["otherBasic.carNumber"],
                 motorCycleNumber: updateData["otherBasic.motorCycleNumber"]
             }
         }
-        return appInstance.put<any, AxiosResponse<AppResult<OwnerInfoDto>>>(`/owner_info/info/${dataId}`, searchDto)
+        return appInstance.put<any, AxiosResponse<AppResult<OwnerInfoDto>>>(`/owner_info/info/${dataId}`, updateDto)
     },
 
     postData: (data: OwnerInfoInsertDto) => {
         return appInstance.post<any, AxiosResponse<AppResult<OwnerInfoDto>>>(`/owner_info/info`, data)
+    },
+    deleteData: (dataId: number) => {
+        return appInstance.delete<any, AxiosResponse<any>>(`/owner_info/info/${dataId}`)
     }
 }
 

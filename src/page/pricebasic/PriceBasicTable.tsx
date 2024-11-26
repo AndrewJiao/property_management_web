@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from "../../redux/hook";
 import {basicPriceSlice, PriceBasicState, thunkBasicPriceDataGet} from "../../redux/basicprice/slice";
 import {PaginateRequest, PriceBasicDto, REQUEST_PRICE_BASIC} from "../../axios";
 import {ColumnTypes, EditableCell, EditableRow, TablePageColumn} from "../../component";
-import {tableTimeRender} from "../../utils/Time";
+import {tableTimeRender} from "../../utils/TimeUtils";
 
 const defaultColumns:TablePageColumn  = [
     {

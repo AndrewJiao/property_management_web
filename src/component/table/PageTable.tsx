@@ -2,10 +2,10 @@ import React, {ReactElement, useEffect} from "react";
 
 
 import styles from './PageTable.module.css';
-import {Button, Table, TableProps, Typography} from "antd";
+import {Popconfirm, Table, TableProps, Typography} from "antd";
 import {useDispatch} from "../../redux/hook";
-import {AppResult, PaginateRequest, PriceBasicDto} from "../../axios";
-import {AutoRow, EditableCell, EditableRow} from "../../component";
+import {PaginateRequest, PriceBasicDto} from "../../axios";
+import {EditableCell, EditableRow} from "../../component";
 import {AsyncThunk} from "@reduxjs/toolkit";
 import {HttpBasicState} from "../../redux/HttpBasicState";
 
@@ -16,12 +16,16 @@ interface Props<T> {
     columns: TablePageColumn,
     pageSearchAction: AsyncThunk<any, any, any>,
     onUpdateHandleSave: (record: T) => void,
-    onExecuteSearch: () => void,
+    onDelete?: (id: string | number) => void
     state: HttpBasicState,
 }
 
 export type ColumnTypes = Exclude<TableProps<PriceBasicDto>['columns'], undefined>;
-export type TablePageColumn = (ColumnTypes[number] & { editable?: boolean; dataIndex: string })[];
+export type TablePageColumn = (ColumnTypes[number] & {
+    editable?: boolean;
+    dataIndex: string;
+    columnStyle?: ('input' | 'inputNumber')
+})[];
 
 export const PageTable: React.FC<Props<any>> = <T extends any>({
                                                                    columns,
@@ -29,14 +33,28 @@ export const PageTable: React.FC<Props<any>> = <T extends any>({
                                                                    children,
                                                                    pageSearchAction,
                                                                    onUpdateHandleSave,
+                                                                   onDelete,
                                                                    state,
                                                                }: Props<T>) => {
     let dispatch = useDispatch();
+    let dataSource = state.result?.data;
     useEffect(() => {
         console.log(`page = ${JSON.stringify(pageSearchAction)}`)
         dispatch(pageSearchAction(new PaginateRequest()));
-        // dispatch(thunkBasicPriceDataGet(PAGE_DEFAULT_PAGE_REQUEST));
     }, [])
+
+    if (onDelete) {
+        //添加操作项
+        columns = [...columns, {
+            title: '操作',
+            dataIndex: 'operation',
+            key: 'operation',
+            render: (_, record) =>
+                (<Popconfirm title="Sure to delete?" onConfirm={() => onDelete(record.id)}>
+                    <a>删除</a>
+                </Popconfirm>)
+        }]
+    }
 
     const column = columns.map(col => {
         if (!col.editable) {
@@ -49,6 +67,7 @@ export const PageTable: React.FC<Props<any>> = <T extends any>({
                 title: col.title,
                 editable: col.editable,
                 dataIndex: col.dataIndex,
+                columnStyle: col.columnStyle,
                 handleSave: onUpdateHandleSave,
             })
         }
@@ -62,7 +81,7 @@ export const PageTable: React.FC<Props<any>> = <T extends any>({
             <div className={styles['table-content']}>
                 {
                     state.errorMsg ? <div></div> :
-                        <Table columns={column as ColumnTypes} dataSource={state.result?.data}
+                        <Table columns={column as ColumnTypes} dataSource={dataSource}
                                components={{
                                    body: {
                                        cell: EditableCell,

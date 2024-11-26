@@ -1,8 +1,20 @@
-import React from "react";
-import {AutoRow, PageTable, TablePageColumn} from "../../component";
+import React, {useState} from "react";
+import {AutoRow, PageTable, SubmitDraw, TablePageColumn} from "../../component";
 import {Button, Form, FormProps, Input} from "antd";
-import {ownerInfoSlice, thunkOwnerInfoDataGet} from "../../redux/ownerInfo/slice";
-import {axiosAppendIdToKey, OwnerInfoDto, OwnerInfoSearchDto, PaginateRequest, REQUEST_OWNER_INFO} from "../../axios";
+import {
+    ownerInfoSlice,
+    thunkOwnerInfoDataGet,
+    thunkOwnerInfoDelete,
+    thunkOwnerInfoInsert
+} from "../../redux/ownerInfo/slice";
+import {
+    axiosAppendIdToKey,
+    OwnerInfoDto,
+    OwnerInfoInsertDto,
+    OwnerInfoSearchDto,
+    PaginateRequest,
+    REQUEST_OWNER_INFO
+} from "../../axios";
 import {useDispatch, useSelector} from "../../redux/hook";
 import {tableTimeRender} from "../../utils";
 import styles from "./OwnerInfoTable.module.css";
@@ -29,8 +41,9 @@ const columns: TablePageColumn = [
         dataIndex: 'roomSquare',
         key: 'roomSquare',
         editable: true,
-        width: '7%',
-        render: (text) => `${text} m²`
+        width: '8%',
+        columnStyle: 'inputNumber',
+        render: (text: number) => `${text} m²`
     },
     {
         title: '备注',
@@ -80,22 +93,26 @@ const columns: TablePageColumn = [
 ];
 
 export const OwnerInfoTable: React.FC = () => {
+    let [open, setOpen] = useState(false);
     let [form] = useForm<OwnerInfoSearchDto>();
     let dispatch = useDispatch();
     let state = useSelector((e) => e.ownerInfoSlice);
 
-
-    const onFinish: FormProps<OwnerInfoSearchDto>['onFinish'] = (value) => {
+    const onFinishSearch: FormProps<OwnerInfoSearchDto>['onFinish'] = (value) => {
         let searchParam = new PaginateRequest<OwnerInfoSearchDto>();
         searchParam.searchParam = {ownerName: "", roomNumber: "", ...value};
         dispatch(thunkOwnerInfoDataGet(searchParam));
     };
-
-    const handleAdd = () => {
-        //     defaultOwnerInfoInsertDto
+    //开关抽屉
+    const openDraw = () => setOpen(!open);
+    const closeDraw = () => setOpen(false);
+    const onSaveDraw = (value: OwnerInfoInsertDto) => {
+        dispatch(thunkOwnerInfoInsert(value))
     }
+    const onDeleteRow = (id: number | string) => dispatch(thunkOwnerInfoDelete(Number(id)));
 
     return <>
+        <SubmitDraw title={"新增住户"} open={open} onClose={closeDraw} onSave={onSaveDraw}/>
         <PageTable title={`住户信息`}
                    columns={columns}
                    pageSearchAction={thunkOwnerInfoDataGet}
@@ -113,20 +130,19 @@ export const OwnerInfoTable: React.FC = () => {
                            })
                    }}
                    state={state}
-                   onExecuteSearch={() => {
-                   }}
+                   onDelete={onDeleteRow}
         >
             <div className={styles['search-content']}>
                 <Form form={form}
-                      onFinish={onFinish}
+                      onFinish={onFinishSearch}
                 >
                     <AutoRow showBorder={false} perCountEachRow={4} subElements={[
-                        <Form.Item<OwnerInfoDto> name={"ownerName"} label={`住户名称`}
+                        <Form.Item<OwnerInfoDto> name={"roomNumber"} label={`房号`}
                                                  labelCol={{span: 4}}
                                                  wrapperCol={{span: 4}}>
                             <Input placeholder={`请输入`} style={{width: 200}}/>
                         </Form.Item>,
-                        <Form.Item<OwnerInfoDto> name={"roomNumber"} label={`房号`}
+                        <Form.Item<OwnerInfoDto> name={"ownerName"} label={`住户名称`}
                                                  labelCol={{span: 4}}
                                                  wrapperCol={{span: 4}}>
                             <Input placeholder={`请输入`} style={{width: 200}}/>
@@ -139,13 +155,13 @@ export const OwnerInfoTable: React.FC = () => {
                             </Button>
                         </Form.Item>
                         <Form.Item>
-                            <Button className={styles['button-styles']} type="primary" htmlType={"reset"}>
+                            <Button className={styles['button-styles']} type="dashed" htmlType={"reset"}>
                                 重置
                             </Button>
                         </Form.Item>
                         <Form.Item>
                             <Button className={styles['button-styles']} type="primary" htmlType={"button"}
-                                    onClick={handleAdd}>
+                                    onClick={openDraw}>
                                 新增
                             </Button>
                         </Form.Item>

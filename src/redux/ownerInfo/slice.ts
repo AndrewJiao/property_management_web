@@ -21,17 +21,15 @@ export interface OwnerInfoState extends HttpBasicState {
 export const thunkOwnerInfoDataGet = createAsyncThunk(
     "ownerInfo/getPage",
     async (param: PaginateRequest<OwnerInfoSearchDto>, thunkAPI) => {
-        if (!param.searchParam) {
-            param.searchParam = {roomNumber: "", ownerName: ""}
-        }
+        param.searchParam = param.searchParam || {roomNumber: "", ownerName: ""}
         return await REQUEST_OWNER_INFO.getData<OwnerInfoDto[]>(param)
             .then(e => {
-                let data = e.data.data;
-                data.forEach(e => {
-                    e["otherBasic.carNumber"] = e.otherBasic.carNumber;
-                    e["otherBasic.motorCycleNumber"] = e.otherBasic.motorCycleNumber;
-                })
-                return e
+                e.data.data = e.data.data.map(e => ({
+                    ...e,
+                    "otherBasic.carNumber": e.otherBasic?.carNumber || 0,
+                    "otherBasic.motorCycleNumber": e.otherBasic?.motorCycleNumber || 0,
+                }))
+                return e;
             })
             .then(axiosAppendIdToKey)
             .then(axiosGetContent)
@@ -39,19 +37,20 @@ export const thunkOwnerInfoDataGet = createAsyncThunk(
 )
 
 export const thunkOwnerInfoInsert = createAsyncThunk(
-    "ownerInfo/getPage",
+    "ownerInfo/postData",
     async (param: OwnerInfoInsertDto, thunkAPI) => {
         return await REQUEST_OWNER_INFO.postData(param)
-            .then(e => {
-                let data = e.data.data;
-                // data.for(e => {
-                //     e["otherBasic.carNumber"] = e.otherBasic.carNumber;
-                //     e["otherBasic.motorCycleNumber"] = e.otherBasic.motorCycleNumber;
-                // })
-                return e
-            })
-            .then(axiosAppendIdToKey)
-            .then(axiosGetContent)
+            .then((e) =>
+                thunkAPI.dispatch(thunkOwnerInfoDataGet(new PaginateRequest<OwnerInfoSearchDto>())))
+    }
+)
+
+export const thunkOwnerInfoDelete = createAsyncThunk(
+    "ownerInfo/deleteData",
+    async (dataId: number, thunkAPI) => {
+        return await REQUEST_OWNER_INFO.deleteData(dataId)
+            .then((e) =>
+                thunkAPI.dispatch(thunkOwnerInfoDataGet(new PaginateRequest<OwnerInfoSearchDto>())))
     }
 )
 
@@ -72,15 +71,38 @@ export const ownerInfoSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(thunkOwnerInfoDataGet.fulfilled,
-            (state, action) => {
-                return default_success(action.payload);
-            })
+        builder
+            .addCase(thunkOwnerInfoDataGet.fulfilled,
+                (state, action) => {
+                    return default_success(action.payload);
+                })
             .addCase(thunkOwnerInfoDataGet.rejected,
                 (state, action) => {
                     return default_reject(action.error.message)
                 })
             .addCase(thunkOwnerInfoDataGet.pending,
+                (state) => {
+                    return default_pending()
+                })
+            .addCase(thunkOwnerInfoInsert.fulfilled,
+                (state, action) => {
+                })
+            .addCase(thunkOwnerInfoInsert.rejected,
+                (state, action) => {
+                    return default_reject(action.error.message)
+                })
+            .addCase(thunkOwnerInfoInsert.pending,
+                (state) => {
+                    return default_pending()
+                })
+            .addCase(thunkOwnerInfoDelete.fulfilled,
+                (state, action) => {
+                })
+            .addCase(thunkOwnerInfoDelete.rejected,
+                (state, action) => {
+                    return default_reject(action.error.message)
+                })
+            .addCase(thunkOwnerInfoDelete.pending,
                 (state) => {
                     return default_pending()
                 })

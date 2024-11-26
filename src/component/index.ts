@@ -4,4 +4,5 @@ export * from './footer'
 export * from './autorow'
 export * from './searchcolumn'
 export * from './table'
+export * from './draw'
 
