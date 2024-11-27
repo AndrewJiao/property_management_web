@@ -1,7 +1,8 @@
-import React, {ReactElement, ReactNode} from "react";
+import React, {ReactNode} from "react";
 import {MainLayout, PriceBasicTable} from "../../layout";
 import {useParams} from "react-router-dom";
 import {OwnerInfoTable} from "../ownerinfo";
+import {RoomInfoTable} from "../roominfo";
 
 /**
  * 构建主页面
@@ -17,6 +18,9 @@ export const HomePage: React.FC = () => {
             break
         case "ownerInfo":
             renderSub = <OwnerInfoTable/>
+            break
+        case "roomInfo":
+            renderSub = <RoomInfoTable/>
             break
         default:
             renderSub = <></>

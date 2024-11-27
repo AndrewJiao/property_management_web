@@ -84,7 +84,17 @@ export const REQUEST_OWNER_INFO = {
     },
     deleteData: (dataId: number) => {
         return appInstance.delete<any, AxiosResponse<any>>(`/owner_info/info/${dataId}`)
+    },
+    findData: (searchValue: string, searchType: OwnerInfoSearchType) => {
+        return appInstance.get<any, AxiosResponse<AppResult<string[]>>>(`/owner_info/find`, {
+            params: {searchType, searchValue}
+        }).then(e => e.data.data)
     }
+}
+
+export enum OwnerInfoSearchType {
+    RoomNumber = "roomNumber",
+    OwnerName = "ownerName",
 }
 
 

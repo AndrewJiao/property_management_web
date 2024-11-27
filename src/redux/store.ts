@@ -4,10 +4,12 @@ import {persistReducer, persistStore} from 'redux-persist'
 import {basicPriceSlice} from "./basicprice/slice";
 import storage from 'redux-persist/lib/storage';
 import {ownerInfoSlice} from "./ownerInfo/slice";
+import {roomInfoSlice} from "./roominfo/slice";
 
 const rootReducer = combineReducers({
     basicPriceSlice: basicPriceSlice.reducer,
     ownerInfoSlice: ownerInfoSlice.reducer,
+    roomInfoSlice: roomInfoSlice.reducer,
 })
 
 let persistedReducer = persistReducer({

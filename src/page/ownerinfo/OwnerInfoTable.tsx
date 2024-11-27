@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {AutoRow, PageTable, SubmitDraw, TablePageColumn} from "../../component";
+import {AutoRow, onFindFetch, PageTable, SearchInput, SubmitDraw, TablePageColumn} from "../../component";
 import {Button, Form, FormProps, Input} from "antd";
 import {
     ownerInfoSlice,
@@ -12,6 +12,7 @@ import {
     OwnerInfoDto,
     OwnerInfoInsertDto,
     OwnerInfoSearchDto,
+    OwnerInfoSearchType,
     PaginateRequest,
     REQUEST_OWNER_INFO
 } from "../../axios";
@@ -110,6 +111,10 @@ export const OwnerInfoTable: React.FC = () => {
         dispatch(thunkOwnerInfoInsert(value))
     }
     const onDeleteRow = (id: number | string) => dispatch(thunkOwnerInfoDelete(Number(id)));
+    const onFind: onFindFetch = (value, callback) => {
+        REQUEST_OWNER_INFO.findData(value, OwnerInfoSearchType.OwnerName)
+            .then(values => callback(values.map(value => ({value: value, text: value}))))
+    }
 
     return <>
         <SubmitDraw title={"新增住户"} open={open} onClose={closeDraw} onSave={onSaveDraw}/>
@@ -133,19 +138,14 @@ export const OwnerInfoTable: React.FC = () => {
                    onDelete={onDeleteRow}
         >
             <div className={styles['search-content']}>
-                <Form form={form}
-                      onFinish={onFinishSearch}
-                >
+                <Form form={form} onFinish={onFinishSearch}>
                     <AutoRow showBorder={false} perCountEachRow={4} subElements={[
-                        <Form.Item<OwnerInfoDto> name={"roomNumber"} label={`房号`}
-                                                 labelCol={{span: 4}}
-                                                 wrapperCol={{span: 4}}>
+                        <Form.Item<OwnerInfoDto> name={"roomNumber"} label={`房号`} labelCol={{span: 4}} wrapperCol={{span: 4}}>
                             <Input placeholder={`请输入`} style={{width: 200}}/>
                         </Form.Item>,
-                        <Form.Item<OwnerInfoDto> name={"ownerName"} label={`住户名称`}
-                                                 labelCol={{span: 4}}
+                        <Form.Item<OwnerInfoDto> name={"ownerName"} label={`住户名称`} labelCol={{span: 4}}
                                                  wrapperCol={{span: 4}}>
-                            <Input placeholder={`请输入`} style={{width: 200}}/>
+                            <SearchInput placeholder={'请输入房间号'} fetch={onFind} style={{width: 200, textAlign: "left"}}/>
                         </Form.Item>,
                     ]}/>
                     <div className={styles['button-type']}>

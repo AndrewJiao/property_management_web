@@ -1,15 +1,14 @@
-import React, {createRef, RefObject, useContext, useEffect, useRef, useState} from "react";
+import React, {RefObject, useContext, useEffect, useRef, useState} from "react";
 import {Form, Input, InputNumber, InputRef,} from "antd";
 import {EditableContext} from "./EditableRow";
-import {PriceBasicDto} from "../../axios";
 
 
 interface EditableCellProps {
     title: React.ReactNode;
     editable: boolean;
-    dataIndex: keyof PriceBasicDto;
-    record: PriceBasicDto;
-    handleSave: (record: PriceBasicDto) => void;
+    dataIndex: keyof any;
+    record: any;
+    handleSave: (record: any) => void;
     columnStyle?: ('input' | 'inputNumber');
 }
 
@@ -54,7 +53,7 @@ export const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> 
         childNode = editing ? (
             <Form.Item
                 style={{margin: 0, padding: 0}}
-                name={dataIndex}
+                name={dataIndex as any}
                 rules={[
                     {required: false, message: `${title} is required.`},
                 ]}

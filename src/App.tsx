@@ -13,7 +13,6 @@ function App() {
                     <Route path="/:tableType" Component={HomePage}/>
                 </Routes>
             </BrowserRouter>
-
         </div>
     );
 }
