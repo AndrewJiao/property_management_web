@@ -24,7 +24,7 @@ export const REQUEST_ROOM_INFO = {
     },
 
     putData: (id: string, data: RoomInfoDetailUpdateDto) => {
-        return appInstance.post<any, AxiosResponse<AppResult<RoomInfoDetailResultDto>>>(`/room_info/data/${id}`, data)
+        return appInstance.put<any, AxiosResponse<AppResult<RoomInfoDetailResultDto>>>(`/room_info/data/${id}`, data)
     },
     findData: (searchValue: string, searchType: RoomInfoSearchType) => {
         return appInstance.get<any, AxiosResponse<AppResult<string[]>>>(`/room_info/find`, {
@@ -47,6 +47,7 @@ export interface RoomInfoDetailUpdateDto {
     electricityMeterNumBefore?: number;
     electricityMeterNum?: number;
     electricityMeterSub?: number;
+    comment?: string;
 }
 
 export interface RoomInfoDetailSearchDto {

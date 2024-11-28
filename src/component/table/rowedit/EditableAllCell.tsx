@@ -1,7 +1,6 @@
 import React, {PropsWithChildren, useContext} from "react";
 import {Form, Input, InputNumber, Popconfirm, Typography} from "antd";
 import {FormContext} from "./EditableAllRow";
-import {EditingMark} from "./PageRowEditTable";
 
 
 interface Props {
@@ -13,6 +12,7 @@ interface Props {
     onDelete: (id) => void,
     //用于给外部修改dataSource,不传参数代表不编辑了
     onEditingMark: (id?) => void,
+    editingKey: string
     columnStyle?: ('input' | 'inputNumber');
 }
 
@@ -27,38 +27,39 @@ export const EditableAllCell: React.FC<PropsWithChildren<Props>> = ({
                                                                         dataIndex,
                                                                         record,
                                                                         columnStyle,
+                                                                        editingKey,
                                                                         ...props
                                                                     }) => {
     let childNode = children;
-    let editingMark: EditingMark = record?.editingMark;
     const form = useContext(FormContext)!;
 
-    function onSave() {
-        let values = form.validateFields();
-        onUpdateHandleSave(values)
+    async function onSave() {
+        let values = await form.validateFields();
+        onUpdateHandleSave({...record, ...values});
         onEditingMark()
     }
 
     //编辑操作项的场景
     if (dataIndex === 'operation') {
-        if (editingMark === EditingMark.normal || editingMark === EditingMark.disEditing) {
-            return <div>
+        if (editingKey !== record.id || editingKey === '') {
+            childNode = (<div>
                 {onDelete ?
-                    (<Popconfirm disabled={editingMark === EditingMark.disEditing} title="确定要删除吗？"
+                    (<Popconfirm disabled={editingKey !== '' && editingKey === record.id} title="确定要删除吗？"
+                                 style={{marginInlineEnd: 8}}
                                  onConfirm={() => onDelete(record.id)}>
                         <a>删除</a>
                     </Popconfirm>) : <></>
                 }
                 {/*点击编辑，将这一行的数据设置为editing*/}
-                <Typography.Link disabled={editingMark === EditingMark.disEditing} onClick={() => {
-                    onEditingMark(record.id)
-                }}>
+                <Typography.Link disabled={editingKey !== '' && editingKey === record.id}
+                                 onClick={() => onEditingMark(record.id)}>
                     编辑
                 </Typography.Link>
-            </div>
+            </div>)
         } else {
-            return <div>
-                <Typography.Link onClick={onSave}>保存</Typography.Link>
+            //参与编辑的行
+            childNode = <div>
+                <Typography.Link onClick={onSave} style={{marginInlineEnd: 8}}> 保存 </Typography.Link>
                 <Popconfirm title="确定取消吗" onConfirm={() => onEditingMark()}>
                     <a>取消</a>
                 </Popconfirm>
@@ -67,7 +68,7 @@ export const EditableAllCell: React.FC<PropsWithChildren<Props>> = ({
 
     } else {
         //编辑单元格的场景
-        if (editable && editingMark !== EditingMark.normal) {
+        if (editable && editingKey === record.id) {
             childNode = <Form.Item
                 style={{margin: 0, padding: 0}}
                 name={dataIndex as string}
@@ -77,14 +78,14 @@ export const EditableAllCell: React.FC<PropsWithChildren<Props>> = ({
             >
                 {
                     columnStyle === 'inputNumber' ?
-                        <InputNumber/> :
-                        <Input/>
+                        <InputNumber defaultValue={record[dataIndex]}/> :
+                        <Input defaultValue={record[dataIndex]}/>
                 }
             </Form.Item>
         } else {
             childNode = <div>{children}</div>
         }
-        return <td {...props}>{childNode}</td>
     }
+    return <td {...props}>{childNode}</td>
 
 }

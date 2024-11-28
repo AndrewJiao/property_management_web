@@ -1,10 +1,18 @@
 import React from "react";
-import {onFindFetch, PageRowEditTable, TablePageColumn} from "../../component";
-import {FormProps} from "antd";
-import {axiosAppendIdToKey, axiosGetContent, PaginateRequest} from "../../axios";
+import {AutoRow, onFindFetch, PageRowEditTable, SearchInput, TablePageColumn} from "../../component";
+import {Button, Form, FormProps, Input} from "antd";
+import {axiosAppendIdToKey, axiosGetContent, OwnerInfoDto, PaginateRequest} from "../../axios";
 import {useDispatch, useSelector} from "../../redux/hook";
-import {RoomInfoData, roomInfoSlice, RoomInfoState, thunkRoomInfoDataGet} from "../../redux/roominfo/slice";
+import {
+    RoomInfoData,
+    roomInfoSlice,
+    RoomInfoState,
+    thunkRoomInfoDataGet,
+    thunkRoomInfoInit
+} from "../../redux/roominfo/slice";
 import {REQUEST_ROOM_INFO, RoomInfoDetailSearchDto, RoomInfoSearchType} from "../../axios/AxiosRoomInfo";
+import styles from './RoomInfoTable.module.css'
+import {useForm} from "antd/es/form/Form";
 
 
 const columns: TablePageColumn = [
@@ -12,22 +20,24 @@ const columns: TablePageColumn = [
         title: "房主姓名",
         dataIndex: "roomOwnerName",
         key: "roomOwnerName",
-        width: "9%",
+        width: 100,
     },
     {
         title: "房间号",
         dataIndex: "roomNumber",
         key: "roomNumber",
         sorter: true,
-        width: "8%"
+        width: 100,
+        fixed: 'left',
     },
     {
         title: "水表读数（前）",
         dataIndex: "waterMeterNumBefore",
         key: "waterMeterNumBefore",
         // sorter: (a, b) => a.waterMeterNumBefore - b.waterMeterNumBefore,
-        width: "7%",
-        columnStyle: 'inputNumber'
+        width: 150,
+        columnStyle: 'inputNumber',
+        editable: true,
         // render: (text) => <span>{text}</span>
     },
     {
@@ -35,8 +45,9 @@ const columns: TablePageColumn = [
         dataIndex: "waterMeterNum",
         key: "waterMeterNum",
         // sorter: (a, b) => a.waterMeterNum - b.waterMeterNum,
-        width: "7%",
-        columnStyle: 'inputNumber'
+        width: 150,
+        columnStyle: 'inputNumber',
+        editable: true,
         // render: (text) => <span>{text}</span>
     },
     {
@@ -44,17 +55,17 @@ const columns: TablePageColumn = [
         dataIndex: "waterMeterSub",
         key: "waterMeterSub",
         // sorter: (a, b) => a.waterMeterSub - b.waterMeterSub,
-        width: "7%",
-        columnStyle: 'inputNumber'
-        // render: (text) => <span>{text}</span>
+        width: 150,
+        columnStyle: 'inputNumber',
     },
     {
         title: "电表读数（前）",
         dataIndex: "electricityMeterNumBefore",
         key: "electricityMeterNumBefore",
         // sorter: (a, b) => a.electricityMeterNumBefore - b.electricityMeterNumBefore,
-        width: "6%",
-        columnStyle: 'inputNumber'
+        width: 150,
+        columnStyle: 'inputNumber',
+        editable: true,
         // render: (text) => <span>{text}</span>
     },
     {
@@ -62,8 +73,9 @@ const columns: TablePageColumn = [
         dataIndex: "electricityMeterNum",
         key: "electricityMeterNum",
         // sorter: (a, b) => a.electricityMeterNum - b.electricityMeterNum,
-        width: "6%",
-        columnStyle: 'inputNumber'
+        width: 150,
+        columnStyle: 'inputNumber',
+        editable: true,
         // render: (text) => <span>{text}</span>
     },
     {
@@ -71,8 +83,8 @@ const columns: TablePageColumn = [
         dataIndex: "electricityMeterSub",
         key: "electricityMeterSub",
         // sorter: (a, b) => a.electricityMeterSub - b.electricityMeterSub,
-        width: "7%",
-        columnStyle: 'inputNumber'
+        width: 150,
+        columnStyle: 'inputNumber',
         // render: (text) => <span>{text}</span>
     },
     {
@@ -80,110 +92,103 @@ const columns: TablePageColumn = [
         dataIndex: "monthVersion",
         key: "monthVersion",
         // sorter: true,
-        // width: "20%"
+        width: "200"
     },
     {
         title: "备注",
         dataIndex: "comment",
         key: "comment",
-        width: "10%"
+        editable: true,
+        width: "300"
     },
     {
         title: "创建者",
         dataIndex: "createBy",
         key: "createBy",
         sorter: true,
-        width: "15%"
+        width: "100"
     },
     {
         title: "更新者",
         dataIndex: "updateBy",
         key: "updateBy",
         sorter: true,
-        width: "15%"
+        width: "100"
     },
     {
         title: "创建时间",
         dataIndex: "createTime",
         key: "createTime",
-        // sorter: (a, b) => new Date(a.createTime) - new Date(b.createTime),
-        // width: "20%",
-        // render: (text) => <span>{new Date(text).toLocaleString()}</span>
+        render: (text) => <span>{new Date(text).toLocaleString()}</span>,
+        width: "200",
     },
     {
         title: "更新时间",
         dataIndex: "updateTime",
         key: "updateTime",
-        // sorter: (a, b) => new Date(a.updateTime) - new Date(b.updateTime),
-        // width: "20%",
-        // render: (text) => <span>{new Date(text).toLocaleString()}</span>
+        width: "200",
+        render: (text) => <span>{new Date(text).toLocaleString()}</span>
     }
 ];
 
 export const RoomInfoTable: React.FC = () => {
-    // let [open, setOpen] = useState(false);
+    let [searchForm] = useForm<RoomInfoDetailSearchDto>();
     let dispatch = useDispatch();
     let state: RoomInfoState = useSelector((e) => e.roomInfoSlice);
 
-    const onFinishSearch: FormProps<RoomInfoData>['onFinish'] = (value) => {
-        dispatch(thunkRoomInfoDataGet(new PaginateRequest<RoomInfoDetailSearchDto>()));
+    const onFinishSearch: FormProps<RoomInfoDetailSearchDto>['onFinish'] = (value) => {
+        dispatch(thunkRoomInfoDataGet(new PaginateRequest<RoomInfoDetailSearchDto>(1, 10, value)));
     };
-    //开关抽屉
-    // const openDraw = () => setOpen(!open);
-    // const closeDraw = () => setOpen(false);
-    // const onSaveDraw = (value: OwnerInfoInsertDto) => {
-    //     dispatch(thunkOwnerInfoInsert(value))
-    // }
+
+    const initData = () => {
+        dispatch(thunkRoomInfoInit())
+    }
+
     const onFind: onFindFetch = (value, callback) => {
         REQUEST_ROOM_INFO.findData(value, RoomInfoSearchType.monthVersion)
             .then(values => callback(values.map(value => ({value: value, text: value}))))
     }
     return <>
-        {/*<SubmitDraw title={"新增住户"} open={open} onClose={closeDraw} onSave={onSaveDraw}/>*/}
         <PageRowEditTable title={`水电读数`}
                           columns={columns}
                           pageSearchAction={thunkRoomInfoDataGet}
                           onUpdateHandleSave={(record: RoomInfoData) => {
+                              console.log(`record = ${JSON.stringify(record)}`)
                               REQUEST_ROOM_INFO.putData(record.id.toString(), record)
                                   .then(axiosAppendIdToKey)
                                   .then(axiosGetContent)
                                   .then(e => dispatch(roomInfoSlice.actions.putDataResponseUpdate(e.data)))
                           }}
                           state={state}
-            // onDelete={onDeleteRow}
         >
-            <div></div>
-            {/*<div className={styles['search-content']}>*/}
-            {/*    <Form form={form} onFinish={onFinishSearch}>*/}
-            {/*        <AutoRow showBorder={false} perCountEachRow={4} subElements={[*/}
-            {/*            <Form.Item<OwnerInfoDto> name={"roomNumber"} label={`房号`} labelCol={{span: 4}} wrapperCol={{span: 4}}>*/}
-            {/*                <Input placeholder={`请输入`} style={{width: 200}}/>*/}
-            {/*            </Form.Item>,*/}
-            {/*            <Form.Item<OwnerInfoDto> name={"ownerName"} label={`住户名称`} labelCol={{span: 4}}*/}
-            {/*                                     wrapperCol={{span: 4}}>*/}
-            {/*                <SearchInput placeholder={'请输入房间号'} fetch={onFind} style={{width: 200, textAlign: "left"}}/>*/}
-            {/*            </Form.Item>,*/}
-            {/*        ]}/>*/}
-            {/*        <div className={styles['button-type']}>*/}
-            {/*            <Form.Item>*/}
-            {/*                <Button className={styles['button-styles']} type="primary" htmlType={"submit"}>*/}
-            {/*                    搜索*/}
-            {/*                </Button>*/}
-            {/*            </Form.Item>*/}
-            {/*            <Form.Item>*/}
-            {/*                <Button className={styles['button-styles']} type="dashed" htmlType={"reset"}>*/}
-            {/*                    重置*/}
-            {/*                </Button>*/}
-            {/*            </Form.Item>*/}
-            {/*            <Form.Item>*/}
-            {/*                <Button className={styles['button-styles']} type="primary" htmlType={"button"}*/}
-            {/*                        onClick={openDraw}>*/}
-            {/*                    新增*/}
-            {/*                </Button>*/}
-            {/*            </Form.Item>*/}
-            {/*        </div>*/}
-            {/*    </Form>*/}
-            {/*</div>*/}
+            <div className={styles['search-content']}>
+                <Form form={searchForm} onFinish={onFinishSearch}>
+                    <AutoRow showBorder={false} perCountEachRow={4} subElements={[
+                        <Form.Item<OwnerInfoDto> name={"roomNumber"} label={`房号`} labelCol={{span: 4}}
+                                                 wrapperCol={{span: 4}}>
+                            <Input placeholder={`请输入`} style={{width: 200}}/>
+                        </Form.Item>,
+                    ]}/>
+                    <div className={styles['button-type']}>
+                        <Form.Item>
+                            <Button className={styles['button-styles']} type="primary" htmlType={"submit"}>
+                                搜索
+                            </Button>
+                        </Form.Item>
+                        <Form.Item>
+                            <Button className={styles['button-styles']} type="dashed" htmlType={"reset"}>
+                                重置
+                            </Button>
+                        </Form.Item>
+                        <Form.Item>
+                            <Button className={styles['button-styles']} type="primary" htmlType={"button"}
+                                    onClick={initData}>
+                                初始化
+                            </Button>
+                        </Form.Item>
+                    </div>
+                </Form>
+            </div>
         </PageRowEditTable>
     </>
 }

@@ -1,8 +1,7 @@
 import {default_pending, default_reject, default_success, HttpBasicState} from "../HttpBasicState";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {AppResult, axiosAppendIdToKey, axiosGetContent, PaginateRequest,} from "../../axios";
-import {REQUEST_ROOM_INFO, RoomInfoDetailResultDto, RoomInfoDetailSearchDto} from "../../axios/AxiosRoomInfo";
-import {EditingMark} from "../../component";
+import {REQUEST_ROOM_INFO, RoomInfoDetailSearchDto} from "../../axios/AxiosRoomInfo";
 
 export interface RoomInfoData {
     id: number;
@@ -19,7 +18,6 @@ export interface RoomInfoData {
     updateBy?: string;
     createTime: Date;
     updateTime: Date;
-    editingMark?: EditingMark;
 }
 
 export interface RoomInfoState extends HttpBasicState {
@@ -38,7 +36,7 @@ export const thunkRoomInfoDataGet = createAsyncThunk(
 )
 
 export const thunkRoomInfoInit = createAsyncThunk(
-    "roomInfo/postData",
+    "roomInfo/init",
     async (_, thunkAPI) => {
         return await REQUEST_ROOM_INFO.initData()
             .then((_) =>

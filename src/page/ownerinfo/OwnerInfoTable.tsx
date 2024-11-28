@@ -145,7 +145,7 @@ export const OwnerInfoTable: React.FC = () => {
                         </Form.Item>,
                         <Form.Item<OwnerInfoDto> name={"ownerName"} label={`住户名称`} labelCol={{span: 4}}
                                                  wrapperCol={{span: 4}}>
-                            <SearchInput placeholder={'请输入房间号'} fetch={onFind} style={{width: 200, textAlign: "left"}}/>
+                            <SearchInput placeholder={'请输入'} fetch={onFind} style={{width: 200, textAlign: "left"}}/>
                         </Form.Item>,
                     ]}/>
                     <div className={styles['button-type']}>
