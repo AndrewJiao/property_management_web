@@ -32,7 +32,6 @@ export const PageRowEditTable: React.FC<Props> = ({
     let dispatch = useDispatch();
     let dataSource: any[] = state.result?.data;
     const [editingKey, setEditingKey] = useState('');
-    //初始化一个属性editingMark
 
     useEffect(() => {
         dispatch(pageSearchAction(new PaginateRequest()));

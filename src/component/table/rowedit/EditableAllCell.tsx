@@ -36,31 +36,33 @@ export const EditableAllCell: React.FC<PropsWithChildren<Props>> = ({
     async function onSave() {
         let values = await form.validateFields();
         onUpdateHandleSave({...record, ...values});
-        onEditingMark()
+        onEditingMark('')
     }
 
     //编辑操作项的场景
     if (dataIndex === 'operation') {
         if (editingKey !== record.id || editingKey === '') {
             childNode = (<div>
-                {onDelete ?
-                    (<Popconfirm disabled={editingKey !== '' && editingKey === record.id} title="确定要删除吗？"
-                                 style={{marginInlineEnd: 8}}
-                                 onConfirm={() => onDelete(record.id)}>
-                        <a>删除</a>
-                    </Popconfirm>) : <></>
-                }
                 {/*点击编辑，将这一行的数据设置为editing*/}
-                <Typography.Link disabled={editingKey !== '' && editingKey === record.id}
-                                 onClick={() => onEditingMark(record.id)}>
+                <Typography.Link disabled={editingKey !== '' && editingKey !== record.id}
+                                 onClick={() => onEditingMark(record.id)}
+                                 style={{marginInlineEnd: 8}}
+                >
                     编辑
                 </Typography.Link>
+                {onDelete ?
+                    (<Popconfirm disabled={editingKey !== '' && editingKey !== record.id} title="确定要删除吗？"
+
+                                 onConfirm={() => onDelete(record.id)}>
+                        <a >删除</a>
+                    </Popconfirm>) : <></>
+                }
             </div>)
         } else {
             //参与编辑的行
             childNode = <div>
                 <Typography.Link onClick={onSave} style={{marginInlineEnd: 8}}> 保存 </Typography.Link>
-                <Popconfirm title="确定取消吗" onConfirm={() => onEditingMark()}>
+                <Popconfirm title="确定取消吗" onConfirm={() => onEditingMark('')}>
                     <a>取消</a>
                 </Popconfirm>
             </div>

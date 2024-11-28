@@ -14,7 +14,7 @@ export const SideBarMenu: React.FC = () => {
         {key: '1', icon: <PieChartOutlined/>, label: '基础价格', onClick: () => navigate("/priceBasic")},
         {key: '2', icon: <DesktopOutlined/>, label: '住户信息', onClick: () => navigate("/ownerInfo")},
         {key: '3', icon: <ContainerOutlined/>, label: '水电读数', onClick: () => navigate("/roomInfo")},
-        {key: '4', icon: <ContainerOutlined/>, label: '物业费明细', onClick: () => navigate("/other")},
+        {key: '4', icon: <ContainerOutlined/>, label: '物业费明细', onClick: () => navigate("/propertyFee")},
     ];
 
     const [collapsed, setCollapsed] = useState(false);

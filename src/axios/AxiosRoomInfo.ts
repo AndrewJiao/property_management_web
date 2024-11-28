@@ -3,6 +3,7 @@ import {appInstance, AppResult, PaginateRequest} from "./AxiosConf";
 import {encode} from "base-64";
 import utf8 from "utf8";
 import {RoomInfoData} from "../redux/roominfo/slice";
+import {DateRangeType} from "../utils";
 
 /**
  * 基础价格请求
@@ -50,11 +51,7 @@ export interface RoomInfoDetailUpdateDto {
     comment?: string;
 }
 
-export interface RoomInfoDetailSearchDto {
+export interface RoomInfoDetailSearchDto extends DateRangeType {
     roomNumber?: string;
     monthVersion?: string;
-    createTimeStart?: Date;
-    createTimeEnd?: Date;
-    updateTimeEnd?: Date;
-    updateTimeStart?: Date;
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import {AutoRow, onFindFetch, PageRowEditTable, SearchInput, TablePageColumn} from "../../component";
-import {Button, Form, FormProps, Input} from "antd";
+import {Button, DatePicker, Form, FormProps, Input, Space, TimePicker} from "antd";
 import {axiosAppendIdToKey, axiosGetContent, OwnerInfoDto, PaginateRequest} from "../../axios";
 import {useDispatch, useSelector} from "../../redux/hook";
 import {
@@ -13,6 +13,7 @@ import {
 import {REQUEST_ROOM_INFO, RoomInfoDetailSearchDto, RoomInfoSearchType} from "../../axios/AxiosRoomInfo";
 import styles from './RoomInfoTable.module.css'
 import {useForm} from "antd/es/form/Form";
+import {buildDateSearchParam} from "../../utils";
 
 
 const columns: TablePageColumn = [
@@ -137,7 +138,8 @@ export const RoomInfoTable: React.FC = () => {
     let state: RoomInfoState = useSelector((e) => e.roomInfoSlice);
 
     const onFinishSearch: FormProps<RoomInfoDetailSearchDto>['onFinish'] = (value) => {
-        dispatch(thunkRoomInfoDataGet(new PaginateRequest<RoomInfoDetailSearchDto>(1, 10, value)));
+
+        dispatch(thunkRoomInfoDataGet(new PaginateRequest<RoomInfoDetailSearchDto>(1, 10, buildDateSearchParam(value))));
     };
 
     const initData = () => {
@@ -153,7 +155,6 @@ export const RoomInfoTable: React.FC = () => {
                           columns={columns}
                           pageSearchAction={thunkRoomInfoDataGet}
                           onUpdateHandleSave={(record: RoomInfoData) => {
-                              console.log(`record = ${JSON.stringify(record)}`)
                               REQUEST_ROOM_INFO.putData(record.id.toString(), record)
                                   .then(axiosAppendIdToKey)
                                   .then(axiosGetContent)
@@ -163,11 +164,25 @@ export const RoomInfoTable: React.FC = () => {
         >
             <div className={styles['search-content']}>
                 <Form form={searchForm} onFinish={onFinishSearch}>
-                    <AutoRow showBorder={false} perCountEachRow={4} subElements={[
-                        <Form.Item<OwnerInfoDto> name={"roomNumber"} label={`房号`} labelCol={{span: 4}}
-                                                 wrapperCol={{span: 4}}>
+                    <AutoRow showBorder={false} perCountEachRow={2} subElements={[
+                        <Form.Item<RoomInfoDetailSearchDto> name={"roomNumber"} label={`房号`} labelCol={{span: 4}}
+                                                            wrapperCol={{span: 4}}>
                             <Input placeholder={`请输入`} style={{width: 200}}/>
                         </Form.Item>,
+                        <Form.Item<RoomInfoDetailSearchDto> name={"monthVersion"} label={`月份版本`}
+                                                            labelCol={{span: 4}}
+                                                            wrapperCol={{span: 4}}>
+                            <SearchInput placeholder={'请输入'} fetch={onFind} style={{width: 200, textAlign: "left"}}/>
+                        </Form.Item>,
+                        <Form.Item<RoomInfoDetailSearchDto> name="createDateRange" label={'创建时间'}
+                                                            labelCol={{span: 4}}
+                                                            wrapperCol={{span: 4}}>
+                            <DatePicker.RangePicker style={{width: 300}}/>
+                        </Form.Item>,
+                        <Form.Item<RoomInfoDetailSearchDto> name="updateDateRange" label={'创建时间'}
+                                                            labelCol={{span: 4}} wrapperCol={{span: 4}}>
+                            <DatePicker.RangePicker style={{width: 300}}/>
+                        </Form.Item>
                     ]}/>
                     <div className={styles['button-type']}>
                         <Form.Item>
