@@ -22,13 +22,13 @@ export const REQUEST_PROPERTY_FEE = {
 
     initData: (monthVersion: string) => {
         let param: PropertyFeeDetailInitDto = {monthVersion: monthVersion};
-        return appInstance.post<PropertyFeeDetailInitDto, AxiosResponse<AppResult<void>>>(`/property_fee/init`, param)
+        return appInstance.post<PropertyFeeDetailInitDto, AxiosResponse<AppResult<void>>>(`/property_fee/data`, param)
     },
 
     putData: (id: string, data: PropertyFeeDetailUpdatePo) => {
         return appInstance.put<any, AxiosResponse<AppResult<PropertyFeeResultDto>>>(`/property_fee/data/${id}`, data)
     },
-    deleteData(id: string|number) {
+    deleteData(id: string | number) {
         return appInstance.delete(`/property_fee/data/${id}`)
     }
 }

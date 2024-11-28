@@ -1,13 +1,7 @@
 import {default_pending, default_reject, default_success, HttpBasicState} from "../HttpBasicState";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {AppResult, axiosAppendIdToKey, axiosGetContent, PaginateRequest,} from "../../axios";
-import {
-    PropertyFeeDetailInitDto,
-    PropertyFeeDetailSearchDto,
-    PropertyFeeResultDto,
-    REQUEST_PROPERTY_FEE
-} from "../../axios/AxiosPropertyFee";
-import {PropertyFeeTable} from "../../page";
+import {PropertyFeeDetailSearchDto, PropertyFeeResultDto, REQUEST_PROPERTY_FEE} from "../../axios/AxiosPropertyFee";
 import {RootState} from "../store";
 
 export interface PropertyFeeState extends HttpBasicState {
@@ -26,7 +20,7 @@ export const thunkPropertyFeeDataGet = createAsyncThunk(
 )
 
 export const thunkPropertyFeeInit = createAsyncThunk(
-    "propertyFee/postData",
+    "propertyFee/initData",
     async (monthVersion: string, thunkAPI) => {
         return await REQUEST_PROPERTY_FEE.initData(monthVersion)
             .then((_) =>
@@ -54,7 +48,6 @@ export const propertyFeeSlice = createSlice({
             if (state.result.data) {
                 let index = state.result.data.findIndex(e => e.id === action.payload.id);
                 if (index !== -1) {
-                    console.log(`action = ${JSON.stringify(action.payload)}`)
                     state.result.data[index] = action.payload;
                 }
             }
@@ -76,28 +69,28 @@ export const propertyFeeSlice = createSlice({
                 (state) => {
                     return default_pending()
                 })
-        // .addCase(thunkOwnerInfoInsert.fulfilled,
-        //     (state, action) => {
-        //     })
-        // .addCase(thunkOwnerInfoInsert.rejected,
-        //     (state, action) => {
-        //         return default_reject(action.error.message)
-        //     })
-        // .addCase(thunkOwnerInfoInsert.pending,
-        //     (state) => {
-        //         return default_pending()
-        //     })
-        // .addCase(thunkOwnerInfoDelete.fulfilled,
-        //     (state, action) => {
-        //     })
-        // .addCase(thunkOwnerInfoDelete.rejected,
-        //     (state, action) => {
-        //         return default_reject(action.error.message)
-        //     })
-        // .addCase(thunkOwnerInfoDelete.pending,
-        //     (state) => {
-        //         return default_pending()
-        //     })
+            .addCase(thunkPropertyFeeInit.fulfilled,
+                (state, action) => {
+                })
+            .addCase(thunkPropertyFeeInit.rejected,
+                (state, action) => {
+                    return default_reject(action.error.message)
+                })
+            .addCase(thunkPropertyFeeInit.pending,
+                (state) => {
+                    return default_pending()
+                })
+            .addCase(thunkPropertyFeeDelete.fulfilled,
+                (state, action) => {
+                })
+            .addCase(thunkPropertyFeeDelete.rejected,
+                (state, action) => {
+                    return default_reject(action.error.message)
+                })
+            .addCase(thunkPropertyFeeDelete.pending,
+                (state) => {
+                    return default_pending()
+                })
     }
 
 })

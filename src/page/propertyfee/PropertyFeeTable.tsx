@@ -1,0 +1,143 @@
+import React from "react";
+import {AutoRow, onFindFetch, PageRowEditTable, SearchInput, TablePageColumn} from "../../component";
+import {Button, DatePicker, Form, FormProps, Input} from "antd";
+import {
+    axiosAppendIdToKey,
+    axiosGetContent,
+    OwnerInfoSearchType,
+    PaginateRequest,
+    REQUEST_OWNER_INFO
+} from "../../axios";
+import {useDispatch, useSelector} from "../../redux/hook";
+import {REQUEST_ROOM_INFO, RoomInfoSearchType} from "../../axios/AxiosRoomInfo";
+import styles from './PropertyFee.module.css'
+import {useForm} from "antd/es/form/Form";
+import {buildDateSearchParam} from "../../utils";
+import {
+    PropertyFeeDetailData,
+    propertyFeeSlice,
+    PropertyFeeState,
+    thunkPropertyFeeDataGet,
+    thunkPropertyFeeDelete, thunkPropertyFeeInit
+} from "../../redux/propertyfee/slice";
+import {PropertyFeeDetailSearchDto, REQUEST_PROPERTY_FEE} from "../../axios/AxiosPropertyFee";
+
+
+const columns: TablePageColumn = [
+    {title: '房号', dataIndex: 'roomNumber', key: 'roomNumber'},
+    {title: '房主姓名', dataIndex: 'roomOwnerName', key: 'roomOwnerName'},
+    {title: '管理费', dataIndex: 'managementFee', key: 'managementFee', editable: true},
+    {title: '部分费用', dataIndex: 'partFee', key: 'partFee', editable: true},
+    {title: '机房装修费', dataIndex: 'machineRoomRenovationFee', key: 'machineRoomRenovationFee', editable: true},
+    {title: '电费', dataIndex: 'electricFee', key: 'electricFee', editable: true},
+    {title: '电费分摊', dataIndex: 'electricShareFee', key: 'electricShareFee', editable: true},
+    {title: '水费', dataIndex: 'waterFee', key: 'waterFee', editable: true},
+    {title: '水费分摊', dataIndex: 'waterShareFee', key: 'waterShareFee', editable: true},
+    {title: '违约金', dataIndex: 'liquidateFee', key: 'liquidateFee', editable: true},
+    {title: '预存费', dataIndex: 'preStoreFee', key: 'preStoreFee', editable: true},
+    {title: '备注', dataIndex: 'comment', key: 'comment', editable: true},
+    {title: '总费用', dataIndex: 'totalFee', key: 'totalFee'},
+    {title: '记录版本', dataIndex: 'recordVersion', key: 'recordVersion'},
+    {title: '创建者', dataIndex: 'createBy', key: 'createBy'},
+    {title: '更新者', dataIndex: 'updateBy', key: 'updateBy'},
+    {
+        title: '创建时间',
+        dataIndex: 'createTime',
+        key: 'createTime',
+        render: (text) => <span>{new Date(text).toLocaleString()}</span>
+    },
+    {
+        title: '更新时间',
+        dataIndex: 'updateTime',
+        key: 'updateTime',
+        render: (text) => <span>{new Date(text).toLocaleString()}</span>
+    },
+];
+
+export const PropertyFeeTable: React.FC = () => {
+    let [searchForm] = useForm<PropertyFeeDetailSearchDto>();
+    let dispatch = useDispatch();
+    let state: PropertyFeeState = useSelector((e) => e.propertyFeeSlice);
+
+    const onFinishSearch: FormProps<PropertyFeeDetailSearchDto>['onFinish'] = (value) => {
+        dispatch(thunkPropertyFeeDataGet(new PaginateRequest<PropertyFeeDetailSearchDto>(1, 10, buildDateSearchParam(value))));
+    };
+    const onDelete = (id: string | number) => {
+        dispatch(thunkPropertyFeeDelete(id))
+    }
+
+    const initData = () => {
+        dispatch(thunkPropertyFeeInit('HSMZ-2024-11'))
+    }
+
+    const onFindRecord: onFindFetch = (value, callback) => {
+        REQUEST_ROOM_INFO.findData(value, RoomInfoSearchType.monthVersion)
+            .then(values => callback(values.map(value => ({value: value, text: value}))))
+    }
+    const onFindName: onFindFetch = (value, callback) => {
+        REQUEST_OWNER_INFO.findData(value, OwnerInfoSearchType.OwnerName)
+            .then(values => callback(values.map(value => ({value: value, text: value}))))
+    }
+    return <>
+        <PageRowEditTable title={`物业费明细`}
+                          columns={columns}
+                          pageSearchAction={thunkPropertyFeeDataGet}
+                          onDelete={onDelete}
+                          onUpdateHandleSave={(record: PropertyFeeDetailData) => {
+                              REQUEST_PROPERTY_FEE.putData(record.id.toString(), record)
+                                  .then(axiosAppendIdToKey)
+                                  .then(axiosGetContent)
+                                  .then(e => dispatch(propertyFeeSlice.actions.putDataResponseUpdate(e.data)))
+                          }} state={state}>
+            <div className={styles['search-content']}>
+                <Form form={searchForm} onFinish={onFinishSearch}>
+                    <AutoRow showBorder={false} perCountEachRow={3} subElements={[
+                        <Form.Item<PropertyFeeDetailSearchDto> name={"roomNumber"} label={`房号`} labelCol={{span: 4}}
+                                                               wrapperCol={{span: 4}}>
+                            <Input placeholder={`请输入`} style={{width: 200}}/>
+                        </Form.Item>,
+                        <Form.Item<PropertyFeeDetailSearchDto> name={"roomOwnerName"} label={`业主姓名`}
+                                                               labelCol={{span: 4}}
+                                                               wrapperCol={{span: 4}}>
+                            <SearchInput placeholder={'请输入'} fetch={onFindName}
+                                         style={{width: 200, textAlign: "left"}}/>
+                        </Form.Item>,
+                        <Form.Item<PropertyFeeDetailSearchDto> name={"recordVersion"} label={`记录版本`}
+                                                               labelCol={{span: 4}}
+                                                               wrapperCol={{span: 4}}>
+                            <SearchInput placeholder={'请输入'} fetch={onFindRecord}
+                                         style={{width: 200, textAlign: "left"}}/>
+                        </Form.Item>,
+                        <Form.Item<PropertyFeeDetailSearchDto> name="createDateRange" label={'创建时间'}
+                                                               labelCol={{span: 4}}
+                                                               wrapperCol={{span: 4}}>
+                            <DatePicker.RangePicker style={{width: 300}}/>
+                        </Form.Item>,
+                        <Form.Item<PropertyFeeDetailSearchDto> name="updateDateRange" label={'创建时间'}
+                                                               labelCol={{span: 4}} wrapperCol={{span: 4}}>
+                            <DatePicker.RangePicker style={{width: 300}}/>
+                        </Form.Item>
+                    ]}/>
+                    <div className={styles['button-type']}>
+                        <Form.Item>
+                            <Button className={styles['button-styles']} type="primary" htmlType={"submit"}>
+                                搜索
+                            </Button>
+                        </Form.Item>
+                        <Form.Item>
+                            <Button className={styles['button-styles']} type="dashed" htmlType={"reset"}>
+                                重置
+                            </Button>
+                        </Form.Item>
+                        <Form.Item>
+                            <Button className={styles['button-styles']} type="primary" htmlType={"button"}
+                                    onClick={initData}>
+                                初始化
+                            </Button>
+                        </Form.Item>
+                    </div>
+                </Form>
+            </div>
+        </PageRowEditTable>
+    </>
+}
