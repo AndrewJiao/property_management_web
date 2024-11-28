@@ -12,21 +12,22 @@ const columns: TablePageColumn = [
         title: "房主姓名",
         dataIndex: "roomOwnerName",
         key: "roomOwnerName",
-        width: "20%",
+        width: "9%",
     },
     {
         title: "房间号",
         dataIndex: "roomNumber",
         key: "roomNumber",
         sorter: true,
-        width: "15%"
+        width: "8%"
     },
     {
         title: "水表读数（前）",
         dataIndex: "waterMeterNumBefore",
         key: "waterMeterNumBefore",
         // sorter: (a, b) => a.waterMeterNumBefore - b.waterMeterNumBefore,
-        width: "15%",
+        width: "7%",
+        columnStyle: 'inputNumber'
         // render: (text) => <span>{text}</span>
     },
     {
@@ -34,7 +35,8 @@ const columns: TablePageColumn = [
         dataIndex: "waterMeterNum",
         key: "waterMeterNum",
         // sorter: (a, b) => a.waterMeterNum - b.waterMeterNum,
-        width: "15%",
+        width: "7%",
+        columnStyle: 'inputNumber'
         // render: (text) => <span>{text}</span>
     },
     {
@@ -42,7 +44,8 @@ const columns: TablePageColumn = [
         dataIndex: "waterMeterSub",
         key: "waterMeterSub",
         // sorter: (a, b) => a.waterMeterSub - b.waterMeterSub,
-        width: "15%",
+        width: "7%",
+        columnStyle: 'inputNumber'
         // render: (text) => <span>{text}</span>
     },
     {
@@ -50,7 +53,8 @@ const columns: TablePageColumn = [
         dataIndex: "electricityMeterNumBefore",
         key: "electricityMeterNumBefore",
         // sorter: (a, b) => a.electricityMeterNumBefore - b.electricityMeterNumBefore,
-        width: "15%",
+        width: "6%",
+        columnStyle: 'inputNumber'
         // render: (text) => <span>{text}</span>
     },
     {
@@ -58,7 +62,8 @@ const columns: TablePageColumn = [
         dataIndex: "electricityMeterNum",
         key: "electricityMeterNum",
         // sorter: (a, b) => a.electricityMeterNum - b.electricityMeterNum,
-        width: "15%",
+        width: "6%",
+        columnStyle: 'inputNumber'
         // render: (text) => <span>{text}</span>
     },
     {
@@ -66,7 +71,8 @@ const columns: TablePageColumn = [
         dataIndex: "electricityMeterSub",
         key: "electricityMeterSub",
         // sorter: (a, b) => a.electricityMeterSub - b.electricityMeterSub,
-        width: "15%",
+        width: "7%",
+        columnStyle: 'inputNumber'
         // render: (text) => <span>{text}</span>
     },
     {
@@ -80,21 +86,21 @@ const columns: TablePageColumn = [
         title: "备注",
         dataIndex: "comment",
         key: "comment",
-        // width: "30%"
+        width: "10%"
     },
     {
         title: "创建者",
         dataIndex: "createBy",
         key: "createBy",
-        // sorter: true,
-        // width: "15%"
+        sorter: true,
+        width: "15%"
     },
     {
         title: "更新者",
         dataIndex: "updateBy",
         key: "updateBy",
-        // sorter: true,
-        // width: "15%"
+        sorter: true,
+        width: "15%"
     },
     {
         title: "创建时间",
@@ -128,12 +134,10 @@ export const RoomInfoTable: React.FC = () => {
     // const onSaveDraw = (value: OwnerInfoInsertDto) => {
     //     dispatch(thunkOwnerInfoInsert(value))
     // }
-    // const onDeleteRow = (id: number | string) => dispatch(thunkOwnerInfoDelete(Number(id)));
     const onFind: onFindFetch = (value, callback) => {
         REQUEST_ROOM_INFO.findData(value, RoomInfoSearchType.monthVersion)
             .then(values => callback(values.map(value => ({value: value, text: value}))))
     }
-
     return <>
         {/*<SubmitDraw title={"新增住户"} open={open} onClose={closeDraw} onSave={onSaveDraw}/>*/}
         <PageRowEditTable title={`水电读数`}

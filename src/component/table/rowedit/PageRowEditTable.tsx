@@ -5,7 +5,7 @@ import styles from './PageRowEditTable.module.css';
 import {Table, Typography} from "antd";
 import {useDispatch} from "../../../redux/hook";
 import {PaginateRequest} from "../../../axios";
-import {ColumnTypes, EditableAllRow, TablePageColumn} from "../index";
+import {ColumnTypes, EditableAllCell, EditableAllRow, TablePageColumn} from "../index";
 import {AsyncThunk} from "@reduxjs/toolkit";
 import {HttpBasicState} from "../../../redux/HttpBasicState";
 
@@ -29,12 +29,12 @@ interface Props {
 
 //标记数据为编辑中
 function markColumnEditing(id: any, dataSource: any[]) {
-    dataSource?.map(e => e.editingMark = e.id === id ? EditingMark.editing : EditingMark.disEditing)
+    return dataSource?.map(e => e.id === id ? {editingMark: EditingMark.editing, ...e} : {editingMark: EditingMark.disEditing, ...e})
 }
 
 //标记数据为编辑完成
 function markColumnNormal(dataSource: any[]) {
-    dataSource?.map(e => e.editingMark = EditingMark.normal)
+    return dataSource?.map(e => ({editingMark: EditingMark.normal, ...e}));
 }
 
 export const PageRowEditTable: React.FC<Props> = ({
@@ -48,16 +48,18 @@ export const PageRowEditTable: React.FC<Props> = ({
                                                   }: Props) => {
     let dispatch = useDispatch();
     let dataSource: any[] = state.result?.data;
-    markColumnNormal(dataSource)
+
     useEffect(() => {
         dispatch(pageSearchAction(new PaginateRequest()));
     }, [])
 
+    dataSource = markColumnNormal(dataSource)
     function onEditMark(id) {
+        console.log(`id:${id}`)
         if (id) {
-            markColumnEditing(id, dataSource)
+            dataSource = markColumnEditing(id, dataSource)
         } else {
-            markColumnNormal(dataSource)
+            dataSource = markColumnNormal(dataSource)
         }
     }
 
@@ -68,12 +70,7 @@ export const PageRowEditTable: React.FC<Props> = ({
         key: 'operation',
     }]
 
-
     const column = columns.map(col => {
-        console.log(`col.editable`, col.editable)
-        if (!col.editable) {
-            return col
-        }
         return {
             ...col,
             onCell: (record: any) => ({
@@ -98,8 +95,10 @@ export const PageRowEditTable: React.FC<Props> = ({
                 {
                     state.errorMsg ? <div></div> :
                         <Table columns={column as ColumnTypes} dataSource={dataSource}
+                               scroll={{ x: 800 }}
                                components={{
                                    body: {
+                                       cell: EditableAllCell,
                                        row: EditableAllRow,
                                    }
                                }}

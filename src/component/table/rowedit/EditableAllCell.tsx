@@ -30,7 +30,7 @@ export const EditableAllCell: React.FC<PropsWithChildren<Props>> = ({
                                                                         ...props
                                                                     }) => {
     let childNode = children;
-    let editingMark: EditingMark = record.editingMark;
+    let editingMark: EditingMark = record?.editingMark;
     const form = useContext(FormContext)!;
 
     function onSave() {
@@ -43,12 +43,14 @@ export const EditableAllCell: React.FC<PropsWithChildren<Props>> = ({
     if (dataIndex === 'operation') {
         if (editingMark === EditingMark.normal || editingMark === EditingMark.disEditing) {
             return <div>
-                <Popconfirm disabled={editingMark === EditingMark.disEditing} title="确定要删除吗？"
-                            onConfirm={() => onDelete(record.id)}>
-                    <a>删除</a>
-                </Popconfirm>
+                {onDelete ?
+                    (<Popconfirm disabled={editingMark === EditingMark.disEditing} title="确定要删除吗？"
+                                 onConfirm={() => onDelete(record.id)}>
+                        <a>删除</a>
+                    </Popconfirm>) : <></>
+                }
                 {/*点击编辑，将这一行的数据设置为editing*/}
-                <Typography.Link disabled={editingMark === EditingMark.disEditing} onClick={async () => {
+                <Typography.Link disabled={editingMark === EditingMark.disEditing} onClick={() => {
                     onEditingMark(record.id)
                 }}>
                     编辑
