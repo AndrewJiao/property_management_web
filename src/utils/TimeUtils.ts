@@ -1,4 +1,5 @@
 import {format} from "date-fns";
+import {Dayjs} from "dayjs";
 
 export interface DateRangeType {
     createDateRange?: string[2];
@@ -15,7 +16,7 @@ function toLocalDate(date: Date) {
 }
 
 export function buildDateSearchParam(param: any) {
-    let searchParam: any = {};
+    let searchParam: any = {...param};
     if (param.createDateRange) {
         let {star, end} = format_range_param_search(param.createDateRange);
         searchParam.createTimeStar = (star);
@@ -48,3 +49,9 @@ const format_param_search = (dateStr: string, type: 'star' | 'end') => {
     return format(date, "yyyy-MM-dd'T'HH:mm:ss")
 }
 
+export function defaultCurrentMonthRange() {
+    let date = new Date();
+    let start = new Date(date.getFullYear(), date.getMonth(), 1);
+    let end = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    return [start, end]
+}

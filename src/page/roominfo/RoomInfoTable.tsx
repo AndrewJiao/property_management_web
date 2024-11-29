@@ -138,7 +138,6 @@ export const RoomInfoTable: React.FC = () => {
     let state: RoomInfoState = useSelector((e) => e.roomInfoSlice);
 
     const onFinishSearch: FormProps<RoomInfoDetailSearchDto>['onFinish'] = (value) => {
-
         dispatch(thunkRoomInfoDataGet(new PaginateRequest<RoomInfoDetailSearchDto>(1, 10, buildDateSearchParam(value))));
     };
 

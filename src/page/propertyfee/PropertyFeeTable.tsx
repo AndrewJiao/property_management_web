@@ -12,15 +12,18 @@ import {useDispatch, useSelector} from "../../redux/hook";
 import {REQUEST_ROOM_INFO, RoomInfoSearchType} from "../../axios/AxiosRoomInfo";
 import styles from './PropertyFee.module.css'
 import {useForm} from "antd/es/form/Form";
-import {buildDateSearchParam} from "../../utils";
+import {buildDateSearchParam, defaultCurrentMonthRange, tableTimeRender} from "../../utils";
 import {
     PropertyFeeDetailData,
     propertyFeeSlice,
     PropertyFeeState,
     thunkPropertyFeeDataGet,
-    thunkPropertyFeeDelete, thunkPropertyFeeInit
+    thunkPropertyFeeDelete,
+    thunkPropertyFeeInit
 } from "../../redux/propertyfee/slice";
 import {PropertyFeeDetailSearchDto, REQUEST_PROPERTY_FEE} from "../../axios/AxiosPropertyFee";
+import {PropertyFeeInitTopicModal} from "./PropertyFeeInitTopicModal";
+import dayjs from "dayjs";
 
 
 const columns: TablePageColumn = [
@@ -44,13 +47,13 @@ const columns: TablePageColumn = [
         title: '创建时间',
         dataIndex: 'createTime',
         key: 'createTime',
-        render: (text) => <span>{new Date(text).toLocaleString()}</span>
+        render: tableTimeRender
     },
     {
         title: '更新时间',
         dataIndex: 'updateTime',
         key: 'updateTime',
-        render: (text) => <span>{new Date(text).toLocaleString()}</span>
+        render: tableTimeRender
     },
 ];
 
@@ -58,6 +61,7 @@ export const PropertyFeeTable: React.FC = () => {
     let [searchForm] = useForm<PropertyFeeDetailSearchDto>();
     let dispatch = useDispatch();
     let state: PropertyFeeState = useSelector((e) => e.propertyFeeSlice);
+    let [star, end] = defaultCurrentMonthRange().map(e => dayjs(e));
 
     const onFinishSearch: FormProps<PropertyFeeDetailSearchDto>['onFinish'] = (value) => {
         dispatch(thunkPropertyFeeDataGet(new PaginateRequest<PropertyFeeDetailSearchDto>(1, 10, buildDateSearchParam(value))));
@@ -66,8 +70,8 @@ export const PropertyFeeTable: React.FC = () => {
         dispatch(thunkPropertyFeeDelete(id))
     }
 
-    const initData = () => {
-        dispatch(thunkPropertyFeeInit('HSMZ-2024-11'))
+    const initData = (monthVersion: string) => {
+        dispatch(thunkPropertyFeeInit(monthVersion))
     }
 
     const onFindRecord: onFindFetch = (value, callback) => {
@@ -111,15 +115,15 @@ export const PropertyFeeTable: React.FC = () => {
                         <Form.Item<PropertyFeeDetailSearchDto> name="createDateRange" label={'创建时间'}
                                                                labelCol={{span: 4}}
                                                                wrapperCol={{span: 4}}>
-                            <DatePicker.RangePicker style={{width: 300}}/>
+                            <DatePicker.RangePicker style={{width: 300}} defaultValue={[star, end]}/>
                         </Form.Item>,
                         <Form.Item<PropertyFeeDetailSearchDto> name="updateDateRange" label={'创建时间'}
                                                                labelCol={{span: 4}} wrapperCol={{span: 4}}>
-                            <DatePicker.RangePicker style={{width: 300}}/>
+                            <DatePicker.RangePicker style={{width: 300}} defaultValue={[star, end]}/>
                         </Form.Item>
                     ]}/>
                     <div className={styles['button-type']}>
-                        <Form.Item>
+                        <Form.Item style={{display: "inline-flex"}}>
                             <Button className={styles['button-styles']} type="primary" htmlType={"submit"}>
                                 搜索
                             </Button>
@@ -129,12 +133,8 @@ export const PropertyFeeTable: React.FC = () => {
                                 重置
                             </Button>
                         </Form.Item>
-                        <Form.Item>
-                            <Button className={styles['button-styles']} type="primary" htmlType={"button"}
-                                    onClick={initData}>
-                                初始化
-                            </Button>
-                        </Form.Item>
+                        <PropertyFeeInitTopicModal style={{marginBottom: 24}} name={'初始化'}
+                                                   onSelectCompleted={initData}/>
                     </div>
                 </Form>
             </div>
