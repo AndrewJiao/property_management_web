@@ -1,13 +1,13 @@
 import {format} from "date-fns";
-import {Dayjs} from "dayjs";
+import dayjs from "dayjs";
 
 export interface DateRangeType {
-    createDateRange?: string[2];
-    createTimeStar?: string;
-    createTimeEnd?: string;
-    updateDateRange?: string[2];
-    updateTimeEnd?: string;
-    updateTimeStar?: string;
+    createDateRange?: string[] | null;
+    createTimeStar?: string | null;
+    createTimeEnd?: string | null;
+    updateDateRange?: string[] | null;
+    updateTimeEnd?: string | null;
+    updateTimeStar?: string | null;
 
 }
 
@@ -15,7 +15,7 @@ function toLocalDate(date: Date) {
     return new Date(date.getTime() - date.getTimezoneOffset() * 60000)
 }
 
-export function buildDateSearchParam(param: any) {
+export function buildDateSearchParam<T extends DateRangeType>(param: T) {
     let searchParam: any = {...param};
     if (param.createDateRange) {
         let {star, end} = format_range_param_search(param.createDateRange);
@@ -34,7 +34,7 @@ export const tableTimeRender = (date: Date) => {
     return format(date, "yyyy-MM-dd HH:mm:ss")
 }
 
-const format_range_param_search = (date: string[]) => {
+const format_range_param_search = (date: string[] | null) => {
     if (date?.length !== 2) {
         return {star: null, end: null}
     }
@@ -54,4 +54,8 @@ export function defaultCurrentMonthRange() {
     let start = new Date(date.getFullYear(), date.getMonth(), 1);
     let end = new Date(date.getFullYear(), date.getMonth() + 1, 0);
     return [start, end]
+}
+
+export function defaultCurrentMonthRangeDayJs() {
+    return defaultCurrentMonthRange().map(e => dayjs(e));
 }

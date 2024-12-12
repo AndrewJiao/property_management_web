@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {AutoRow, onFindFetch, PageRowEditTable, SearchInput, TablePageColumn} from "../../component";
 import {Button, DatePicker, Form, FormProps, Input, Space, TimePicker} from "antd";
 import {axiosAppendIdToKey, axiosGetContent, OwnerInfoDto, PaginateRequest} from "../../axios";
@@ -13,7 +13,8 @@ import {
 import {REQUEST_ROOM_INFO, RoomInfoDetailSearchDto, RoomInfoSearchType} from "../../axios/AxiosRoomInfo";
 import styles from './RoomInfoTable.module.css'
 import {useForm} from "antd/es/form/Form";
-import {buildDateSearchParam} from "../../utils";
+import {buildDateSearchParam, defaultCurrentMonthRange} from "../../utils";
+import dayjs from "dayjs";
 
 
 const columns: TablePageColumn = [
@@ -136,6 +137,10 @@ export const RoomInfoTable: React.FC = () => {
     let [searchForm] = useForm<RoomInfoDetailSearchDto>();
     let dispatch = useDispatch();
     let state: RoomInfoState = useSelector((e) => e.roomInfoSlice);
+    let [star, end] = defaultCurrentMonthRange().map(e => dayjs(e));
+    useEffect(() => {
+        searchForm.setFieldValue('createDateRange', [star, end])
+    }, []);
 
     const onFinishSearch: FormProps<RoomInfoDetailSearchDto>['onFinish'] = (value) => {
         dispatch(thunkRoomInfoDataGet(new PaginateRequest<RoomInfoDetailSearchDto>(1, 10, buildDateSearchParam(value))));

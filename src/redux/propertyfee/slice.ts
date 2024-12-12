@@ -5,17 +5,31 @@ import {PropertyFeeDetailSearchDto, PropertyFeeResultDto, REQUEST_PROPERTY_FEE} 
 import {RootState} from "../store";
 
 export interface PropertyFeeState extends HttpBasicState {
-    result: AppResult<PropertyFeeResultDto[]>;
-    request?: PaginateRequest<PropertyFeeDetailSearchDto>
+    result: AppResult<PropertyFeeResultDto[]> | null;
+    request?: PaginateRequest<PropertyFeeDetailSearchDto> | null;
+}
+
+const defaultPropertyFeeState: PropertyFeeState = {
+    request: null,
+    result: null,
+    errorMsg: null,
+    isLoading: true
 }
 
 
 export const thunkPropertyFeeDataGet = createAsyncThunk(
     "propertyFee/getPage",
     async (param: PaginateRequest<PropertyFeeDetailSearchDto>, thunkAPI) => {
+
+        //如果请求中没有条件，则用state的条件附加上
+        let state = (thunkAPI.getState() as RootState).propertyFeeSlice;
+        if (param.searchParam === undefined) {
+            param.searchParam = state.request?.searchParam;
+        }
         return await REQUEST_PROPERTY_FEE.getData(param)
             .then(axiosAppendIdToKey)
             .then(axiosGetContent)
+            .then(result => ({request: param, result}))
     }
 )
 
@@ -42,10 +56,10 @@ export const thunkPropertyFeeDelete = createAsyncThunk(
 
 export const propertyFeeSlice = createSlice({
     name: "propertyFee",
-    initialState: default_pending(),
+    initialState: defaultPropertyFeeState,
     reducers: {
         putDataResponseUpdate: (state, action) => {
-            if (state.result.data) {
+            if (state.result?.data) {
                 let index = state.result.data.findIndex(e => e.id === action.payload.id);
                 if (index !== -1) {
                     state.result.data[index] = action.payload;
@@ -59,37 +73,37 @@ export const propertyFeeSlice = createSlice({
         builder
             .addCase(thunkPropertyFeeDataGet.fulfilled,
                 (state, action) => {
-                    return default_success(action.payload);
+                    return {request: action.payload.request, ...default_success(action.payload.result)};
                 })
             .addCase(thunkPropertyFeeDataGet.rejected,
                 (state, action) => {
-                    return default_reject(action.error.message)
+                    return {...state, ...default_reject(action.error.message)}
                 })
             .addCase(thunkPropertyFeeDataGet.pending,
                 (state) => {
-                    return default_pending()
+                    return {request: state.request, ...default_pending()};
                 })
             .addCase(thunkPropertyFeeInit.fulfilled,
                 (state, action) => {
                 })
             .addCase(thunkPropertyFeeInit.rejected,
                 (state, action) => {
-                    return default_reject(action.error.message)
+                    return {...state, ...default_reject(action.error.message)}
                 })
             .addCase(thunkPropertyFeeInit.pending,
                 (state) => {
-                    return default_pending()
+                    return {...state, ...default_pending()}
                 })
             .addCase(thunkPropertyFeeDelete.fulfilled,
                 (state, action) => {
                 })
             .addCase(thunkPropertyFeeDelete.rejected,
                 (state, action) => {
-                    return default_reject(action.error.message)
+                    return {...state, ...default_reject(action.error.message)}
                 })
             .addCase(thunkPropertyFeeDelete.pending,
                 (state) => {
-                    return default_pending()
+                    return {...state, ...default_pending()}
                 })
     }
 

@@ -11,17 +11,24 @@ import {
     PriceBasicDto,
     REQUEST_OWNER_INFO,
 } from "../../axios";
+import {RootState} from "../store";
 
 export interface OwnerInfoState extends HttpBasicState {
     result: AppResult<PriceBasicDto[]>;
     request?: PaginateRequest<OwnerInfoSearchDto>
 }
 
+const defaultOwnerInfoState: OwnerInfoState = default_pending();
+
 
 export const thunkOwnerInfoDataGet = createAsyncThunk(
     "ownerInfo/getPage",
     async (param: PaginateRequest<OwnerInfoSearchDto>, thunkAPI) => {
         param.searchParam = param.searchParam || {roomNumber: "", ownerName: ""}
+        if (param.searchParam === undefined) {
+            let state = (thunkAPI.getState() as RootState).ownerInfoSlice;
+            param.searchParam = state.request?.searchParam;
+        }
         return await REQUEST_OWNER_INFO.getData<OwnerInfoDto[]>(param)
             .then(e => {
                 e.data.data = e.data.data.map(e => ({
@@ -33,6 +40,7 @@ export const thunkOwnerInfoDataGet = createAsyncThunk(
             })
             .then(axiosAppendIdToKey)
             .then(axiosGetContent)
+            .then(e => ({request: param, result: e}))
     }
 )
 
@@ -56,7 +64,7 @@ export const thunkOwnerInfoDelete = createAsyncThunk(
 
 export const ownerInfoSlice = createSlice({
     name: "ownerInfo",
-    initialState: default_pending(),
+    initialState: defaultOwnerInfoState,
     reducers: {
         putDataResponseUpdate: (state, action) => {
             if (state.result.data) {
@@ -74,15 +82,15 @@ export const ownerInfoSlice = createSlice({
         builder
             .addCase(thunkOwnerInfoDataGet.fulfilled,
                 (state, action) => {
-                    return default_success(action.payload);
+                    return {request: action.payload.request, ...default_success(action.payload.result)}
                 })
             .addCase(thunkOwnerInfoDataGet.rejected,
                 (state, action) => {
-                    return default_reject(action.error.message)
+                    return {...state, ...default_reject(action.error.message)}
                 })
             .addCase(thunkOwnerInfoDataGet.pending,
                 (state) => {
-                    return default_pending()
+                    return {...state, ...default_pending()}
                 })
             .addCase(thunkOwnerInfoInsert.fulfilled,
                 (state, action) => {
@@ -100,11 +108,11 @@ export const ownerInfoSlice = createSlice({
                 })
             .addCase(thunkOwnerInfoDelete.rejected,
                 (state, action) => {
-                    return default_reject(action.error.message)
+                    return {...state, ...default_reject(action.error.message)}
                 })
             .addCase(thunkOwnerInfoDelete.pending,
                 (state) => {
-                    return default_pending()
+                    return {...state, ...default_pending()}
                 })
     }
 

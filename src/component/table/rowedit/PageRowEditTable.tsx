@@ -8,6 +8,7 @@ import {PaginateRequest} from "../../../axios";
 import {ColumnTypes, EditableAllCell, EditableAllRow, TablePageColumn} from "../index";
 import {AsyncThunk} from "@reduxjs/toolkit";
 import {HttpBasicState} from "../../../redux/HttpBasicState";
+import {buildDateSearchParam, defaultCurrentMonthRange} from "../../../utils";
 
 
 interface Props {
@@ -34,7 +35,10 @@ export const PageRowEditTable: React.FC<Props> = ({
     const [editingKey, setEditingKey] = useState('');
 
     useEffect(() => {
-        dispatch(pageSearchAction(new PaginateRequest()));
+        let [star, end] = defaultCurrentMonthRange();
+        dispatch(pageSearchAction(new PaginateRequest(1, 10,
+            buildDateSearchParam({createDateRange: [star.toISOString(), end.toISOString()]})
+        )));
     }, [])
 
     //添加操作项

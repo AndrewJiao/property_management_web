@@ -40,7 +40,6 @@ export enum RoomInfoSearchType {
 
 export type RoomInfoDetailResultDto = RoomInfoData;
 
-
 export interface RoomInfoDetailUpdateDto {
     waterMeterNumBefore?: number;
     waterMeterNum?: number;

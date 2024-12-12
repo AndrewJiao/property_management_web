@@ -1,27 +1,18 @@
 import axios from 'axios'
 import {AxiosResponse} from 'axios'
+import {DateRangeType} from "../utils";
 
-// axios.defaults.headers['x-icode'] = 'FB80558A73FA658E'
+axios.defaults.headers['Access-Control-Allow-Origin'] = "*"
 
 export const appInstance = axios.create({
     baseURL: "http://localhost:8080",
+    // baseURL: "http://andrew.free.idcfengye.com",
     timeout: 10000,
+    auth: {
+        username: 'jiojio',
+        password: 'jiojio'
+    }
 });
-
-// 可以配置请求拦截器
-// appInstance.interceptors.request.use(
-//     (config) => {
-//         // 在请求发送之前可以做一些操作，例如添加 token 等
-//         const token = localStorage.getItem('authToken');
-//         if (token) {
-//             config.headers = {'X-Requested-With': 'XMLHttpRequest'};
-//         }
-//         return config;
-//     },
-//     (error) => {
-//         return Promise.reject(error);
-//     }
-// );
 
 
 /**
@@ -55,7 +46,6 @@ export class PaginateRequest<T> {
     pageSize: number = 10;
     searchParam?: T | null;
 }
-
 
 export const axiosAppendIdToKey = (e: AxiosResponse<AppResult<any>>) => {
     let item = e.data.data;

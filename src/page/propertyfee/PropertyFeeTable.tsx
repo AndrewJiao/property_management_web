@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {AutoRow, onFindFetch, PageRowEditTable, SearchInput, TablePageColumn} from "../../component";
 import {Button, DatePicker, Form, FormProps, Input} from "antd";
 import {
@@ -62,6 +62,9 @@ export const PropertyFeeTable: React.FC = () => {
     let dispatch = useDispatch();
     let state: PropertyFeeState = useSelector((e) => e.propertyFeeSlice);
     let [star, end] = defaultCurrentMonthRange().map(e => dayjs(e));
+    useEffect(() => {
+        searchForm.setFieldValue('createDateRange', [star, end])
+    }, []);
 
     const onFinishSearch: FormProps<PropertyFeeDetailSearchDto>['onFinish'] = (value) => {
         dispatch(thunkPropertyFeeDataGet(new PaginateRequest<PropertyFeeDetailSearchDto>(1, 10, buildDateSearchParam(value))));
@@ -69,11 +72,9 @@ export const PropertyFeeTable: React.FC = () => {
     const onDelete = (id: string | number) => {
         dispatch(thunkPropertyFeeDelete(id))
     }
-
     const initData = (monthVersion: string) => {
         dispatch(thunkPropertyFeeInit(monthVersion))
     }
-
     const onFindRecord: onFindFetch = (value, callback) => {
         REQUEST_ROOM_INFO.findData(value, RoomInfoSearchType.monthVersion)
             .then(values => callback(values.map(value => ({value: value, text: value}))))
@@ -114,12 +115,12 @@ export const PropertyFeeTable: React.FC = () => {
                         </Form.Item>,
                         <Form.Item<PropertyFeeDetailSearchDto> name="createDateRange" label={'创建时间'}
                                                                labelCol={{span: 4}}
-                                                               wrapperCol={{span: 4}}>
-                            <DatePicker.RangePicker style={{width: 300}} defaultValue={[star, end]}/>
+                                                               wrapperCol={{span: 4}} >
+                            <DatePicker.RangePicker style={{width: 300}} />
                         </Form.Item>,
                         <Form.Item<PropertyFeeDetailSearchDto> name="updateDateRange" label={'创建时间'}
                                                                labelCol={{span: 4}} wrapperCol={{span: 4}}>
-                            <DatePicker.RangePicker style={{width: 300}} defaultValue={[star, end]}/>
+                            <DatePicker.RangePicker style={{width: 300}}/>
                         </Form.Item>
                     ]}/>
                     <div className={styles['button-type']}>
