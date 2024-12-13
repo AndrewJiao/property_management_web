@@ -39,7 +39,7 @@ export class PaginateRequest<T> {
     constructor(currentPage?: number, pageSize?: number, searchParam?: T) {
         this.currentPage = currentPage ? currentPage : 1;
         this.pageSize = pageSize ? pageSize : 10;
-        this.searchParam = searchParam ? searchParam : null;
+        this.searchParam = searchParam ? searchParam : undefined;
     }
 
     currentPage: number = 1;

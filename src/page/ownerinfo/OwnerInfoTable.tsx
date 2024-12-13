@@ -47,6 +47,15 @@ const columns: TablePageColumn = [
         render: (text: number) => `${text} m²`
     },
     {
+        title: '应收费用',
+        dataIndex: 'amountBalance',
+        key: 'amountBalance',
+        editable: true,
+        width: '8%',
+        columnStyle: 'inputNumber',
+        render: (text: number) => `${text} ￥`
+    },
+    {
         title: '备注',
         dataIndex: 'comment',
         key: 'comment',
@@ -140,7 +149,8 @@ export const OwnerInfoTable: React.FC = () => {
             <div className={styles['search-content']}>
                 <Form form={form} onFinish={onFinishSearch}>
                     <AutoRow showBorder={false} perCountEachRow={4} subElements={[
-                        <Form.Item<OwnerInfoDto> name={"roomNumber"} label={`房号`} labelCol={{span: 4}} wrapperCol={{span: 4}}>
+                        <Form.Item<OwnerInfoDto> name={"roomNumber"} label={`房号`} labelCol={{span: 4}}
+                                                 wrapperCol={{span: 4}}>
                             <Input placeholder={`请输入`} style={{width: 200}}/>
                         </Form.Item>,
                         <Form.Item<OwnerInfoDto> name={"ownerName"} label={`住户名称`} labelCol={{span: 4}}

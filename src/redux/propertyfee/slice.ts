@@ -65,8 +65,6 @@ export const propertyFeeSlice = createSlice({
                     state.result.data[index] = action.payload;
                 }
             }
-
-
         }
     },
     extraReducers: (builder) => {
@@ -129,4 +127,5 @@ export interface PropertyFeeDetailData {
     updateTime: Date;
     comment?: string;
     totalFee?: number;
+    relatedOrderNumber: string,
 }

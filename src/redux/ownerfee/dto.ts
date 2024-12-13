@@ -36,6 +36,11 @@ export enum DetailType {
     SettlementFee = "settlementFee",
 }
 
+export interface OwnerFeeDetailCreateDto {
+    roomNumber?: string,
+    version?: string,
+}
+
 export const detailTypeSelectProps = (): SelectProps['options'] => {
     return [
         {

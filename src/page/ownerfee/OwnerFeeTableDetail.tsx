@@ -29,7 +29,7 @@ const columns: TablePageColumn = [
 export const OwnerFeeTableDetail = (props: { param: OwnerFeeDetailSearchDto }) => {
     let [trigger, {isFetching, isLoading, data}] = useLazyGetOwnerFeeDataQuery();
     useEffect(() => {
-        trigger(new PaginateRequest(1, 2, props.param));
+        trigger(new PaginateRequest(1, 10, props.param));
     }, [props]);
     return <Table columns={columns} dataSource={data?.data} loading={isLoading}
                   pagination={

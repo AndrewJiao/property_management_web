@@ -54,7 +54,7 @@ export const EditableAllCell: React.FC<PropsWithChildren<Props>> = ({
                     (<Popconfirm disabled={editingKey !== '' && editingKey !== record.id} title="确定要删除吗？"
 
                                  onConfirm={() => onDelete(record.id)}>
-                        <a >删除</a>
+                        <a>删除</a>
                     </Popconfirm>) : <></>
                 }
             </div>)

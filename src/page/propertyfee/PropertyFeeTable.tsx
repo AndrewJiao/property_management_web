@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {AutoRow, onFindFetch, PageRowEditTable, SearchInput, TablePageColumn} from "../../component";
+import {AutoRow, onFindFetch, PageRowEditTable, SearchInput, TablePageColumn, TopicButton} from "../../component";
 import {Button, DatePicker, Form, FormProps, Input} from "antd";
 import {
     axiosAppendIdToKey,
@@ -21,14 +21,33 @@ import {
     thunkPropertyFeeDelete,
     thunkPropertyFeeInit
 } from "../../redux/propertyfee/slice";
-import {PropertyFeeDetailSearchDto, REQUEST_PROPERTY_FEE} from "../../axios/AxiosPropertyFee";
+import {PropertyFeeDetailSearchDto, PropertyFeeResultDto, REQUEST_PROPERTY_FEE} from "../../axios/AxiosPropertyFee";
 import {PropertyFeeInitTopicModal} from "./PropertyFeeInitTopicModal";
 import dayjs from "dayjs";
+import {InitOwnerFeeButton} from "./PropertyFeeInitOwnerFee";
+import {useCreateOwnerFeeDataMutation} from "../../redux/ownerfee";
+
+//为费用单号添加按钮
+const RenderButton = (props: { text: string, record: PropertyFeeResultDto }) => {
+    let [fetchRelateOrder, {isLoading, data, isSuccess}] = useCreateOwnerFeeDataMutation({});
+    if (props.text || isSuccess) {
+        return <>{isSuccess ? data?.data.streamId : props.text}</>
+    } else {
+        return <Button loading={isLoading} disabled={isLoading} type={"default"} onClick={() => {
+            //校验费用是否都全
+            fetchRelateOrder({roomNumber: props.record.roomNumber, version: props.record.recordVersion});
+        }}>创建费用</Button>
+    }
+}
 
 
 const columns: TablePageColumn = [
+
     {title: '房号', dataIndex: 'roomNumber', key: 'roomNumber'},
     {title: '房主姓名', dataIndex: 'roomOwnerName', key: 'roomOwnerName'},
+    {
+        title: '费用单号', dataIndex: 'relatedOrderNumber', key: 'related_order_number', width: '150px',
+    },
     {title: '管理费', dataIndex: 'managementFee', key: 'managementFee', editable: true},
     {title: '部分费用', dataIndex: 'partFee', key: 'partFee', editable: true},
     {title: '机房装修费', dataIndex: 'machineRoomRenovationFee', key: 'machineRoomRenovationFee', editable: true},
@@ -57,6 +76,7 @@ const columns: TablePageColumn = [
     },
 ];
 
+
 export const PropertyFeeTable: React.FC = () => {
     let [searchForm] = useForm<PropertyFeeDetailSearchDto>();
     let dispatch = useDispatch();
@@ -72,7 +92,7 @@ export const PropertyFeeTable: React.FC = () => {
     const onDelete = (id: string | number) => {
         dispatch(thunkPropertyFeeDelete(id))
     }
-    const initData = (monthVersion: string) => {
+    const initDataVersion = (monthVersion: string) => {
         dispatch(thunkPropertyFeeInit(monthVersion))
     }
     const onFindRecord: onFindFetch = (value, callback) => {
@@ -82,6 +102,10 @@ export const PropertyFeeTable: React.FC = () => {
     const onFindName: onFindFetch = (value, callback) => {
         REQUEST_OWNER_INFO.findData(value, OwnerInfoSearchType.OwnerName)
             .then(values => callback(values.map(value => ({value: value, text: value}))))
+    }
+
+    columns[2].render = (text, record) => {
+        return <RenderButton text={text} record={record}/>
     }
     return <>
         <PageRowEditTable title={`物业费明细`}
@@ -134,8 +158,9 @@ export const PropertyFeeTable: React.FC = () => {
                                 重置
                             </Button>
                         </Form.Item>
-                        <PropertyFeeInitTopicModal style={{marginBottom: 24}} name={'初始化'}
-                                                   onSelectCompleted={initData}/>
+                        <PropertyFeeInitTopicModal style={{marginBottom: 24, marginRight: 20}} name={'初始化'}
+                                                   onSelectCompleted={initDataVersion}/>
+                        <InitOwnerFeeButton style={{marginBottom: 24}} name={"生成费用"}/>
                     </div>
                 </Form>
             </div>

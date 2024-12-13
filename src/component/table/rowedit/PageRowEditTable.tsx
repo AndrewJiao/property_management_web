@@ -36,9 +36,10 @@ export const PageRowEditTable: React.FC<Props> = ({
 
     useEffect(() => {
         let [star, end] = defaultCurrentMonthRange();
-        dispatch(pageSearchAction(new PaginateRequest(1, 10,
-            buildDateSearchParam({createDateRange: [star.toISOString(), end.toISOString()]})
-        )));
+        dispatch(pageSearchAction({
+            currentPage: 1, pageSize: 10,
+            searchParam: buildDateSearchParam({createDateRange: [star.toISOString(), end.toISOString()]}),
+        }));
     }, [])
 
     //添加操作项
