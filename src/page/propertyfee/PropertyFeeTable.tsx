@@ -118,7 +118,7 @@ export const PropertyFeeTable: React.FC = () => {
                                                                wrapperCol={{span: 4}}>
                             <DatePicker.RangePicker style={{width: 300}}/>
                         </Form.Item>,
-                        <Form.Item<PropertyFeeDetailSearchDto> name="updateDateRange" label={'创建时间'}
+                        <Form.Item<PropertyFeeDetailSearchDto> name="updateDateRange" label={'更新时间'}
                                                                labelCol={{span: 4}} wrapperCol={{span: 4}}>
                             <DatePicker.RangePicker style={{width: 300}}/>
                         </Form.Item>

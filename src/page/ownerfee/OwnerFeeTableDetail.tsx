@@ -7,6 +7,7 @@ import {TablePageColumn} from "../../component";
 
 const columns: TablePageColumn = [
     {title: '明细ID', dataIndex: 'streamId', key: 'streamId',},
+    {title: '关联订单号', dataIndex: 'relatedOrderNumber', key: 'relatedOrderNumber',},
     {title: '房间号', dataIndex: 'roomNumber', key: 'roomNumber',},
     {title: '业主姓名', dataIndex: 'ownerName', key: 'ownerName',},
     {title: '明细类型', dataIndex: 'detailType', key: 'detailType',},
@@ -15,16 +16,21 @@ const columns: TablePageColumn = [
     {title: '备注', dataIndex: 'comment', key: 'comment',},
     {title: '创建人', dataIndex: 'createBy', key: 'createBy',},
     {title: '更新人', dataIndex: 'updateBy', key: 'updateBy',},
-    {title: '创建时间', dataIndex: 'createTime', key: 'createTime',},
-    {title: '更新时间', dataIndex: 'updateTime', key: 'updateTime',},
-    {title: '相关订单号', dataIndex: 'relatedOrderNumber', key: 'relatedOrderNumber',},
+    {
+        title: '创建时间', dataIndex: 'createTime', key: 'createTime',
+        render: (text) => <span>{new Date(text).toLocaleString()}</span>
+    },
+    {
+        title: '更新时间', dataIndex: 'updateTime', key: 'updateTime',
+        render: (text) => <span>{new Date(text).toLocaleString()}</span>
+    },
 ];
 
 export const OwnerFeeTableDetail = (props: { param: OwnerFeeDetailSearchDto }) => {
     let [trigger, {isFetching, isLoading, data}] = useLazyGetOwnerFeeDataQuery();
     useEffect(() => {
         trigger(new PaginateRequest(1, 2, props.param));
-    }, []);
+    }, [props]);
     return <Table columns={columns} dataSource={data?.data} loading={isLoading}
                   pagination={
                       {

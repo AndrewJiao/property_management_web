@@ -8,16 +8,15 @@ import {OwnerFeeFormDetail} from "./OwnerFeeFormDetail";
 
 export const OwnerFeeTable: React.FC = () => {
 
-    const [param, setParam] = useState<OwnerFeeDetailSearchDto>({});
+    const [searchParam, setSearchParam] = useState<OwnerFeeDetailSearchDto>({});
 
     return <>
         <Typography.Title level={4}>用户费用明细</Typography.Title>
         <div className={styles['search-content']}>
-            <OwnerFeeFormDetail onFinishSearch={setParam}/>
+            <OwnerFeeFormDetail onFinishSearch={setSearchParam}/>
         </div>
         <div className={styles['table-content']}>
-            {/*内部会绑定param作为state,param变更则table会更新查询*/}
-            <OwnerFeeTableDetail param={param}/>
+            <OwnerFeeTableDetail param={searchParam}/>
         </div>
     </>
 }

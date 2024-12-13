@@ -8,6 +8,7 @@ import {roomInfoSlice} from "./roominfo/slice";
 import {propertyFeeSlice} from "./propertyfee/slice";
 import {ownerFeeApi} from "./ownerfee";
 
+
 const rootReducer = combineReducers({
     basicPriceSlice: basicPriceSlice.reducer,
     ownerInfoSlice: ownerInfoSlice.reducer,
@@ -24,7 +25,9 @@ let persistedReducer = persistReducer({
 
 let store = configureStore({
     reducer: persistedReducer,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false}).concat(ownerFeeApi.middleware),
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({serializableCheck: false})
+            .concat(ownerFeeApi.middleware),
     devTools: true
 });
 

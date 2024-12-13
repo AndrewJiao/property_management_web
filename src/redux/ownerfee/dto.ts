@@ -1,4 +1,5 @@
 import {DateRangeType} from "../../utils";
+import {SelectProps} from "antd";
 
 export interface OwnerFeeDetailResultDto {
     id: number;
@@ -26,14 +27,37 @@ export interface OwnerFeeDetailSearchDto extends DateRangeType {
 
 export enum DetailType {
     //物业费
-    ManagementFee,
+    ManagementFee = "managementFee",
     //滞纳
-    LiquidatedDamages,
+    LiquidatedDamages = "liquidatedDamages",
     //预存
-    PreStoreFee,
+    PreStoreFee = "preStoreFee",
     //结算
-    SettlementFee,
+    SettlementFee = "settlementFee",
 }
+
+export const detailTypeSelectProps = (): SelectProps['options'] => {
+    return [
+        {
+            label: '物业费',
+            value: DetailType.ManagementFee
+        },
+        {
+            label: '滞纳',
+            value: DetailType.LiquidatedDamages
+        },
+        {
+            label: '预存',
+            value: DetailType.PreStoreFee
+        },
+        {
+            label: '结算',
+            value: DetailType.SettlementFee
+
+        }
+    ]
+}
+
 
 export interface OwnerFeeDetailUpdateDto {
     amount?: number;
