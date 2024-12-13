@@ -11,12 +11,15 @@ export const OwnerFeeTable: React.FC = () => {
     const [searchParam, setSearchParam] = useState<OwnerFeeDetailSearchDto>({});
 
     return <>
-        <Typography.Title level={4}>用户费用明细</Typography.Title>
-        <div className={styles['search-content']}>
-            <OwnerFeeFormDetail onFinishSearch={setSearchParam}/>
-        </div>
         <div className={styles['table-content']}>
-            <OwnerFeeTableDetail param={searchParam}/>
+
+            <Typography.Title level={4}>用户费用明细</Typography.Title>
+            <div className={styles['search-content']}>
+                <OwnerFeeFormDetail onFinishSearch={setSearchParam}/>
+            </div>
+            <div className={styles['content']}>
+                <OwnerFeeTableDetail param={searchParam}/>
+            </div>
         </div>
     </>
 }

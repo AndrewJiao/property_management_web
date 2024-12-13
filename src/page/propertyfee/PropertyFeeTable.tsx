@@ -25,17 +25,21 @@ import {PropertyFeeDetailSearchDto, PropertyFeeResultDto, REQUEST_PROPERTY_FEE} 
 import {PropertyFeeInitTopicModal} from "./PropertyFeeInitTopicModal";
 import dayjs from "dayjs";
 import {InitOwnerFeeButton} from "./PropertyFeeInitOwnerFee";
-import {useCreateOwnerFeeDataMutation} from "../../redux/ownerfee";
+import {DetailType, useCreateOwnerFeeDataMutation} from "../../redux/ownerfee";
 
 //为费用单号添加按钮
 const RenderButton = (props: { text: string, record: PropertyFeeResultDto }) => {
     let [fetchRelateOrder, {isLoading, data, isSuccess}] = useCreateOwnerFeeDataMutation({});
     if (props.text || isSuccess) {
-        return <>{isSuccess ? data?.data.streamId : props.text}</>
+        return <>{isSuccess ? data?.data?.streamId : props.text}</>
     } else {
         return <Button loading={isLoading} disabled={isLoading} type={"default"} onClick={() => {
             //校验费用是否都全
-            fetchRelateOrder({roomNumber: props.record.roomNumber, version: props.record.recordVersion});
+            fetchRelateOrder({
+                roomNumber: props.record.roomNumber,
+                version: props.record.recordVersion,
+                detailType: DetailType.ManagementFee
+            });
         }}>创建费用</Button>
     }
 }

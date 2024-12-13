@@ -1,9 +1,8 @@
-import {BaseQueryArg, BaseQueryMeta, BaseQueryResult, createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
+import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 import {OwnerFeeDetailCreateDto, OwnerFeeDetailResultDto, OwnerFeeDetailSearchDto} from "./dto";
 import {AppResult, PaginateRequest} from "../../axios";
 import {encode} from "base-64";
 import utf8 from "utf8";
-import * as url from "node:url";
 
 const baseQuery = (arg, api, opt = {}) => {
     if (arg instanceof PaginateRequest) {
@@ -33,7 +32,7 @@ export const ownerFeeApi = createApi({
             ),
             transformResponse: (response: AppResult<[OwnerFeeDetailResultDto]>) => response
         }),
-        createOwnerFeeData: builder.mutation<AppResult<OwnerFeeDetailResultDto>, OwnerFeeDetailCreateDto>({
+        createOwnerFeeData: builder.mutation<AppResult<OwnerFeeDetailResultDto | null>, OwnerFeeDetailCreateDto>({
             query(arg) {
                 return {
                     url: '/owner_fee/data',
@@ -42,20 +41,10 @@ export const ownerFeeApi = createApi({
                 }
             },
         }),
-        createOwnerFeeDataAll: builder.mutation<AppResult<void>, OwnerFeeDetailCreateDto>({
-            query(arg) {
-                return {
-                    url: '/owner_fee/datas',
-                    method: 'POST',
-                    body: arg
-                }
-            }
-        }),
     }),
 });
 export const {
     useGetOwnerFeeDataQuery,
     useLazyGetOwnerFeeDataQuery,
     useCreateOwnerFeeDataMutation,
-    useCreateOwnerFeeDataAllMutation
 } = ownerFeeApi

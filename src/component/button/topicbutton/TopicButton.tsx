@@ -12,14 +12,10 @@ interface Props {
 export const TopicButton: React.FC<Props> = ({childern, onSelectCompleted, onFetchingData, name, style}) => {
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
-    const [initLoading, setInitLoading] = useState(true);
-    const [versionList, setVersionList] = useState<{ value: string, label: string }[]>([]);
-    const [selectedVersion, setSelectedVersion] = useState<string | null>()
+    const [selectValue, setSelectValue] = useState<string | null>()
     useEffect(() => {
         let e = onFetchingData();
-        setInitLoading(false);
-        setVersionList(e);
-        setSelectedVersion(e[0].value ?? null);
+        setSelectValue(e[0].value ?? null);
     }, []);
 
 
@@ -28,9 +24,9 @@ export const TopicButton: React.FC<Props> = ({childern, onSelectCompleted, onFet
     };
 
     const handleOk = () => {
-        if (selectedVersion) {
+        if (selectValue) {
             setConfirmLoading(true);
-            onSelectCompleted(selectedVersion)
+            onSelectCompleted(selectValue)
             setOpen(false);
             setConfirmLoading(false);
         }

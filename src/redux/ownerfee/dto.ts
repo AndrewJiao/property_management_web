@@ -36,9 +36,17 @@ export enum DetailType {
     SettlementFee = "settlementFee",
 }
 
+export enum DetailTypePlus{
+    ManagementFeeBatch = "managementFeeBatch"
+}
+
+export type StreamAddDetailType =
+    Omit<DetailType, DetailType.LiquidatedDamages> | DetailTypePlus.ManagementFeeBatch
+
 export interface OwnerFeeDetailCreateDto {
     roomNumber?: string,
     version?: string,
+    detailType: StreamAddDetailType,
 }
 
 export const detailTypeSelectProps = (): SelectProps['options'] => {

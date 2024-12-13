@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from "react";
 import {Button, Modal, Select} from "antd";
-import {useCreateOwnerFeeDataAllMutation} from "../../redux/ownerfee";
+import {DetailType, DetailTypePlus, useCreateOwnerFeeDataMutation} from "../../redux/ownerfee";
 import {thunkPropertyFeeDataGet} from "../../redux/propertyfee/slice";
 import {PaginateRequest} from "../../axios";
 import {PropertyFeeDetailSearchDto} from "../../axios/AxiosPropertyFee";
 import {useDispatch} from "../../redux/hook";
-import {TopicButton} from "../../component";
 import {REQUEST_ROOM_INFO, RoomInfoSearchType} from "../../axios/AxiosRoomInfo";
 
 interface Props {
@@ -16,7 +15,7 @@ interface Props {
 export const InitOwnerFeeButton: React.FC<Props> = ({name, style}) => {
 
     let dispatch = useDispatch();
-    let [postInitAll, {isLoading}] = useCreateOwnerFeeDataAllMutation();
+    let [fetchRelateOrder, {isLoading}] = useCreateOwnerFeeDataMutation();
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [initLoading, setInitLoading] = useState(true);
@@ -39,7 +38,7 @@ export const InitOwnerFeeButton: React.FC<Props> = ({name, style}) => {
     const handleOk = async () => {
         if (selectedVersion) {
             setConfirmLoading(true);
-            await postInitAll({version: selectedVersion});
+            await fetchRelateOrder({version: selectedVersion, detailType: DetailTypePlus.ManagementFeeBatch});
             dispatch(thunkPropertyFeeDataGet(new PaginateRequest<PropertyFeeDetailSearchDto>()));
             setOpen(false);
             setConfirmLoading(false);

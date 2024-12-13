@@ -1,9 +1,10 @@
 import React, {useEffect} from "react";
 import {AutoRow, SearchInput} from "../../component";
-import {Button, DatePicker, Form, FormProps, Input, Select, SelectProps} from "antd";
+import {Button, DatePicker, Form, FormProps, Input, Select, SelectProps, Space} from "antd";
 import {DetailType, detailTypeSelectProps, OwnerFeeDetailSearchDto} from "../../redux/ownerfee";
 import {useForm} from "antd/es/form/Form";
 import {defaultCurrentMonthRangeDayJs} from "../../utils";
+import styles from "./OwnerFeeTable.module.css";
 
 const options: SelectProps['options'] = detailTypeSelectProps()
 
@@ -52,7 +53,17 @@ export const OwnerFeeFormDetail = (props: { onFinishSearch: (param: OwnerFeeDeta
                 <DatePicker.RangePicker style={{width: 300}}/>
             </Form.Item>
         ]}/>
-        <Button type="primary" htmlType="submit">查询</Button>
+
+        <div className={styles['button-container']}>
+            <div className={styles['button-left-container']}>
+                <Button type="primary" htmlType="submit" className={styles['button-left']}>查询</Button>
+                <Button type="dashed" htmlType="reset" className={styles['button-left']}>重置</Button>
+            </div>
+            <div className={styles['button-right-container']}>
+                <Button type="primary" htmlType="submit" className={styles['button-right']}>新增</Button>
+            </div>
+        </div>
+
     </Form>
 
 
