@@ -47,6 +47,7 @@ export interface OwnerFeeDetailCreateDto {
     roomNumber?: string,
     version?: string,
     detailType: StreamAddDetailType,
+    amount?:number,
 }
 
 export const detailTypeSelectProps = (): SelectProps['options'] => {

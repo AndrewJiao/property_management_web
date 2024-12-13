@@ -2,21 +2,22 @@ import React, {useEffect, useState} from 'react';
 import {Button, Modal} from 'antd';
 
 interface Props {
-    onSelectCompleted: (value: string) => void;
-    onFetchingData: () => [{ value: string, label: string }]
+    onCompleted: () => void;
     name: string,
     style?: React.CSSProperties,
-    childern: React.ReactNode
+    children: React.ReactNode
+    classNameButton?: string,
 }
 
-export const TopicButton: React.FC<Props> = ({childern, onSelectCompleted, onFetchingData, name, style}) => {
+export const TopicButton: React.FC<Props> = ({
+                                                 children,
+                                                 onCompleted,
+                                                 name,
+                                                 style,
+                                                 classNameButton
+                                             }) => {
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
-    const [selectValue, setSelectValue] = useState<string | null>()
-    useEffect(() => {
-        let e = onFetchingData();
-        setSelectValue(e[0].value ?? null);
-    }, []);
 
 
     const showModal = () => {
@@ -24,21 +25,18 @@ export const TopicButton: React.FC<Props> = ({childern, onSelectCompleted, onFet
     };
 
     const handleOk = () => {
-        if (selectValue) {
-            setConfirmLoading(true);
-            onSelectCompleted(selectValue)
-            setOpen(false);
-            setConfirmLoading(false);
-        }
+        setConfirmLoading(true);
+        setOpen(false);
+        setConfirmLoading(false);
+        onCompleted()
     };
 
     const handleCancel = () => {
         setOpen(false);
     };
 
-    return (
-        <>
-            <Button style={style} type="primary" onClick={showModal}>
+    return (<>
+            <Button className={classNameButton} style={style} type="primary" onClick={showModal}>
                 {name}
             </Button>
             <Modal
@@ -46,9 +44,8 @@ export const TopicButton: React.FC<Props> = ({childern, onSelectCompleted, onFet
                 open={open}
                 onOk={handleOk}
                 confirmLoading={confirmLoading}
-                onCancel={handleCancel}
-            >
-                {childern}
+                onCancel={handleCancel}>
+                {children}
             </Modal>
         </>
     );

@@ -45,3 +45,9 @@
     padding-bottom: 24px;
     padding-top: 10px;
 }
+
+/*create topic*/
+.topic-input{
+    width: 100%;
+    margin-top: 20px;
+}

@@ -1,31 +1,43 @@
 import React, {useState} from "react";
-import {TopicButton} from "../../component";
-import {SelectProps} from "antd";
-import {DetailType} from "../../redux/ownerfee";
+import {SearchInput, TopicButton} from "../../component";
+import {DetailType, OwnerFeeDetailCreateDto, useCreateOwnerFeeDataMutation} from "../../redux/ownerfee";
+import {OwnerInfoSearchType, REQUEST_OWNER_INFO} from "../../axios";
+import {useForm} from "antd/es/form/Form";
+import {Form, InputNumber} from "antd";
+import styles from './OwnerFeeTable.module.css';
 
-const detailTypeToSelected: SelectProps['options'] = [
-    {
-        label: '预存',
-        value: DetailType.PreStoreFee
-    },
-    {
-        label: '结算',
-        value: DetailType.SettlementFee
+interface Props {
+    classNameButton?: string
+
+}
+
+export const OwnerFeeCreateTopicButton: React.FC<Props> = ({classNameButton}) => {
+    let [form] = useForm<OwnerFeeDetailCreateDto>()
+    let [postCreateOwnerFee, {isLoading, data}] = useCreateOwnerFeeDataMutation();
+
+    const onFinishForm = (value: OwnerFeeDetailCreateDto) => {
+        postCreateOwnerFee({...value, detailType: DetailType.PreStoreFee}).then(() => {
+            form.resetFields();
+        })
+
     }
-]
-export const OwnerFeeCreateTopicButton: React.FC = () => {
+
+    const SearchContent = () => <Form form={form} onFinish={onFinishForm}>
+        <Form.Item<OwnerFeeDetailCreateDto> className={styles['topic-input']} name={"roomNumber"} label={"房间号"}
+                                            labelCol={{span: 4}} wrapperCol={{span: 12}}>
+            <SearchInput placeholder={"选择预存用户"} fetch={async (value, callback) => {
+                let roomNumbers = await REQUEST_OWNER_INFO.findData(value, OwnerInfoSearchType.RoomNumber);
+                callback(roomNumbers.map(value => ({value: value, text: value})));
+            }}/>
+        </Form.Item>
+        <Form.Item<OwnerFeeDetailCreateDto> className={styles['topic-input']} name={"amount"} label={"金额"}
+                                            labelCol={{span: 4}} wrapperCol={{span: 12}}>
+            <InputNumber placeholder={"请输入"} style={{width: 225}}/>
+        </Form.Item>
+    </Form>
 
 
-    const [initLoading, setInitLoading] = useState(true);
-    const [detailTypeToSelected, setDetailTypeToSelected] = useState<{ value: string, label: string }[]>([]);
-
-    return <div/>
-    // return <TopicButton
-    //     onSelectCompleted={(e) => {
-    //
-    //     }}
-    //     onFetchingData={}
-    //     name={"新增明细"}>
-    //
-    // </TopicButton>
+    return <TopicButton onCompleted={() => form.submit()} name={"增加预存"} classNameButton={classNameButton}>
+        <SearchContent/>
+    </TopicButton>
 }

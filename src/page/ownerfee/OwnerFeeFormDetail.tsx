@@ -5,6 +5,7 @@ import {DetailType, detailTypeSelectProps, OwnerFeeDetailSearchDto} from "../../
 import {useForm} from "antd/es/form/Form";
 import {defaultCurrentMonthRangeDayJs} from "../../utils";
 import styles from "./OwnerFeeTable.module.css";
+import {OwnerFeeCreateTopicButton} from "./OwnerFeeCreateTopicButton";
 
 const options: SelectProps['options'] = detailTypeSelectProps()
 
@@ -61,6 +62,7 @@ export const OwnerFeeFormDetail = (props: { onFinishSearch: (param: OwnerFeeDeta
             </div>
             <div className={styles['button-right-container']}>
                 <Button type="primary" htmlType="submit" className={styles['button-right']}>新增</Button>
+                <OwnerFeeCreateTopicButton classNameButton={styles['button-right']}/>
             </div>
         </div>
 

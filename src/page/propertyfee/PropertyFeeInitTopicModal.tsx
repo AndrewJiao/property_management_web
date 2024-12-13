@@ -29,7 +29,6 @@ export const PropertyFeeInitTopicModal: React.FC<Props> = ({onSelectCompleted, n
     };
 
     const handleOk = () => {
-        console.log(`selectedVersion = ${selectedVersion}`)
         if (selectedVersion) {
             setConfirmLoading(true);
             onSelectCompleted(selectedVersion)
