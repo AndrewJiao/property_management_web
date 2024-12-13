@@ -24,7 +24,7 @@ let persistedReducer = persistReducer({
 
 let store = configureStore({
     reducer: persistedReducer,
-    middleware: (e) => e().concat(ownerFeeApi.middleware),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false}).concat(ownerFeeApi.middleware),
     devTools: true
 });
 

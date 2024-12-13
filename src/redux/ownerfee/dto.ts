@@ -1,5 +1,4 @@
-import {buildDateSearchParam, DateRangeType, defaultCurrentMonthRange} from "../../utils";
-import {OwnerInfoSearchDto, PaginateRequest} from "../../axios";
+import {DateRangeType} from "../../utils";
 
 export interface OwnerFeeDetailResultDto {
     id: number;
@@ -15,22 +14,6 @@ export interface OwnerFeeDetailResultDto {
     createTime: Date;
     updateTime: Date;
     relatedOrderNumber: string;
-}
-
-/**
- * 初始化查詢
- */
-export const initOwnerFeeDetailSearchDto = (): PaginateRequest<OwnerInfoSearchDto> => {
-    let [star, end] = defaultCurrentMonthRange();
-    return {
-        currentPage: 1,
-        pageSize: 10,
-        searchParam: buildDateSearchParam({
-            createDateRange: [star.toISOString(), end.toISOString()],
-            createTimeStar: null,
-            createTimeEnd: null,
-        })
-    }
 }
 
 
