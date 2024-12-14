@@ -1,7 +1,12 @@
 import React, {useEffect} from "react";
-import {OwnerFeeDetailSearchDto, useLazyGetOwnerFeeDataQuery} from "../../redux/ownerfee";
+import {
+    CalculateType,
+    OwnerFeeDetailResultDto,
+    OwnerFeeDetailSearchDto,
+    useLazyGetOwnerFeeDataQuery
+} from "../../redux/ownerfee";
 import {PaginateRequest} from "../../axios";
-import {Table} from "antd";
+import {Table, Tag} from "antd";
 import {TablePageColumn} from "../../component";
 
 
@@ -10,8 +15,18 @@ const columns: TablePageColumn = [
     {title: '关联订单号', dataIndex: 'relatedOrderNumber', key: 'relatedOrderNumber',},
     {title: '房间号', dataIndex: 'roomNumber', key: 'roomNumber',},
     {title: '业主姓名', dataIndex: 'ownerName', key: 'ownerName',},
-    {title: '明细类型', dataIndex: 'detailType', key: 'detailType',},
-    {title: '金额', dataIndex: 'amount', key: 'amount',},
+    {title: '明细类型', dataIndex: 'detailTypeDesc', key: 'detailTypeDesc',},
+    {
+        title: '应收金额', dataIndex: 'amount', key: 'amount',
+        render: (text, record: OwnerFeeDetailResultDto) => {
+            if (record.calculateType === CalculateType.Add) {
+                return <Tag color="red">{text}</Tag>
+            } else {
+                return <Tag color="green">{text}</Tag>
+            }
+
+        }
+    },
     {title: '余额', dataIndex: 'amountBalance', key: 'amountBalance',},
     {title: '备注', dataIndex: 'comment', key: 'comment',},
     {title: '创建人', dataIndex: 'createBy', key: 'createBy',},

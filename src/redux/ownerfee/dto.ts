@@ -7,6 +7,8 @@ export interface OwnerFeeDetailResultDto {
     roomNumber: string;
     ownerName?: string;
     detailType: DetailType;
+    detailTypeDesc: string;
+    calculateType: CalculateType;
     amount: number;
     amountBalance: number;
     comment?: string;
@@ -15,6 +17,7 @@ export interface OwnerFeeDetailResultDto {
     createTime: Date;
     updateTime: Date;
     relatedOrderNumber: string;
+
 }
 
 
@@ -24,6 +27,10 @@ export interface OwnerFeeDetailSearchDto extends DateRangeType {
     detailType?: DetailType;
 }
 
+export enum CalculateType {
+    Add="Add",
+    Subtract="Subtract",
+}
 
 export enum DetailType {
     //物业费
@@ -36,7 +43,7 @@ export enum DetailType {
     SettlementFee = "settlementFee",
 }
 
-export enum DetailTypePlus{
+export enum DetailTypePlus {
     ManagementFeeBatch = "managementFeeBatch"
 }
 
@@ -47,7 +54,7 @@ export interface OwnerFeeDetailCreateDto {
     roomNumber?: string,
     version?: string,
     detailType: StreamAddDetailType,
-    amount?:number,
+    amount?: number,
 }
 
 export const detailTypeSelectProps = (): SelectProps['options'] => {
