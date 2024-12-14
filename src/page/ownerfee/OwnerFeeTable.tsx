@@ -1,24 +1,19 @@
-import React, {useState} from "react";
+import React from "react";
 import {Typography} from "antd";
-import {OwnerFeeDetailSearchDto} from "../../redux/ownerfee";
 import styles from './OwnerFeeTable.module.css';
 import {OwnerFeeTableDetail} from "./OwnerFeeTableDetail";
 import {OwnerFeeFormDetail} from "./OwnerFeeFormDetail";
 
 
 export const OwnerFeeTable: React.FC = () => {
-
-    const [searchParam, setSearchParam] = useState<OwnerFeeDetailSearchDto>({});
-
     return <>
         <div className={styles['table-content']}>
-
             <Typography.Title level={4}>用户费用明细</Typography.Title>
             <div className={styles['search-content']}>
-                <OwnerFeeFormDetail onFinishSearch={setSearchParam}/>
+                <OwnerFeeFormDetail/>
             </div>
             <div className={styles['content']}>
-                <OwnerFeeTableDetail param={searchParam}/>
+                <OwnerFeeTableDetail/>
             </div>
         </div>
     </>

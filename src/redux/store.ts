@@ -7,6 +7,7 @@ import {ownerInfoSlice} from "./ownerInfo/slice";
 import {roomInfoSlice} from "./roominfo/slice";
 import {propertyFeeSlice} from "./propertyfee/slice";
 import {ownerFeeApi} from "./ownerfee";
+import {ownerFeeSlice} from "./ownerfee/slice";
 
 
 const rootReducer = combineReducers({
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
     ownerInfoSlice: ownerInfoSlice.reducer,
     roomInfoSlice: roomInfoSlice.reducer,
     propertyFeeSlice: propertyFeeSlice.reducer,
-    [ownerFeeApi.reducerPath]: ownerFeeApi.reducer
+    [ownerFeeApi.reducerPath]: ownerFeeApi.reducer,
+    ownerFeeSlice: ownerFeeSlice.reducer,
 })
 
 let persistedReducer = persistReducer({

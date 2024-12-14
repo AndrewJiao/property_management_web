@@ -12,6 +12,7 @@ import {OwnerFeeTable} from "../ownerfee";
  */
 export const HomePage: React.FC = () => {
     let {tableType} = useParams<{ tableType: string }>();
+    console.log(`HomePage tableType = ${tableType}`)
 
     let renderSub: ReactNode;
     switch (tableType) {

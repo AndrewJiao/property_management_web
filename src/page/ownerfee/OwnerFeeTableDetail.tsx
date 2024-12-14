@@ -8,6 +8,7 @@ import {
 import {PaginateRequest} from "../../axios";
 import {Table, Tag} from "antd";
 import {TablePageColumn} from "../../component";
+import {useSelector} from "../../redux/hook";
 
 
 const columns: TablePageColumn = [
@@ -41,12 +42,13 @@ const columns: TablePageColumn = [
     },
 ];
 
-export const OwnerFeeTableDetail = (props: { param: OwnerFeeDetailSearchDto }) => {
-    let [trigger, {isFetching, isLoading, data}] = useLazyGetOwnerFeeDataQuery();
+export const OwnerFeeTableDetail = () => {
+    let {searchParam, isLoading} = useSelector(state => state.ownerFeeSlice);
+    let [postFetch, {isFetching, data}] = useLazyGetOwnerFeeDataQuery();
     useEffect(() => {
-        trigger(new PaginateRequest(1, 10, props.param));
-    }, [props]);
-    return <Table columns={columns} dataSource={data?.data} loading={isLoading}
+        !isLoading && postFetch(new PaginateRequest(1, 10, searchParam));
+    }, [searchParam, isLoading]);
+    return <Table columns={columns} dataSource={data?.data} loading={isFetching || isLoading}
                   pagination={
                       {
                           disabled: isFetching,
@@ -56,10 +58,10 @@ export const OwnerFeeTableDetail = (props: { param: OwnerFeeDetailSearchDto }) =
                           total: data?.paginateResult.totalSize,
                           showSizeChanger: true,
                           onShowSizeChange: (currentPage, pageSize) => {
-                              trigger(new PaginateRequest(currentPage, pageSize, props.param))
+                              postFetch(new PaginateRequest(currentPage, pageSize, searchParam))
                           },
                           onChange: (currentPage, pageSize) => {
-                              trigger(new PaginateRequest(currentPage, pageSize, props.param))
+                              postFetch(new PaginateRequest(currentPage, pageSize, searchParam))
                           }
                       }
                   }/>

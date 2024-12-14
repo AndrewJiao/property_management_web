@@ -1,15 +1,18 @@
 import React, {useEffect} from "react";
-import {AutoRow, SearchInput} from "../../component";
-import {Button, DatePicker, Form, FormProps, Input, Select, SelectProps, Space} from "antd";
-import {DetailType, detailTypeSelectProps, OwnerFeeDetailSearchDto} from "../../redux/ownerfee";
+import {AutoRow} from "../../component";
+import {Button, DatePicker, Form, FormProps, Input, Select, SelectProps} from "antd";
+import {detailTypeSelectProps, OwnerFeeDetailSearchDto} from "../../redux/ownerfee";
 import {useForm} from "antd/es/form/Form";
 import {defaultCurrentMonthRangeDayJs} from "../../utils";
 import styles from "./OwnerFeeTable.module.css";
 import {OwnerFeeCreateTopicButton} from "./OwnerFeeCreateTopicButton";
+import {useDispatch} from "../../redux/hook";
+import {ownerFeeSlice} from "../../redux/ownerfee/slice";
 
 const options: SelectProps['options'] = detailTypeSelectProps()
 
-export const OwnerFeeFormDetail = (props: { onFinishSearch: (param: OwnerFeeDetailSearchDto) => void }) => {
+export const OwnerFeeFormDetail = () => {
+    let dispatch = useDispatch();
 
     let [searchForm] = useForm<OwnerFeeDetailSearchDto>();
     //初始化默认查询条件
@@ -19,7 +22,7 @@ export const OwnerFeeFormDetail = (props: { onFinishSearch: (param: OwnerFeeDeta
 
     const onFinishFormToFetch: FormProps<OwnerFeeDetailSearchDto>['onFinish'] = async (value) => {
         let searchParam = await searchForm.validateFields();
-        props.onFinishSearch(searchParam)
+        dispatch(ownerFeeSlice.actions.setSearchParam(searchParam));
     }
     return <Form form={searchForm} onFinish={onFinishFormToFetch}>
         <AutoRow showBorder={false} perCountEachRow={3} subElements={[
