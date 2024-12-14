@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Button, Modal} from 'antd';
 
 interface Props {
@@ -18,7 +18,6 @@ export const TopicButton: React.FC<Props> = ({
                                              }) => {
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
-
 
     const showModal = () => {
         setOpen(true);
@@ -47,7 +46,6 @@ export const TopicButton: React.FC<Props> = ({
                 onCancel={handleCancel}>
                 {children}
             </Modal>
-        </>
-    );
-};
+        </>);
+}
 

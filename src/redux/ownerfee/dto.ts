@@ -1,6 +1,15 @@
 import {DateRangeType} from "../../utils";
 import {SelectProps} from "antd";
 
+export enum SettleType {
+    //未结算
+    Settled = "Settled",
+    //已结算
+    NotSettle = "NotSettle",
+    //无需结算
+    NoNeedSettle = "NoNeedSettle"
+}
+
 export interface OwnerFeeDetailResultDto {
     id: number;
     streamId: string;
@@ -17,6 +26,7 @@ export interface OwnerFeeDetailResultDto {
     createTime: Date;
     updateTime: Date;
     relatedOrderNumber: string;
+    settleType: SettleType;
 
 }
 
@@ -28,23 +38,23 @@ export interface OwnerFeeDetailSearchDto extends DateRangeType {
 }
 
 export enum CalculateType {
-    Add="Add",
-    Subtract="Subtract",
+    Add = "Add",
+    Subtract = "Subtract",
 }
 
 export enum DetailType {
     //物业费
-    ManagementFee = "managementFee",
+    ManagementFee = "ManagementFee",
     //滞纳
-    LiquidatedDamages = "liquidatedDamages",
+    LiquidatedDamages = "LiquidatedDamages",
     //预存
-    PreStoreFee = "preStoreFee",
+    PreStoreFee = "PreStoreFee",
     //结算
-    SettlementFee = "settlementFee",
+    SettlementFee = "SettlementFee",
 }
 
 export enum DetailTypePlus {
-    ManagementFeeBatch = "managementFeeBatch"
+    ManagementFeeBatch = "ManagementFeeBatch"
 }
 
 export type StreamAddDetailType =
@@ -55,6 +65,7 @@ export interface OwnerFeeDetailCreateDto {
     version?: string,
     detailType: StreamAddDetailType,
     amount?: number,
+    streamId?: string,
 }
 
 export const detailTypeSelectProps = (): SelectProps['options'] => {
@@ -74,7 +85,6 @@ export const detailTypeSelectProps = (): SelectProps['options'] => {
         {
             label: '结算',
             value: DetailType.SettlementFee
-
         }
     ]
 }

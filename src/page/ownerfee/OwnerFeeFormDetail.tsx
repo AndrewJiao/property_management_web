@@ -38,13 +38,8 @@ export const OwnerFeeFormDetail = () => {
             <Form.Item<OwnerFeeDetailSearchDto> name={"detailType"} label={`明细类型`}
                                                 labelCol={{span: 4}}
                                                 wrapperCol={{span: 4}}>
-                <Select
-                    mode="multiple"
-                    size={'middle'}
-                    placeholder="请输入"
-                    defaultValue={[]}
-                    style={{width: '350%'}}
-                    options={options}
+                <Select mode="multiple" size={'middle'} placeholder="请输入" defaultValue={[]} style={{width: '350%'}}
+                        options={options}
                 />
             </Form.Item>,
             <Form.Item<OwnerFeeDetailSearchDto> name="createDateRange" label={'创建时间'}
@@ -64,7 +59,6 @@ export const OwnerFeeFormDetail = () => {
                 <Button type="dashed" htmlType="reset" className={styles['button-left']}>重置</Button>
             </div>
             <div className={styles['button-right-container']}>
-                <Button type="primary" htmlType="submit" className={styles['button-right']}>新增</Button>
                 <OwnerFeeCreateTopicButton classNameButton={styles['button-right']}/>
             </div>
         </div>

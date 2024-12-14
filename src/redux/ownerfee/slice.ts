@@ -2,15 +2,13 @@ import {createSlice} from "@reduxjs/toolkit";
 import {OwnerFeeDetailSearchDto} from "./dto";
 
 export interface OwnerFeeState {
-    isLoading: boolean
-    tableCanFetchData: boolean
-    searchParam: {}
+    searchParam: OwnerFeeDetailSearchDto
+    touchSearch: number
 }
 
 const defaultState: OwnerFeeState = {
-    isLoading: true,
-    tableCanFetchData: true,
-    searchParam: {}
+    searchParam: {},
+    touchSearch: 0
 }
 
 
@@ -18,11 +16,12 @@ export const ownerFeeSlice = createSlice({
     name: 'ownerFee/slice',
     initialState: defaultState,
     reducers: {
-        setTableLoading(state, action) {
-            state.isLoading = action.payload;
-        },
         setSearchParam(state, action) {
             state.searchParam = action.payload;
+            state.touchSearch++;
+        },
+        touchUpdate(state) {
+            state.touchSearch++;
         }
     }
 })

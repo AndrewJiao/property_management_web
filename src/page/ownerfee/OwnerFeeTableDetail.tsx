@@ -1,14 +1,11 @@
 import React, {useEffect} from "react";
-import {
-    CalculateType,
-    OwnerFeeDetailResultDto,
-    OwnerFeeDetailSearchDto,
-    useLazyGetOwnerFeeDataQuery
-} from "../../redux/ownerfee";
+import {CalculateType, OwnerFeeDetailResultDto, useLazyGetOwnerFeeDataQuery} from "../../redux/ownerfee";
 import {PaginateRequest} from "../../axios";
 import {Table, Tag} from "antd";
-import {TablePageColumn} from "../../component";
+import {ColumnTypes, TablePageColumn} from "../../component";
+import {OwnerFeeTableCell} from "./OwnerFeeTableCell";
 import {useSelector} from "../../redux/hook";
+import {CaretDownOutlined, CaretUpOutlined} from "@ant-design/icons";
 
 
 const columns: TablePageColumn = [
@@ -18,17 +15,16 @@ const columns: TablePageColumn = [
     {title: '业主姓名', dataIndex: 'ownerName', key: 'ownerName',},
     {title: '明细类型', dataIndex: 'detailTypeDesc', key: 'detailTypeDesc',},
     {
-        title: '应收金额', dataIndex: 'amount', key: 'amount',
-        render: (text, record: OwnerFeeDetailResultDto) => {
+        title: '金额', dataIndex: 'amount', key: 'amount',
+        render: (text: number, record: OwnerFeeDetailResultDto) => {
             if (record.calculateType === CalculateType.Add) {
-                return <Tag color="red">{text}</Tag>
+                return <div><CaretDownOutlined/><Tag color="red">{text}</Tag></div>
             } else {
-                return <Tag color="green">{text}</Tag>
+                return <div><CaretUpOutlined/> <Tag color="green">{text}</Tag></div>
             }
-
         }
     },
-    {title: '余额', dataIndex: 'amountBalance', key: 'amountBalance',},
+    {title: '应收金额', dataIndex: 'amountBalance', key: 'amountBalance',},
     {title: '备注', dataIndex: 'comment', key: 'comment',},
     {title: '创建人', dataIndex: 'createBy', key: 'createBy',},
     {title: '更新人', dataIndex: 'updateBy', key: 'updateBy',},
@@ -38,17 +34,32 @@ const columns: TablePageColumn = [
     },
     {
         title: '更新时间', dataIndex: 'updateTime', key: 'updateTime',
-        render: (text) => <span>{new Date(text).toLocaleString()}</span>
+        render: (text) => <span>{new Date(text).toLocaleString()}</span>,
     },
+    {
+        title: '操作', dataIndex: 'operation', key: 'operation',
+        fixed: 'right',
+    }
 ];
-
+const columnWithOperation = columns.map(col => ({
+    ...col,
+    onCell: (record: OwnerFeeDetailResultDto) => ({
+        record,
+        title: col.title,
+        dataIndex: col.dataIndex,
+    })
+}))
 export const OwnerFeeTableDetail = () => {
-    let {searchParam, isLoading} = useSelector(state => state.ownerFeeSlice);
-    let [postFetch, {isFetching, data}] = useLazyGetOwnerFeeDataQuery();
+    let {searchParam, touchSearch} = useSelector(state => state.ownerFeeSlice);
+    let [postFetch, {isFetching, data}, lastArg] = useLazyGetOwnerFeeDataQuery();
+
     useEffect(() => {
-        !isLoading && postFetch(new PaginateRequest(1, 10, searchParam));
-    }, [searchParam, isLoading]);
-    return <Table columns={columns} dataSource={data?.data} loading={isFetching || isLoading}
+        postFetch(new PaginateRequest(1, 10, searchParam));
+    }, [touchSearch]);
+    return <Table columns={columnWithOperation as ColumnTypes} dataSource={data?.data} loading={isFetching}
+                  components={{
+                      body: {cell: OwnerFeeTableCell}
+                  }}
                   pagination={
                       {
                           disabled: isFetching,
@@ -58,10 +69,10 @@ export const OwnerFeeTableDetail = () => {
                           total: data?.paginateResult.totalSize,
                           showSizeChanger: true,
                           onShowSizeChange: (currentPage, pageSize) => {
-                              postFetch(new PaginateRequest(currentPage, pageSize, searchParam))
+                              postFetch({...lastArg.lastArg, pageSize, currentPage})
                           },
                           onChange: (currentPage, pageSize) => {
-                              postFetch(new PaginateRequest(currentPage, pageSize, searchParam))
+                              postFetch({...lastArg.lastArg, pageSize, currentPage})
                           }
                       }
                   }/>

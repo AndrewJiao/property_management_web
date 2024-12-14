@@ -27,7 +27,6 @@ const columns: TablePageColumn = [
         title: '房号',
         dataIndex: 'roomNumber',
         key: 'roomNumber',
-        editable: true,
         width: '7%',
     },
     {
