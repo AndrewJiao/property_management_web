@@ -113,6 +113,7 @@ export interface PropertyFeeDetailData {
     roomOwnerName?: string;
     managementFee?: number;
     partFee?: number;
+    liftFee?: number;
     machineRoomRenovationFee?: number;
     electricFee?: number;
     electricShareFee?: number;

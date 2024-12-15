@@ -41,6 +41,7 @@ export interface PropertyFeeDetailUpdatePo {
     id: number;
     managementFee?: number;
     partFee?: number;
+    liftFee?: number;
     machineRoomRenovationFee?: number;
     electricFee?: number;
     electricShareFee?: number;

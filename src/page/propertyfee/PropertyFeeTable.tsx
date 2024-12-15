@@ -49,11 +49,10 @@ const columns: TablePageColumn = [
 
     {title: '房号', dataIndex: 'roomNumber', key: 'roomNumber'},
     {title: '房主姓名', dataIndex: 'roomOwnerName', key: 'roomOwnerName'},
-    {
-        title: '费用单号', dataIndex: 'relatedOrderNumber', key: 'related_order_number', width: '150px',
-    },
+    {title: '费用单号', dataIndex: 'relatedOrderNumber', key: 'relateOrderNumber', width: '150px',},
     {title: '管理费', dataIndex: 'managementFee', key: 'managementFee', editable: true},
-    {title: '部分费用', dataIndex: 'partFee', key: 'partFee', editable: true},
+    {title: '停车费', dataIndex: 'partFee', key: 'partFee', editable: true},
+    {title: '电梯费', dataIndex: 'liftFee', key: 'liftFee', editable: true},
     {title: '机房装修费', dataIndex: 'machineRoomRenovationFee', key: 'machineRoomRenovationFee', editable: true},
     {title: '电费', dataIndex: 'electricFee', key: 'electricFee', editable: true},
     {title: '电费分摊', dataIndex: 'electricShareFee', key: 'electricShareFee', editable: true},

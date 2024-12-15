@@ -8,7 +8,6 @@ export interface DateRangeType {
     updateDateRange?: string[] | null;
     updateTimeEnd?: string | null;
     updateTimeStar?: string | null;
-
 }
 
 function toLocalDate(date: Date) {
@@ -31,6 +30,7 @@ export function buildDateSearchParam<T extends DateRangeType>(param: T) {
 }
 
 export const tableTimeRender = (date: Date) => {
+    console.log(date);
     return format(date, "yyyy-MM-dd HH:mm:ss")
 }
 
