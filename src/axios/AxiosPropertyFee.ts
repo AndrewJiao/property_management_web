@@ -30,7 +30,18 @@ export const REQUEST_PROPERTY_FEE = {
     },
     deleteData(id: string | number) {
         return appInstance.delete(`/property_fee/data/${id}`)
-    }
+    },
+    exportData: (param: PaginateRequest<PropertyFeeDetailSearchDto>) => {
+        return appInstance.get(
+            `/property_fee/export`,
+            {
+                responseType: 'blob',
+                params: {
+                    ...param,
+                    param: param.searchParam ? encode(utf8.encode(JSON.stringify(param.searchParam))) : null
+                },
+            })
+    },
 }
 
 

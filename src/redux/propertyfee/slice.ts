@@ -3,6 +3,7 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {AppResult, axiosAppendIdToKey, axiosGetContent, PaginateRequest,} from "../../axios";
 import {PropertyFeeDetailSearchDto, PropertyFeeResultDto, REQUEST_PROPERTY_FEE} from "../../axios/AxiosPropertyFee";
 import {RootState} from "../store";
+import {FileUtil} from "../../utils/FileUtil";
 
 export interface PropertyFeeState extends HttpBasicState {
     result: AppResult<PropertyFeeResultDto[]> | null;
@@ -30,6 +31,23 @@ export const thunkPropertyFeeDataGet = createAsyncThunk(
             .then(axiosAppendIdToKey)
             .then(axiosGetContent)
             .then(result => ({request: param, result}))
+    }
+)
+
+export const thunkPropertyFeeDataExport = createAsyncThunk(
+    "propertyFee/exportData",
+    async (param: PaginateRequest<PropertyFeeDetailSearchDto>, thunkAPI) => {
+
+        //如果请求中没有条件，则用state的条件附加上
+        let state = (thunkAPI.getState() as RootState).propertyFeeSlice;
+        if (param.searchParam === undefined) {
+            param.searchParam = state.request?.searchParam;
+        }
+        return await REQUEST_PROPERTY_FEE.exportData(param)
+            .then((result) => {
+                let headers = result.headers;
+                FileUtil.saveData(result.data, headers);
+            });
     }
 )
 

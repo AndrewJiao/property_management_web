@@ -16,7 +16,7 @@ import {buildDateSearchParam, defaultCurrentMonthRange, tableTimeRender} from ".
 import {
     PropertyFeeDetailData,
     propertyFeeSlice,
-    PropertyFeeState,
+    PropertyFeeState, thunkPropertyFeeDataExport,
     thunkPropertyFeeDataGet,
     thunkPropertyFeeDelete,
     thunkPropertyFeeInit
@@ -163,7 +163,13 @@ export const PropertyFeeTable: React.FC = () => {
                         </Form.Item>
                         <PropertyFeeInitTopicModal style={{marginBottom: 24, marginRight: 20}} name={'初始化'}
                                                    onSelectCompleted={initDataVersion}/>
-                        <InitOwnerFeeButton style={{marginBottom: 24}} name={"生成费用"}/>
+                        <InitOwnerFeeButton style={{marginBottom: 24, marginRight: 20}} name={"生成费用"}/>
+                        <Button className={styles['button-styles']} style={{marginBottom: 24}} type="primary"
+                                onClick={() => {
+                                    dispatch(thunkPropertyFeeDataExport(new PaginateRequest<PropertyFeeDetailSearchDto>()))
+                                }}>
+                            导出
+                        </Button>
                     </div>
                 </Form>
             </div>
