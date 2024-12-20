@@ -30,7 +30,6 @@ export function buildDateSearchParam<T extends DateRangeType>(param: T) {
 }
 
 export const tableTimeRender = (date: Date) => {
-    console.log(date);
     return format(date, "yyyy-MM-dd HH:mm:ss")
 }
 

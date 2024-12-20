@@ -4,6 +4,7 @@ import {AppResult, axiosAppendIdToKey, axiosGetContent, PaginateRequest,} from "
 import {PropertyFeeDetailSearchDto, PropertyFeeResultDto, REQUEST_PROPERTY_FEE} from "../../axios/AxiosPropertyFee";
 import {RootState} from "../store";
 import {FileUtil} from "../../utils/FileUtil";
+import assert from "node:assert";
 
 export interface PropertyFeeState extends HttpBasicState {
     result: AppResult<PropertyFeeResultDto[]> | null;
@@ -27,6 +28,10 @@ export const thunkPropertyFeeDataGet = createAsyncThunk(
         if (param.searchParam === undefined) {
             param.searchParam = state.request?.searchParam;
         }
+        //如果没有order,就带上order
+        if (param.searchOrder === undefined) {
+            param.searchOrder = state.request?.searchOrder;
+        }
         return await REQUEST_PROPERTY_FEE.getData(param)
             .then(axiosAppendIdToKey)
             .then(axiosGetContent)
@@ -42,6 +47,10 @@ export const thunkPropertyFeeDataExport = createAsyncThunk(
         let state = (thunkAPI.getState() as RootState).propertyFeeSlice;
         if (param.searchParam === undefined) {
             param.searchParam = state.request?.searchParam;
+        }
+        //如果没有order,就带上order
+        if (param.searchOrder === undefined) {
+            param.searchOrder = state.request?.searchOrder;
         }
         return await REQUEST_PROPERTY_FEE.exportData(param)
             .then((result) => {

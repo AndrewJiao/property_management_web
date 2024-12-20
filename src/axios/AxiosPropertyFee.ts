@@ -15,7 +15,8 @@ export const REQUEST_PROPERTY_FEE = {
             {
                 params: {
                     ...param,
-                    param: param.searchParam ? encode(utf8.encode(JSON.stringify(param.searchParam))) : null
+                    orderType: param.searchOrder && encode(utf8.encode(JSON.stringify(param.searchOrder))),
+                    param: param.searchParam && encode(utf8.encode(JSON.stringify(param.searchParam))),
                 },
             })
     },
@@ -38,6 +39,7 @@ export const REQUEST_PROPERTY_FEE = {
                 responseType: 'blob',
                 params: {
                     ...param,
+                    orderType: param.searchOrder && encode(utf8.encode(JSON.stringify(param.searchOrder))),
                     param: param.searchParam ? encode(utf8.encode(JSON.stringify(param.searchParam))) : null
                 },
             })

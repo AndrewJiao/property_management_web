@@ -4,7 +4,6 @@ import React, {ReactElement, useEffect, useState} from "react";
 import styles from './PageRowEditTable.module.css';
 import {Table, Typography} from "antd";
 import {useDispatch} from "../../../redux/hook";
-import {PaginateRequest} from "../../../axios";
 import {ColumnTypes, EditableAllCell, EditableAllRow, TablePageColumn} from "../index";
 import {AsyncThunk} from "@reduxjs/toolkit";
 import {HttpBasicState} from "../../../redux/HttpBasicState";
@@ -19,10 +18,12 @@ interface Props {
     onUpdateHandleSave: (record: any) => void,
     onDelete?: (id: string | number) => void
     state: HttpBasicState,
+    onTableChange?: (paginate, filter, sorter, extra) => void
 }
 
 export const PageRowEditTable: React.FC<Props> = ({
                                                       columns,
+                                                      onTableChange,
                                                       title,
                                                       children,
                                                       pageSearchAction,
@@ -84,6 +85,7 @@ export const PageRowEditTable: React.FC<Props> = ({
                                        row: EditableAllRow,
                                    }
                                }}
+                               onChange={onTableChange}
                                bordered
                                rowClassName={() => 'editable-row'}
                                pagination={{

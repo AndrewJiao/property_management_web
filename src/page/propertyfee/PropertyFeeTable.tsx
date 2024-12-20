@@ -1,9 +1,10 @@
 import React, {useEffect} from "react";
-import {AutoRow, onFindFetch, PageRowEditTable, SearchInput, TablePageColumn, TopicButton} from "../../component";
+import {AutoRow, onFindFetch, PageRowEditTable, SearchInput, TablePageColumn} from "../../component";
 import {Button, DatePicker, Form, FormProps, Input} from "antd";
 import {
     axiosAppendIdToKey,
     axiosGetContent,
+    convertTableSortToParamSort,
     OwnerInfoSearchType,
     PaginateRequest,
     REQUEST_OWNER_INFO
@@ -16,7 +17,8 @@ import {buildDateSearchParam, defaultCurrentMonthRange, tableTimeRender} from ".
 import {
     PropertyFeeDetailData,
     propertyFeeSlice,
-    PropertyFeeState, thunkPropertyFeeDataExport,
+    PropertyFeeState,
+    thunkPropertyFeeDataExport,
     thunkPropertyFeeDataGet,
     thunkPropertyFeeDelete,
     thunkPropertyFeeInit
@@ -47,7 +49,7 @@ const RenderButton = (props: { text: string, record: PropertyFeeResultDto }) => 
 
 const columns: TablePageColumn = [
 
-    {title: '房号', dataIndex: 'roomNumber', key: 'roomNumber'},
+    {title: '房号', dataIndex: 'roomNumber', key: 'roomNumber', sorter: {multiple: 2}},
     {title: '房主姓名', dataIndex: 'roomOwnerName', key: 'roomOwnerName'},
     {title: '费用单号', dataIndex: 'relatedOrderNumber', key: 'relateOrderNumber', width: '150px',},
     {title: '管理费', dataIndex: 'managementFee', key: 'managementFee', editable: true},
@@ -69,13 +71,19 @@ const columns: TablePageColumn = [
         title: '创建时间',
         dataIndex: 'createTime',
         key: 'createTime',
-        render: tableTimeRender
+        render: tableTimeRender,
+        sorter: {
+            multiple: 1
+        },
     },
     {
         title: '更新时间',
         dataIndex: 'updateTime',
         key: 'updateTime',
-        render: tableTimeRender
+        render: tableTimeRender,
+        sorter: {
+            multiple: 1
+        },
     },
 ];
 
@@ -106,6 +114,10 @@ export const PropertyFeeTable: React.FC = () => {
         REQUEST_OWNER_INFO.findData(value, OwnerInfoSearchType.OwnerName)
             .then(values => callback(values.map(value => ({value: value, text: value}))))
     }
+    const onTableChange = (paginate, filter, sorter, extra) => {
+        let sorterParam = convertTableSortToParamSort(sorter);
+        dispatch(thunkPropertyFeeDataGet(new PaginateRequest<PropertyFeeDetailSearchDto>(paginate.current, paginate.pageSize, undefined, sorterParam)))
+    }
 
     columns[2].render = (text, record) => {
         return <RenderButton text={text} record={record}/>
@@ -115,6 +127,7 @@ export const PropertyFeeTable: React.FC = () => {
                           columns={columns}
                           pageSearchAction={thunkPropertyFeeDataGet}
                           onDelete={onDelete}
+                          onTableChange={onTableChange}
                           onUpdateHandleSave={(record: PropertyFeeDetailData) => {
                               REQUEST_PROPERTY_FEE.putData(record.id.toString(), record)
                                   .then(axiosAppendIdToKey)
