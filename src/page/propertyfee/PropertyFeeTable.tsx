@@ -107,7 +107,7 @@ export const PropertyFeeTable: React.FC = () => {
         dispatch(thunkPropertyFeeInit(monthVersion))
     }
     const onFindRecord: onFindFetch = (value, callback) => {
-        REQUEST_ROOM_INFO.findData(value, RoomInfoSearchType.monthVersion)
+        REQUEST_ROOM_INFO.findData<string[]>(value, RoomInfoSearchType.monthVersion)
             .then(values => callback(values.map(value => ({value: value, text: value}))))
     }
     const onFindName: onFindFetch = (value, callback) => {

@@ -58,3 +58,21 @@ export function defaultCurrentMonthRange() {
 export function defaultCurrentMonthRangeDayJs() {
     return defaultCurrentMonthRange().map(e => dayjs(e));
 }
+
+export function getCurrentUtcTimeStr() {
+    return new Date().toUTCString();
+}
+
+export function getCurrentISOTimeStr() {
+    return new Date().toISOString();
+}
+
+export const TimeUtil = {
+    toLocalDate,
+    buildDateSearchParam,
+    tableTimeRender,
+    defaultCurrentMonthRange,
+    defaultCurrentMonthRangeDayJs,
+    getCurrentUtcTimeStr,
+    getCurrentISOTimeStr,
+}

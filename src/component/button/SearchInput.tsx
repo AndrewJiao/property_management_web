@@ -5,22 +5,22 @@ import {Select} from 'antd';
 
 export type onFindFetch = (value: string, callback: (data: { value: string; text: string }[]) => void) => void;
 
-interface Props<T> {
+interface Props {
     placeholder: string;
     style?: React.CSSProperties;
     fetch: onFindFetch;
-    value?: T;
+    value?: string;
 
-    onChange?(value: T): void
+    onChange?(value: string): void
 }
 
-export const SearchInput: React.FC<Props<any>> = <T extends any>({
-                                                                     placeholder,
-                                                                     style,
-                                                                     fetch,
-                                                                     value,
-                                                                     onChange,
-                                                                 }: Props<T>) => {
+export const SearchInput: React.FC<Props> = ({
+                                                 placeholder,
+                                                 style,
+                                                 fetch,
+                                                 value,
+                                                 onChange,
+                                             }) => {
     const [data, setData] = useState<SelectProps['options']>([]);
     // const [value, setValue] = useState<string>();
 

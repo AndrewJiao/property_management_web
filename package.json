@@ -9,6 +9,7 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@types/crypto-js": "^4.2.2",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.115",
     "@types/react": "^18.3.12",
@@ -16,6 +17,8 @@
     "antd": "^5.21.6",
     "base-64": "^1.0.0",
     "class-transformer": "^0.5.1",
+    "crypto-browserify": "^3.12.1",
+    "crypto-js": "^4.2.0",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "i18next": "^23.16.4",
@@ -61,7 +64,9 @@
     ]
   },
   "devDependencies": {
+    "@types/ali-oss": "^6.16.11",
     "@types/base-64": "^1.0.2",
-    "@types/utf8": "^3.0.3"
+    "@types/utf8": "^3.0.3",
+    "ali-oss": "^6.22.0"
   }
 }

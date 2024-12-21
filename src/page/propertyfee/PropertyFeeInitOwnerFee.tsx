@@ -22,7 +22,7 @@ export const InitOwnerFeeButton: React.FC<Props> = ({name, style}) => {
     const [versionList, setVersionList] = useState<{ value: string, label: string }[]>([]);
     const [selectedVersion, setSelectedVersion] = useState<string | null>()
     useEffect(() => {
-        REQUEST_ROOM_INFO.findData("HSMZ-", RoomInfoSearchType.monthVersion)
+        REQUEST_ROOM_INFO.findData<string[]>("HSMZ-", RoomInfoSearchType.monthVersion)
             .then((e) => {
                 setInitLoading(false);
                 setVersionList(e.map(value => ({value: value, label: value})));

@@ -6,7 +6,7 @@ interface Props {
     name: string,
     style?: React.CSSProperties,
     children: React.ReactNode
-    classNameButton?: string,
+    className?: string,
 }
 
 export const TopicButton: React.FC<Props> = ({
@@ -14,7 +14,7 @@ export const TopicButton: React.FC<Props> = ({
                                                  onCompleted,
                                                  name,
                                                  style,
-                                                 classNameButton
+                                                 className
                                              }) => {
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
@@ -35,7 +35,7 @@ export const TopicButton: React.FC<Props> = ({
     };
 
     return (<>
-            <Button className={classNameButton} style={style} type="primary" onClick={showModal}>
+            <Button className={className} style={style} type="primary" onClick={showModal}>
                 {name}
             </Button>
             <Modal

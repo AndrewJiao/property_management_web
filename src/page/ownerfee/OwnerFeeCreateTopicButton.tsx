@@ -48,7 +48,7 @@ export const OwnerFeeCreateTopicButton: React.FC<Props> = ({classNameButton}) =>
     </Form>
 
 
-    return <TopicButton onCompleted={() => form.submit()} name={"增加预存"} classNameButton={classNameButton}>
+    return <TopicButton onCompleted={() => form.submit()} name={"增加预存"} className={classNameButton}>
         <SearchContent/>
     </TopicButton>
 }

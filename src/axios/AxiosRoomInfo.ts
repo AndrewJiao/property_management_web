@@ -27,15 +27,20 @@ export const REQUEST_ROOM_INFO = {
     putData: (id: string, data: RoomInfoDetailUpdateDto) => {
         return appInstance.put<any, AxiosResponse<AppResult<RoomInfoDetailResultDto>>>(`/room_info/data/${id}`, data)
     },
-    findData: (searchValue: string, searchType: RoomInfoSearchType) => {
-        return appInstance.get<any, AxiosResponse<AppResult<string[]>>>(`/room_info/find`, {
+    findData: async <R>(searchValue: string, searchType: RoomInfoSearchType): Promise<R> => {
+        return appInstance.get<any, AxiosResponse<AppResult<R>>>(`/room_info/find`, {
             params: {searchType, searchValue}
         }).then(e => e.data.data)
+    },
+    postData: (data: RoomInfoDetailInsertDto) => {
+        return appInstance.post<any, AxiosResponse<AppResult<RoomInfoDetailResultDto>>>(`/room_info/data`, data)
+            .then(e => e.data.data)
     }
 }
 
 export enum RoomInfoSearchType {
-    monthVersion = "monthVersion"
+    monthVersion = "monthVersion",
+    preSearchBefore = "preSearchBefore"
 }
 
 export type RoomInfoDetailResultDto = RoomInfoData;
@@ -53,4 +58,14 @@ export interface RoomInfoDetailUpdateDto {
 export interface RoomInfoDetailSearchDto extends DateRangeType {
     roomNumber?: string;
     monthVersion?: string;
+}
+
+export interface RoomInfoDetailInsertDto {
+    roomNumber: string,
+    monthVersion: string
+    waterMeterNumBefore?: number;
+    waterMeterNum?: number;
+    electricityMeterNumBefore?: number;
+    electricityMeterNum?: number;
+    comment?: string;
 }

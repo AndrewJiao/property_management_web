@@ -15,7 +15,6 @@
 
 .button-type {
     display: flex;
-    align-items: center;
     justify-content: left;
     padding-left: 20px;
     padding-bottom: 10px;

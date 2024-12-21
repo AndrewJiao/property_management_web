@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {AutoRow, onFindFetch, PageRowEditTable, SearchInput, TablePageColumn} from "../../component";
+import {AutoRow, onFindFetch, PageRowEditTable, SearchInput, SubmitDraw, TablePageColumn} from "../../component";
 import {Button, DatePicker, Form, FormProps, Input, Space, TimePicker} from "antd";
 import {axiosAppendIdToKey, axiosGetContent, OwnerInfoDto, PaginateRequest} from "../../axios";
 import {useDispatch, useSelector} from "../../redux/hook";
@@ -15,6 +15,7 @@ import styles from './RoomInfoTable.module.css'
 import {useForm} from "antd/es/form/Form";
 import {buildDateSearchParam, defaultCurrentMonthRange} from "../../utils";
 import dayjs from "dayjs";
+import {RoomInfoManuallyAdd} from "./RoomInfoManuallyAdd";
 
 
 const columns: TablePageColumn = [
@@ -151,7 +152,7 @@ export const RoomInfoTable: React.FC = () => {
     }
 
     const onFind: onFindFetch = (value, callback) => {
-        REQUEST_ROOM_INFO.findData(value, RoomInfoSearchType.monthVersion)
+        REQUEST_ROOM_INFO.findData<string[]>(value, RoomInfoSearchType.monthVersion)
             .then(values => callback(values.map(value => ({value: value, text: value}))))
     }
     return <>
@@ -205,6 +206,7 @@ export const RoomInfoTable: React.FC = () => {
                                 初始化
                             </Button>
                         </Form.Item>
+                        <RoomInfoManuallyAdd className={styles['button-styles']}/>
                     </div>
                 </Form>
             </div>
