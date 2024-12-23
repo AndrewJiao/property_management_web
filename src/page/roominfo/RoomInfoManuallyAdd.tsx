@@ -7,7 +7,7 @@ import {onFindFetch, SearchInput} from "../../component";
 import {TupleInput} from "./RoomInfoTupleInput";
 import {OwnerInfoSearchType, REQUEST_OWNER_INFO} from "../../axios";
 import TextArea from "antd/es/input/TextArea";
-import {RoomInfoUploader} from "./RoomInfoUploader";
+import {Uploader} from "../../component/uploader/Uploader";
 
 interface Props {
     className?: string;
@@ -36,7 +36,7 @@ export const RoomInfoManuallyAdd: React.FC<PropsWithChildren<Props>> = ({classNa
                     onClick={() => setOpenState(true)}>手动新增</Button>
             <Drawer width={800} title={"新增水电数据"} onClose={() => setOpenState(false)} open={openState}>
                 <div className={styles['drawer-content']}>
-                    <RoomInfoUploader/>
+                    {/*<Uploader/>*/}
                     <div className={styles["input-content"]}>
                         <Form>
                             <Divider orientation={"left"} type={"horizontal"}>

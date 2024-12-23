@@ -1,4 +1,5 @@
 export * from './sidebar'
+export * from './uploader'
 export * from './header'
 export * from './footer'
 export * from './autorow'
@@ -6,4 +7,3 @@ export * from './searchcolumn'
 export * from './table'
 export * from './draw'
 export * from './button'
-
