@@ -8,6 +8,9 @@ import {roomInfoSlice} from "./roominfo/slice";
 import {propertyFeeSlice} from "./propertyfee/slice";
 import {ownerFeeApi} from "./ownerfee";
 import {ownerFeeSlice} from "./ownerfee/slice";
+import {userInfoApi, userSlice, userTableSlice} from "./userinfo";
+import {AuthSlice} from "./auth/slice";
+import ErrorHandler from "./middleware/ErrorHandler";
 
 
 const rootReducer = combineReducers({
@@ -17,6 +20,10 @@ const rootReducer = combineReducers({
     propertyFeeSlice: propertyFeeSlice.reducer,
     [ownerFeeApi.reducerPath]: ownerFeeApi.reducer,
     ownerFeeSlice: ownerFeeSlice.reducer,
+    [userInfoApi.reducerPath]: userInfoApi.reducer,
+    userSlice: userSlice.reducer,
+    userTableSlice: userTableSlice.reducer,
+    authSlice: AuthSlice.reducer,
 })
 
 let persistedReducer = persistReducer({
@@ -29,7 +36,9 @@ let store = configureStore({
     reducer: persistedReducer,
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({serializableCheck: false})
-            .concat(ownerFeeApi.middleware),
+            .concat(ownerFeeApi.middleware)
+            .concat(ErrorHandler.ErrorHandlerMiddleWare)
+            .concat(userInfoApi.middleware),
     devTools: true
 });
 

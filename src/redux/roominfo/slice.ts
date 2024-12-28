@@ -1,8 +1,9 @@
 import {default_pending, default_reject, default_success, HttpBasicState} from "../HttpBasicState";
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {Action, createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AppResult, axiosAppendIdToKey, axiosGetContent, PaginateRequest,} from "../../axios";
-import {REQUEST_ROOM_INFO, RoomInfoDetailSearchDto} from "../../axios/AxiosRoomInfo";
+import {REQUEST_ROOM_INFO, RoomInfoDetailInsertDto, RoomInfoDetailSearchDto} from "../../axios/AxiosRoomInfo";
 import {RootState} from "../store";
+import {message} from "antd";
 
 export interface RoomInfoData {
     id: number;
@@ -52,6 +53,13 @@ export const thunkRoomInfoInit = createAsyncThunk(
     }
 )
 
+export const thunkRoomInfoPost = createAsyncThunk("roomInfo/postData",
+    async (param: RoomInfoDetailInsertDto, thunkAPI) => {
+        return await REQUEST_ROOM_INFO.postData(param).then(e => {
+            thunkAPI.dispatch(thunkRoomInfoDataGet(new PaginateRequest<RoomInfoDetailSearchDto>()));
+        })
+    }
+)
 
 export const roomInfoSlice = createSlice({
     name: "roomInfo",
@@ -90,6 +98,10 @@ export const roomInfoSlice = createSlice({
             .addCase(thunkRoomInfoInit.pending,
                 (state) => {
                     return {...state, ...default_pending()}
+                })
+            .addCase(thunkRoomInfoPost.rejected,
+                (state, action) => {
+                    return {...state, ...default_reject(action.error.message)}
                 })
     }
 

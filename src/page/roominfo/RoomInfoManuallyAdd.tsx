@@ -1,4 +1,4 @@
-import {Button, Col, Divider, Drawer, Form, Row, Typography} from "antd";
+import {Button, Col, Divider, Drawer, Form, FormProps, Row, Space, Typography} from "antd";
 import styles from './RoomInfoManuallyAdd.module.css';
 import React, {PropsWithChildren, useState} from "react";
 import {REQUEST_ROOM_INFO, RoomInfoDetailInsertDto, RoomInfoSearchType} from "../../axios/AxiosRoomInfo";
@@ -8,6 +8,8 @@ import {TupleInput} from "./RoomInfoTupleInput";
 import {OwnerInfoSearchType, REQUEST_OWNER_INFO} from "../../axios";
 import TextArea from "antd/es/input/TextArea";
 import {Uploader} from "../../component/uploader/Uploader";
+import {useDispatch} from "../../redux/hook";
+import {thunkRoomInfoPost} from "../../redux/roominfo/slice";
 
 interface Props {
     className?: string;
@@ -30,6 +32,12 @@ export const RoomInfoManuallyAdd: React.FC<PropsWithChildren<Props>> = ({classNa
             })
     }
 
+    let dispatch = useDispatch();
+    //配置提交
+    const onFinishAndSubmit: FormProps<RoomInfoDetailInsertDto>['onFinish'] = async (values) => {
+        await form.validateFields()
+        dispatch(thunkRoomInfoPost(values));
+    }
 
     return (<div>
             <Button className={className} style={style} type={"primary"}
@@ -38,13 +46,16 @@ export const RoomInfoManuallyAdd: React.FC<PropsWithChildren<Props>> = ({classNa
                 <div className={styles['drawer-content']}>
                     {/*<Uploader/>*/}
                     <div className={styles["input-content"]}>
-                        <Form>
+                        <Form form={form} onFinish={onFinishAndSubmit}>
                             <Divider orientation={"left"} type={"horizontal"}>
                                 <Typography.Text aria-level={5}>房间</Typography.Text>
                             </Divider>
                             <Row>
                                 <Col span={12}>
-                                    <Form.Item<RoomInfoDetailInsertDto> name={'roomNumber'} label={"房间号"}
+                                    <Form.Item<RoomInfoDetailInsertDto> name={'roomNumber'} label={"房间号"} rules={[{
+                                        required: true,
+                                        message: '请输入房间号'
+                                    }]}
                                                                         labelCol={{span: 4}} wrapperCol={{span: 12}}>
                                         <SearchInput placeholder={'请输入'} fetch={onFindRoom}
                                                      style={{width: 200, textAlign: "left"}}/>
@@ -52,6 +63,10 @@ export const RoomInfoManuallyAdd: React.FC<PropsWithChildren<Props>> = ({classNa
                                 </Col>
                                 <Col span={12}>
                                     <Form.Item<RoomInfoDetailInsertDto> name={'monthVersion'} label={"数据版本"}
+                                                                        rules={[{
+                                                                            required: true,
+                                                                            message: '请输入数据版本'
+                                                                        }]}
                                                                         labelCol={{span: 4}} wrapperCol={{span: 12}}>
                                         <SearchInput placeholder={'请输入'} fetch={onFind}
                                                      style={{width: 200, textAlign: "left"}}/>
@@ -59,7 +74,8 @@ export const RoomInfoManuallyAdd: React.FC<PropsWithChildren<Props>> = ({classNa
                                 </Col>
                             </Row>
                             <TupleInput name={"水表"} beforeName={"waterMeterNumBefore"} afterName={"waterMeterNum"}/>
-                            <TupleInput name={"电表"} beforeName={"electricityMeterNumBefore"} afterName={"electricityMeterNum"}/>
+                            <TupleInput name={"电表"} beforeName={"electricityMeterNumBefore"}
+                                        afterName={"electricityMeterNum"}/>
                             <Divider orientation={"left"} type={"horizontal"}>
                                 <Typography.Text>其它</Typography.Text>
                             </Divider>
@@ -68,6 +84,11 @@ export const RoomInfoManuallyAdd: React.FC<PropsWithChildren<Props>> = ({classNa
                                     <Form.Item<RoomInfoDetailInsertDto> name={"comment"} label={`备注`}>
                                         <TextArea rows={8} placeholder={`不超过1000个字符`} maxLength={1000}/>
                                     </Form.Item>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col span={24} style={{textAlign: "center"}}>
+                                    <Button type={"primary"} htmlType={"submit"}>提交</Button>
                                 </Col>
                             </Row>
                         </Form>

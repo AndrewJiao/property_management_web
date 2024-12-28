@@ -5,6 +5,7 @@ import {OwnerInfoTable} from "../ownerinfo";
 import {RoomInfoTable} from "../roominfo";
 import {PropertyFeeTable} from "../propertyfee";
 import {OwnerFeeTable} from "../ownerfee";
+import {UserTable} from "../user";
 
 /**
  * 构建主页面
@@ -30,6 +31,9 @@ export const HomePage: React.FC = () => {
             break
         case "ownerFee":
             renderSub = <OwnerFeeTable/>
+            break
+        case "userInfo":
+            renderSub = <UserTable/>
             break
         default:
             renderSub = <></>

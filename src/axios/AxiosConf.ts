@@ -1,5 +1,21 @@
 import axios, {AxiosResponse} from 'axios'
 import {SorterResult} from "antd/es/table/interface";
+import ErrorHandler from "../redux/middleware/ErrorHandler";
+
+
+export class ErrorResult {
+    constructor(code: number, message: string, source: string, status: number) {
+        this.code = code;
+        this.message = message;
+        this.source = source;
+        this.status = status;
+    }
+
+    code?: number;
+    message?: string;
+    source?: string;
+    status?: number
+}
 
 axios.defaults.headers['Access-Control-Allow-Origin'] = "*"
 
@@ -10,9 +26,34 @@ export const appInstance = axios.create({
     auth: {
         username: 'jiojio',
         password: 'jiojio'
-    }
+    },
 });
+appInstance.interceptors.response.use(response => response,
+    async (error) => {
+        await ErrorHandler.alertError(new ErrorResult(error.response.status, error.response.statusText, error.response.config.url, error.response.status))
+        //拦截所有错误，根据情况给一个默认返回
+        let config = error.config;
+        let defaultValue = checkIsPaginateSearch(config) || checkIsFindSearch(config);
+        return defaultValue || Promise.reject(error)
+    });
 
+function checkIsPaginateSearch(config: any) {
+    let url: string = config.url
+    if (url.includes("currentPage") && url.includes("pageSize")) {
+        return {data: {data: []}, paginateResult: {currentPage: 1, pageSize: 10, totalSize: 0}}
+    }
+    return null;
+}
+
+function checkIsFindSearch(config: any) {
+    let params = config.params;
+    console.log(`params = ${JSON.stringify(params)}`)
+    if (params?.searchType !== undefined && params?.searchValue !== undefined) {
+        console.log(`find search`)
+        return {data: {data: []}}
+    }
+    return null;
+}
 
 /**
  * 通用请求
@@ -24,6 +65,7 @@ export interface AppResult<T> {
     paginateResult: PaginateResult;
     timestamp: string;
 }
+
 
 /**
  * 通用请求分页
@@ -56,8 +98,8 @@ export const convertTableSortToParamSort = (sort: SorterResult<any> | SorterResu
         return param && [param] || []
     }
 }
-const convertObjectSorter = (sorter: SorterResult<any>): Order|undefined => {
-    if(sorter.columnKey){
+const convertObjectSorter = (sorter: SorterResult<any>): Order | undefined => {
+    if (sorter.columnKey) {
         return {
             fieldName: sorter.columnKey as string,
             orderType: sorter.order === "ascend" ? OrderType.ASC : OrderType.DESC

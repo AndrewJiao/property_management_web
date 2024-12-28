@@ -97,5 +97,9 @@ export enum OwnerInfoSearchType {
     OwnerName = "ownerName",
 }
 
-
-
+export const AxiosOwnerInfo = {
+    onClickSearch: async (value, callback) => {
+        let roomNumbers = await REQUEST_OWNER_INFO.findData(value, OwnerInfoSearchType.RoomNumber);
+        callback(roomNumbers.map(value => ({value: value, text: value})));
+    },
+}

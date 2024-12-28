@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Button, Modal} from 'antd';
 
 interface Props {
-    onCompleted: () => void;
+    onCompleted: (open: (flag: boolean) => void) => void,
     name: string,
     style?: React.CSSProperties,
     children: React.ReactNode
@@ -25,9 +25,8 @@ export const TopicButton: React.FC<Props> = ({
 
     const handleOk = () => {
         setConfirmLoading(true);
-        setOpen(false);
+        onCompleted(setOpen);
         setConfirmLoading(false);
-        onCompleted()
     };
 
     const handleCancel = () => {
@@ -35,17 +34,17 @@ export const TopicButton: React.FC<Props> = ({
     };
 
     return (<>
-            <Button className={className} style={style} type="primary" onClick={showModal}>
-                {name}
-            </Button>
-            <Modal
-                title={'选择初始化的数据版本'}
-                open={open}
-                onOk={handleOk}
-                confirmLoading={confirmLoading}
-                onCancel={handleCancel}>
-                {children}
-            </Modal>
-        </>);
+        <Button className={className} style={style} type="primary" onClick={showModal}>
+            {name}
+        </Button>
+        <Modal
+            title={'选择初始化的数据版本'}
+            open={open}
+            onOk={handleOk}
+            confirmLoading={confirmLoading}
+            onCancel={handleCancel}>
+            {children}
+        </Modal>
+    </>);
 }
 

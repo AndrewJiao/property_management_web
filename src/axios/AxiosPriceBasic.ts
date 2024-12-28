@@ -8,7 +8,7 @@ export const REQUEST_PRICE_BASIC = {
     getData: <T>(currentPage: number, pageSize: number) => {
         return appInstance.get<any, AxiosResponse<AppResult<T>>>(
             `/price_basic/data?currentPage=${currentPage}&pageSize=${pageSize}`,
-        );
+        )
     },
 
     putData: <T>(id: number, data: UpdatePriceBasicDto) =>

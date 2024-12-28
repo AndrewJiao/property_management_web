@@ -30,7 +30,10 @@ export const REQUEST_ROOM_INFO = {
     findData: async <R>(searchValue: string, searchType: RoomInfoSearchType): Promise<R> => {
         return appInstance.get<any, AxiosResponse<AppResult<R>>>(`/room_info/find`, {
             params: {searchType, searchValue}
-        }).then(e => e.data.data)
+        }).then(e => {
+            console.log(`post data = ${JSON.stringify(e)}`);
+            return e.data.data;
+        })
     },
     postData: (data: RoomInfoDetailInsertDto) => {
         return appInstance.post<any, AxiosResponse<AppResult<RoomInfoDetailResultDto>>>(`/room_info/data`, data)

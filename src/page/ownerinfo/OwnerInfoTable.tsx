@@ -49,7 +49,6 @@ const columns: TablePageColumn = [
         title: '应收费用',
         dataIndex: 'amountBalance',
         key: 'amountBalance',
-        editable: true,
         width: '8%',
         columnStyle: 'inputNumber',
         render: (text: number) => `${text} ￥`

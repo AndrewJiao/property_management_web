@@ -10,6 +10,7 @@ interface Props {
     style?: React.CSSProperties;
     fetch: onFindFetch;
     value?: string;
+    mode?: 'multiple' | 'tags';
 
     onChange?(value: string): void
 }
@@ -20,6 +21,7 @@ export const SearchInput: React.FC<Props> = ({
                                                  fetch,
                                                  value,
                                                  onChange,
+    mode,
                                              }) => {
     const [data, setData] = useState<SelectProps['options']>([]);
     // const [value, setValue] = useState<string>();
@@ -32,6 +34,7 @@ export const SearchInput: React.FC<Props> = ({
     // };
     return (
         <Select
+            mode={mode}
             showSearch
             allowClear
             value={value}
