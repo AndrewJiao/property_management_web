@@ -29,7 +29,7 @@ const rootReducer = combineReducers({
 let persistedReducer = persistReducer({
     key: "app",
     storage,
-    whitelist: ['auth']
+    whitelist: ['authSlice']
 }, rootReducer);
 
 let store = configureStore({

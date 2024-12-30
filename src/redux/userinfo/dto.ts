@@ -59,3 +59,9 @@ export interface UserCreateDto {
     comment?: string;
     bindingRoomNumber?: string[];
 }
+
+export interface UserLoginDto{
+    account: string,
+    password: string
+}
+

@@ -1,6 +1,6 @@
 import axios, {AxiosResponse} from 'axios'
 import {SorterResult} from "antd/es/table/interface";
-import ErrorHandler from "../redux/middleware/ErrorHandler";
+import CookieUtil from "../utils/CookieUtil";
 
 
 export class ErrorResult {
@@ -30,29 +30,26 @@ export const appInstance = axios.create({
 });
 appInstance.interceptors.response.use(response => response,
     async (error) => {
-        await ErrorHandler.alertError(new ErrorResult(error.response.status, error.response.statusText, error.response.config.url, error.response.status))
+        // await ErrorHandler.alertError(new ErrorResult(error.response.status, error.response.statusText, error.response.config.url, error.response.status))
         //拦截所有错误，根据情况给一个默认返回
-        let config = error.config;
-        let defaultValue = checkIsPaginateSearch(config) || checkIsFindSearch(config);
-        return defaultValue || Promise.reject(error)
-    });
+        // let config = error.config;
+        return Promise.reject(new ErrorResult(error.response.data?.code, error.response.data?.message || error.response.statusText, error.response.data?.source, error.response.status));
+    },
+);
 
-function checkIsPaginateSearch(config: any) {
+function getDefaultResult(config: any) {
+    let method: string = config.method;
     let url: string = config.url
-    if (url.includes("currentPage") && url.includes("pageSize")) {
-        return {data: {data: []}, paginateResult: {currentPage: 1, pageSize: 10, totalSize: 0}}
-    }
-    return null;
-}
-
-function checkIsFindSearch(config: any) {
     let params = config.params;
-    console.log(`params = ${JSON.stringify(params)}`)
-    if (params?.searchType !== undefined && params?.searchValue !== undefined) {
-        console.log(`find search`)
-        return {data: {data: []}}
+    if (method === "get") {
+        if (url.includes("currentPage") && url.includes("pageSize")) {
+            return {data: {data: []}, paginateResult: {currentPage: 1, pageSize: 10, totalSize: 0}}
+        } else if (params?.searchType !== undefined && params?.searchValue !== undefined) {
+            return {data: {data: []}}
+        }
+    } else {
+        return {data: {data: {}}}
     }
-    return null;
 }
 
 /**

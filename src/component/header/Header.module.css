@@ -1,6 +1,18 @@
 .header {
     background-color: #61dafb;
-    height: 35px;
-
+    height: 5vh;
+    display: flex;
+    justify-content: space-around;
+}
+.header-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    text-align: center;
+}
+.header-text{
+    align-items: center;
+    display: flex;
 }
 

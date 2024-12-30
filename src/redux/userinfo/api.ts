@@ -1,8 +1,8 @@
 import {AppResult, PaginateRequest} from "../../axios";
 import {encode} from "base-64";
 import utf8 from "utf8";
-import {UserCreateDto, UserDto, UserSearchDto, UserUpdateDto} from "./dto";
-import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
+import {UserCreateDto, UserDto, UserLoginDto, UserSearchDto, UserUpdateDto} from "./dto";
+import {BaseQueryArg, createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 
 const baseQuery = (arg, api, opt = {}) => {
     if (arg instanceof PaginateRequest) {
