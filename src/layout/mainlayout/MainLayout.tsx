@@ -15,7 +15,7 @@ export const MainLayout: React.FC<Props> = ({children}) => {
     return <>
         <Header/>
             <Row>
-                <Col span={3} style={{backgroundColor: "gray"}}>
+                <Col span={3} style={{backgroundColor: "#FFFFFF"}}>
                     <SideBarMenu/>
                 </Col>
                 <Col span={21}>

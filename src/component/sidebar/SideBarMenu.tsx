@@ -2,14 +2,13 @@ import React, {useState} from "react";
 import styles from "./SideBar.module.css";
 import {
     ContainerOutlined,
-    DesktopOutlined, MenuFoldOutlined, MenuUnfoldOutlined,
+    DesktopOutlined,
     PieChartOutlined,
     SettingOutlined,
     TableOutlined,
     UserOutlined,
 } from '@ant-design/icons';
-import {Button, MenuProps} from 'antd';
-import {Menu} from 'antd';
+import {Menu, MenuProps} from 'antd';
 import {useNavigate, useParams} from "react-router-dom";
 
 type MenuItem = Required<MenuProps>['items'][number];

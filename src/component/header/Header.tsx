@@ -32,7 +32,6 @@ export const Header: React.FC = () => {
     return <>
         <div className={styles.header}>
             <div className={styles['header-box']}>
-
             </div>
             <div className={styles['header-box']}>
                 <Typography.Title level={3} style={{margin: 0}}>海上明珠物业</Typography.Title>

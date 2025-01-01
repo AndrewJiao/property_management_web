@@ -1,5 +1,5 @@
 .header {
-    background-color: #61dafb;
+    background-color: #F0F0F0;
     height: 5vh;
     display: flex;
     justify-content: space-around;
@@ -14,5 +14,6 @@
 .header-text{
     align-items: center;
     display: flex;
+    width: 200px;
 }
 

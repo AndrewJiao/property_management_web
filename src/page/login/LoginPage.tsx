@@ -16,8 +16,8 @@ import {useNavigate} from "react-router-dom";
 export const LoginPage: React.FC = () => {
     let dispatch = useDispatch();
     let navigate = useNavigate();
-    const onFinish = (values: UserLoginDto) => {
-        dispatch(slice.thunkAuthLogin(values))
+    const onFinish = async (values: UserLoginDto) => {
+        await dispatch(slice.thunkAuthLogin(values))
         //登录完成后跳转
         navigate('/home');
     }
