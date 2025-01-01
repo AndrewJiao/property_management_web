@@ -1,7 +1,6 @@
 import React, {ReactNode} from "react";
 import {Footer, Header} from "../../component";
 import styles from './BasicLayout.module.css';
-import {Row} from "antd";
 
 class Props {
     children: ReactNode
