@@ -8,9 +8,7 @@ export const REQUEST_AUTH = {
             account: account,
             password: password
         })
-            .then(response => {
-                return response.data.data
-            })
+            .then((response) => response.data.data)
     },
     logOut(){
         appInstance.put<AxiosResponse>('/user_info/logout' )

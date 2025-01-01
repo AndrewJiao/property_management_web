@@ -1,6 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {UserSearchDto} from "./dto";
-import {UserTableDetail} from "../../page/user/list/UserTableDetail";
 
 interface UserInfoState {
     searchParam: UserSearchDto

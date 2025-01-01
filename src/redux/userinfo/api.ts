@@ -1,15 +1,17 @@
-import {AppResult, PaginateRequest} from "../../axios";
+import {AppResult, HOST_WITH_SEC, PaginateRequest} from "../../axios";
 import {encode} from "base-64";
 import utf8 from "utf8";
-import {UserCreateDto, UserDto, UserLoginDto, UserSearchDto, UserUpdateDto} from "./dto";
-import {BaseQueryArg, createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
+import {UserCreateDto, UserDto, UserSearchDto, UserUpdateDto} from "./dto";
+import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
+import DtoUtil from "../../utils/DtoUtil";
 
 const baseQuery = (arg, api, opt = {}) => {
     if (arg instanceof PaginateRequest) {
         arg = {...arg, param: encode(utf8.encode(JSON.stringify(arg.searchParam)))}
     }
     return fetchBaseQuery({
-        baseUrl: 'http://localhost:8080'
+        baseUrl: HOST_WITH_SEC,
+        credentials: 'include'
     })(arg, api, opt);
 }
 
@@ -22,14 +24,15 @@ export const userInfoApi =  createApi({
         searchUser: builder.query<AppResult<[UserDto]>, PaginateRequest<UserSearchDto>>({
             query: (arg) => ({
                 url: '/user_info/data',
-                method: 'Get',
+                method: 'GET',
                 params: {
                     ...arg,
                     searchParam: JSON.stringify(arg.searchParam),
                     param: encode(utf8.encode(JSON.stringify(arg.searchParam)))
                 }
             }),
-            transformResponse: (response: AppResult<[UserDto]>) => response
+            transformResponse: (response: AppResult<[UserDto]>) => DtoUtil.apiAppendIdToKey(response),
+
         }),
         postUser: builder.mutation<AppResult<UserDto>, UserCreateDto>({
             query: (arg) => ({

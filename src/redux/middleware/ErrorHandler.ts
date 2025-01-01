@@ -1,10 +1,17 @@
 import {message} from "antd";
 import {ErrorResult} from "../../axios";
+import {Simulate} from "react-dom/test-utils";
+import error = Simulate.error;
 
 export const ErrorHandlerMiddleWare = (store) => (next) => (action) => {
     if (action.type.endsWith("/rejected")) {
+        console.log(`Error: ${JSON.stringify(action)}`);
         let statusCode = action?.payload?.status;
+
         //如果是401就跳转登陆页面
+        if (statusCode === 401) {
+            window.location.href = "/login";
+        }
         alertError({message: action.error?.message || action?.payload?.data});
     }
     return next(action);

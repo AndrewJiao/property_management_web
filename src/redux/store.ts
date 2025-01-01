@@ -37,8 +37,8 @@ let store = configureStore({
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({serializableCheck: false})
             .concat(ownerFeeApi.middleware)
-            .concat(ErrorHandler.ErrorHandlerMiddleWare)
-            .concat(userInfoApi.middleware),
+            .concat(userInfoApi.middleware)
+            .concat(ErrorHandler.ErrorHandlerMiddleWare),
     devTools: true
 });
 

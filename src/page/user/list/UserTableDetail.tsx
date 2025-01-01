@@ -37,7 +37,6 @@ const addOperationColumn = (column: TablePageColumn) => {
         return {
             ...data,
             onCell: (record: UserDto) => {
-                console.log(`record:${JSON.stringify(record)}`)
                 return {
                     record,
                     dataIndex: data.dataIndex,

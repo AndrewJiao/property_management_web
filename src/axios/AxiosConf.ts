@@ -1,6 +1,5 @@
 import axios, {AxiosResponse} from 'axios'
 import {SorterResult} from "antd/es/table/interface";
-import CookieUtil from "../utils/CookieUtil";
 
 
 export class ErrorResult {
@@ -10,17 +9,20 @@ export class ErrorResult {
         this.source = source;
         this.status = status;
     }
-
     code?: number;
     message?: string;
     source?: string;
     status?: number
 }
 
-axios.defaults.headers['Access-Control-Allow-Origin'] = "*"
+// axios.defaults.headers['Access-Control-Allow-Origin'] = "*"
+
+export const HOST_WITH_SEC = "https://localhost:9527/api"
+export const HOST = "http://localhost:8080"
 
 export const appInstance = axios.create({
-    baseURL: "http://localhost:8080",
+    withCredentials: true,
+    baseURL: HOST_WITH_SEC,
     // baseURL: "http://andrew.free.idcfengye.com",
     timeout: 10000,
     auth: {
