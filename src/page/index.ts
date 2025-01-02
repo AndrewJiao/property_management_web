@@ -1,5 +1,6 @@
 export * from './home'
 export * from './login'
+export * from './approve'
 export * from './pricebasic'
 export * from './roominfo'
 export * from './propertyfee'

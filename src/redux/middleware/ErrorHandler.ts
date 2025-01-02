@@ -1,7 +1,7 @@
 import {message} from "antd";
 import {ErrorResult} from "../../axios";
 import {Simulate} from "react-dom/test-utils";
-import error = Simulate.error;
+
 
 export const ErrorHandlerMiddleWare = (store) => (next) => (action) => {
     if (action.type.endsWith("/rejected")) {
@@ -12,7 +12,8 @@ export const ErrorHandlerMiddleWare = (store) => (next) => (action) => {
         if (statusCode === 401) {
             window.location.href = "/login";
         }
-        alertError({message: action.error?.message || action?.payload?.data});
+        console.log(`Error: ${JSON.stringify(action)}`);
+        alertError({message: action?.payload?.data.message || action.error?.message});
     }
     return next(action);
 }

@@ -1,7 +1,7 @@
 import React, {PropsWithChildren} from "react";
-import {Button, Popconfirm, Typography} from "antd";
-import {useDeleteUserMutation, UserDto, userSlice, userTableSlice} from "../../../redux/userinfo";
-import {useDispatch, useSelector} from "../../../redux/hook";
+import {Popconfirm, Typography} from "antd";
+import {useDeleteUserMutation, UserDto, userSlice} from "../../../redux/userinfo";
+import {useDispatch} from "../../../redux/hook";
 
 interface Props {
     record: UserDto,

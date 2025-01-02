@@ -11,6 +11,8 @@ import {ownerFeeSlice} from "./ownerfee/slice";
 import {userInfoApi, userSlice, userTableSlice} from "./userinfo";
 import {AuthSlice} from "./auth/slice";
 import ErrorHandler from "./middleware/ErrorHandler";
+import api, {approveApi} from "./approve/api";
+import {approveSlice} from "./approve";
 
 
 const rootReducer = combineReducers({
@@ -24,6 +26,8 @@ const rootReducer = combineReducers({
     userSlice: userSlice.reducer,
     userTableSlice: userTableSlice.reducer,
     authSlice: AuthSlice.reducer,
+    [approveApi.reducerPath]: approveApi.reducer,
+    approveSlice: approveSlice.reducer
 })
 
 let persistedReducer = persistReducer({
@@ -38,6 +42,7 @@ let store = configureStore({
         getDefaultMiddleware({serializableCheck: false})
             .concat(ownerFeeApi.middleware)
             .concat(userInfoApi.middleware)
+            .concat(api.approveApi.middleware)
             .concat(ErrorHandler.ErrorHandlerMiddleWare),
     devTools: true
 });

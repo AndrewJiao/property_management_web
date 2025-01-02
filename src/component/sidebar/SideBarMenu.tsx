@@ -32,6 +32,7 @@ export const SideBarMenu: React.FC = () => {
         {
             key: 'userData', icon: <UserOutlined/>, label: '权限配置', children: [
                 {key: 'userInfo', icon: <TableOutlined/>, label: '用户列表', onClick: () => navigate("/userInfo")},
+                {key: 'approve', icon: <TableOutlined/>, label: '审批列表', onClick: () => navigate("/approve")},
             ]
         },
     ];

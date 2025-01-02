@@ -6,6 +6,7 @@ import {RoomInfoTable} from "../roominfo";
 import {PropertyFeeTable} from "../propertyfee";
 import {OwnerFeeTable} from "../ownerfee";
 import {UserTable} from "../user";
+import {ApproveTable} from "../approve";
 
 /**
  * 构建主页面
@@ -34,6 +35,9 @@ export const HomePage: React.FC = () => {
             break
         case "userInfo":
             renderSub = <UserTable/>
+            break
+        case "approve":
+            renderSub = <ApproveTable/>
             break
         default:
             renderSub = <></>
