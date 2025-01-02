@@ -5,14 +5,12 @@ import {Simulate} from "react-dom/test-utils";
 
 export const ErrorHandlerMiddleWare = (store) => (next) => (action) => {
     if (action.type.endsWith("/rejected")) {
-        console.log(`Error: ${JSON.stringify(action)}`);
         let statusCode = action?.payload?.status;
 
         //如果是401就跳转登陆页面
         if (statusCode === 401) {
             window.location.href = "/login";
         }
-        console.log(`Error: ${JSON.stringify(action)}`);
         alertError({message: action?.payload?.data.message || action.error?.message});
     }
     return next(action);
