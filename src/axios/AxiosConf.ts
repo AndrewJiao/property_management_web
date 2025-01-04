@@ -17,8 +17,9 @@ export class ErrorResult {
 
 // axios.defaults.headers['Access-Control-Allow-Origin'] = "*"
 
-export const HOST_WITH_SEC = "https://localhost:9527/api"
-export const HOST = "http://localhost:8080"
+// export const HOST_WITH_SEC = "https://localhost:9527/api"
+export const HOST_WITH_SEC = process.env['REACT_APP_API_URL'];
+
 
 export const appInstance = axios.create({
     withCredentials: true,
