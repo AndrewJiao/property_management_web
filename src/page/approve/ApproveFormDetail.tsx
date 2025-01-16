@@ -27,17 +27,21 @@ export const ApproveFormDetail: React.FC = () => {
                 <Input placeholder={`请输入`} style={{width: 200}}/>
             </Form.Item>,
             <Form.Item<ApproveSearchDto> name={"approveState"} label={`审批状态`} labelCol={{span: 4}}
-                                         wrapperCol={{span: 4}}>
-                <Select>
+                                         wrapperCol={{span: 10}}>
+                <Select mode={"multiple"}>
                     <Select.Option value="Pending">待审批</Select.Option>
                     <Select.Option value="Approved">已通过</Select.Option>
                     <Select.Option value="Rejected">已拒绝</Select.Option>
                 </Select>
             </Form.Item>,
 
-            <Form.Item<ApproveSearchDto> name={"approveType"} label={`审批类型`}>
+            <Form.Item<ApproveSearchDto> name={"approveType"} label={`审批类型`} labelCol={{span: 4}}
+                                         wrapperCol={{span: 10}}>
                 <Select>
                     <Select.Option value="CreateUser">创建用户</Select.Option>
+                    <Select.Option value="BindingRooms">绑定房间</Select.Option>
+                    <Select.Option value="WeChartCreateUser">微信创建用户</Select.Option>
+                    <Select.Option value="ChangeRoomInfo">修改房间信息</Select.Option>
                 </Select>
             </Form.Item>,
 

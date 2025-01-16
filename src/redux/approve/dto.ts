@@ -50,7 +50,7 @@ export interface ApproveActionDto {
 
 export interface ApproveSearchDto extends DateRangeType {
     orderNo?: string;
-    approveState?: ApproveState;
+    approveState?: ApproveState[];
     approveType?: ApproveType;
 }
 
