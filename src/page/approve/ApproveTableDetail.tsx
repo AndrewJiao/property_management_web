@@ -23,7 +23,7 @@ const Content = (param: ApproveCreateUserValue) => {
         <Row>
             <Space>
                 {
-                    param.bindingRoomNumber?.map(value=>{
+                    param.bindingRoomNumber?.map(value => {
                         return <Tag color="green">{value}</Tag>
                     })
                 }
@@ -36,14 +36,22 @@ const columns: TablePageColumn = [
     {title: '审批单号', dataIndex: 'orderNo', key: 'orderNo', width: 200},
     {title: '审批状态', dataIndex: 'approveStateDesc', key: 'approveStateDesc', width: 150},
     {title: '审批类型', dataIndex: 'approveTypeDesc', key: 'approveTypeDesc', width: 150},
-    {title: '审批数据', dataIndex: 'approveData', key: 'approveData', width: 150,
+    {
+        title: '审批数据', dataIndex: 'approveData', key: 'approveData', width: 150,
         render: (data: string, record: ApproveDto) => {
             return <Popover content={Content(record.approveData)} title="Title" trigger="hover">
-                <Typography.Link>{record.approveData.name}</Typography.Link>
+                <Typography.Text>{JSON.stringify(record.approveData).slice(0,20)}</Typography.Text>
             </Popover>
         }
     },
-    {title: '备注', dataIndex: 'comment', key: 'comment', width: 150},
+    {
+        title: '备注', dataIndex: 'comment', key: 'comment', width: 150, editable: true,
+        render: (_, record: ApproveDto) => {
+            return <Popover content={record.comment}>
+                {record.comment ? record.comment.slice(0, 20) + '...' : record.comment}
+            </Popover>
+        }
+    },
     {title: '创建人', dataIndex: 'createBy', key: 'createBy', width: 150},
     {title: '更新人', dataIndex: 'updateBy', key: 'updateBy', width: 150},
     {title: '创建时间', dataIndex: 'createTime', key: 'createTime', width: 150, render: TimeUtil.tableTimeRender},

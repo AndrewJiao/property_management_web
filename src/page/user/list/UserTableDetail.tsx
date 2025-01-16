@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from "react";
 import {ColumnTypes, TablePageColumn} from "../../../component";
-import {Space, Table, Tag} from "antd";
+import {Popover, Space, Table, Tag} from "antd";
 import {useLazySearchUserQuery, UserDto} from "../../../redux/userinfo";
 import {useSelector} from "../../../redux/hook";
 import {PaginateRequest} from "../../../axios";
@@ -14,18 +14,36 @@ const columns: TablePageColumn = [
     {title: '姓名', dataIndex: 'name', key: 'name', width: 150},
     {title: '角色', dataIndex: 'roleTypeDesc', key: 'roleTypeDesc', width: 150},
     {
-        title: '绑定房间号', dataIndex: 'bindingRoomNumber', key: 'bindingRoomNumber', width: "1%", editable: true,
+        title: '绑定房间号', dataIndex: 'bindingRoomNumber', key: 'bindingRoomNumber', width: "7%", editable: true,
         render: (_, record: UserDto) => {
-            return <Space>
-                {
-                    record.bindingRoomNumber?.map(value => {
-                        return <Tag color="blue">{value}</Tag>
-                    })
-                }
+
+            let tags = record.bindingRoomNumber?.map(value => {
+                return <Tag color="blue">{value}</Tag>
+            })
+
+            let showTags: any;
+            if (tags && tags.length > 2) {
+                showTags = [...tags?.slice(0, 1), <Tag color="blue">...</Tag>];
+            } else {
+                showTags = tags;
+            }
+            const content = <Space>
+                {tags}
             </Space>
+            return <Popover content={content} title={"房号"}>
+                {/*//只展示两个*/}
+                {showTags}
+            </Popover>
         },
     },
-    {title: '备注', dataIndex: 'comment', key: 'comment', width: 150, editable: true},
+    {
+        title: '备注', dataIndex: 'comment', key: 'comment', width: 150, editable: true,
+        render: (_, record: UserDto) => {
+            return <Popover content={record.comment}>
+                {record.comment ? record.comment.slice(0, 20) + '...' : record.comment}
+            </Popover>
+        }
+    },
     {title: '创建人', dataIndex: 'createBy', key: 'createBy', width: 150},
     {title: '更新人', dataIndex: 'updateBy', key: 'updateBy', width: 150},
     {title: '创建时间', dataIndex: 'createTime', key: 'createTime', width: 150, render: TimeUtil.tableTimeRender},
@@ -35,10 +53,6 @@ const columns: TablePageColumn = [
 
 export const UserTableDetail: React.FC = () => {
     const [editingKey, setEditingKey] = useState(null);
-    const abc = (id:any)=>{
-        console.log("do editor key " + id)
-        setEditingKey(id);
-    }
     const addOperationColumn = (column: TablePageColumn) => {
         return column.map(data => {
             return {
@@ -48,8 +62,9 @@ export const UserTableDetail: React.FC = () => {
                         record,
                         dataIndex: data.dataIndex,
                         title: data.title,
+                        editable: data.editable,
                         editingKey,
-                        setEditingKey: abc,
+                        setEditingKey,
                     }
                 }
             }
@@ -62,7 +77,7 @@ export const UserTableDetail: React.FC = () => {
         postFetch(new PaginateRequest(1, 10, TimeUtil.buildDateSearchParam(searchParam)));
     }, [touchSearch])
 
-    let cellColumns = useCallback(() => addOperationColumn(columns), []);
+    let cellColumns = useCallback(() => addOperationColumn(columns), [editingKey]);
 
     return <Table columns={cellColumns() as ColumnTypes} dataSource={data?.data} loading={isFetching}
                   components={{

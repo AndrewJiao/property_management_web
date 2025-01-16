@@ -20,7 +20,6 @@ export interface ApproveCreateUserValue {
     account: string,
     name: string,
     bindingRoomNumber: [string] | null,
-
 }
 
 export type ApproveType = 'CreateUser'
@@ -31,6 +30,8 @@ export interface ApproveCreateDto {
     approveData: any;
     comment?: string;
 }
+
+
 
 export interface ApproveActionDto {
     approveState: ApproveState;

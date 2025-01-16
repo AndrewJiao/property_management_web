@@ -34,21 +34,20 @@ export const UserTableCell: React.FC<PropsWithChildren<Props>> = ({
 
     async function onSave() {
         let values = await form.validateFields();
-        putUser({id: record.id, arg: values})
+
+        let bindingRoomNumber = form.getFieldValue(['bindingRoomNumber'])?.split(',').filter(value => value.trim() === '' ? undefined : value);
+        console.log('Received values of form: ', bindingRoomNumber);
+        putUser({id: record.id, arg: {...values, bindingRoomNumber}})
         setEditingKey(null)
     }
 
     let childNode = children;
-    console.log('editingKey', editingKey)
     if (dataIndex === 'operation') {
         if (editingKey !== record.id || editingKey === null) {
             childNode = (<div>
                 {/*点击编辑，将这一行的数据设置为editing*/}
                 <Typography.Link disabled={editingKey !== null && editingKey !== record.id}
-                                 onClick={() => {
-                                     console.log('edit record.id', record.id)
-                                     return setEditingKey(record.id)
-                                 }}
+                                 onClick={() => setEditingKey(record.id)}
                                  style={{marginInlineEnd: 8}}
                 >
                     编辑
@@ -63,7 +62,7 @@ export const UserTableCell: React.FC<PropsWithChildren<Props>> = ({
         } else {
             //参与编辑的行
             childNode = <div>
-                <Typography.Link onClick={() => form?.submit} style={{marginInlineEnd: 8}}> 保存 </Typography.Link>
+                <Typography.Link onClick={() => onSave()} style={{marginInlineEnd: 8}}> 保存 </Typography.Link>
                 <Popconfirm title="确定取消吗" onConfirm={() => setEditingKey(null)}>
                     <a>取消</a>
                 </Popconfirm>
@@ -73,15 +72,19 @@ export const UserTableCell: React.FC<PropsWithChildren<Props>> = ({
     } else {
         //编辑单元格的场景
         if (editable && editingKey === record.id) {
+            let inputValue: any
+            if (dataIndex === 'bindingRoomNumber') {
+                inputValue = record[dataIndex] ? (record[dataIndex] as string[]).join(',') : record[dataIndex];
+            } else {
+                inputValue = record[dataIndex]
+            }
+
             childNode = <Form.Item
                 style={{margin: 0, padding: 0}}
                 name={dataIndex as string}
-                rules={[
-                    {required: false, message: `${title} is required.`},
-                ]}
             >
                 {
-                    <Input defaultValue={record[dataIndex]}/>
+                    <Input defaultValue={inputValue}/>
                 }
             </Form.Item>
         } else {
