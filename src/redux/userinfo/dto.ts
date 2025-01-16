@@ -1,6 +1,5 @@
 import {DateRangeType} from "../../utils";
 import {SelectProps} from "antd";
-import {DetailType} from "../ownerfee";
 
 export interface UserDto {
     id: number;
@@ -44,8 +43,8 @@ export const roleTypeSelectProps = (): SelectProps['options'] => {
 
 
 export interface UserUpdateDto {
-    name: string;
-    roleType: RoleType;
+    name?: string;
+    roleType?: RoleType;
     comment?: string;
     bindingRoomNumber?: string[];
 }
@@ -64,4 +63,3 @@ export interface UserLoginDto{
     account: string,
     password: string
 }
-

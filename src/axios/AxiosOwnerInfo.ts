@@ -3,7 +3,6 @@ import {AxiosResponse} from 'axios'
 import {encode} from 'base-64'
 import utf8 from "utf8";
 
-
 export interface OwnerInfoDto {
     id: number,
     roomNumber: string,
