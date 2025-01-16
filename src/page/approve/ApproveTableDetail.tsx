@@ -5,31 +5,25 @@ import {TimeUtil} from "../../utils";
 import {Popover, Row, Space, Table, Tag, Typography} from "antd";
 import {ColumnTypes, TablePageColumn} from "../../component";
 import api from "../../redux/approve/api";
-import {ApproveCreateUserValue, ApproveDto} from "../../redux/approve";
+import {ApproveDto, BindingRooms} from "../../redux/approve";
 import {ApproveTableCell} from "./cell";
 
-const Content = (param: ApproveCreateUserValue) => {
-    return <div>
-        <Row>
-            <Space>
-                名称：<p>{param.name}</p>
-            </Space>
-        </Row>
-        <Row>
-            <Space>
-                账户：<p>{param.account}</p>
-            </Space>
-        </Row>
-        <Row>
+const Content = (param: ApproveDto) => {
+    console.log(`====${JSON.stringify(param)}`)
+    if (param.approveType === 'BindingRooms') {
+        let currentParam = param as ApproveDto<BindingRooms>;
+        return <div>
             <Space>
                 {
-                    param.bindingRoomNumber?.map(value => {
+                    currentParam.approveData.bindingRoomNumber?.map(value => {
                         return <Tag color="green">{value}</Tag>
                     })
                 }
             </Space>
-        </Row>
-    </div>
+        </div>
+    } else {
+        <></>
+    }
 }
 
 const columns: TablePageColumn = [
@@ -39,8 +33,8 @@ const columns: TablePageColumn = [
     {
         title: '审批数据', dataIndex: 'approveData', key: 'approveData', width: 150,
         render: (data: string, record: ApproveDto) => {
-            return <Popover content={Content(record.approveData)} title="Title" trigger="hover">
-                <Typography.Text>{JSON.stringify(record.approveData).slice(0,20)}</Typography.Text>
+            return <Popover content={Content(record)} title="Title" trigger="hover">
+                <Typography.Text>{record.approveData.bindingRoomNumber?.slice(0, 20)}</Typography.Text>
             </Popover>
         }
     },

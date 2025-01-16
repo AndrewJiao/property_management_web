@@ -1,13 +1,13 @@
 import {DateRangeType} from "../../utils";
 
-export interface ApproveDto {
+export interface ApproveDto<T extends ApproveData = any> {
     id: number;
     orderNo: string;
     approveState: ApproveState;
     approveStateDesc: string;
     approveType: ApproveType;
     approveTypeDesc: string;
-    approveData: ApproveCreateUserValue;
+    approveData: T;
     comment?: string;
     createBy: string;
     updateBy: string;
@@ -16,21 +16,32 @@ export interface ApproveDto {
     isDelete: boolean;
 }
 
-export interface ApproveCreateUserValue {
-    account: string,
-    name: string,
-    bindingRoomNumber: [string] | null,
+
+export type ApproveType = 'CreateUser' | 'BindingRooms' | 'WeChartCreateUser' | 'ChangeRoomInfo';
+export interface ApproveData {}
+
+export interface BindingRooms extends ApproveData {
+    bindingRoomNumber: string[];
 }
 
-export type ApproveType = 'CreateUser'
+
+export interface CreateUser extends ApproveData {
+    account: string;
+    bindingRoomNumber: string[];
+    name: string;
+}
+
+export interface ChangeRoomInfo extends ApproveData {
+    roomNumber: string;
+    otherPartInfo: {
+        carNumber?: number,
+        motorCycleNumber?: number,
+        carNumberElectron?: number
+    }
+}
+
+
 export type ApproveState = 'Pending' | 'Approved' | 'Rejected'
-
-export interface ApproveCreateDto {
-    approveType: ApproveType;
-    approveData: any;
-    comment?: string;
-}
-
 
 
 export interface ApproveActionDto {
