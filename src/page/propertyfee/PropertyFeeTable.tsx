@@ -154,6 +154,7 @@ export const PropertyFeeTable: React.FC = () => {
                                          style={{width: 200, textAlign: "left"}}/>
                         </Form.Item>,
                         <Form.Item<PropertyFeeDetailSearchDto> name="createDateRange" label={'创建时间'}
+                                                               rules={[{required: true, message: '请选择时间'}]}
                                                                labelCol={{span: 4}}
                                                                wrapperCol={{span: 4}}>
                             <DatePicker.RangePicker style={{width: 300}}/>

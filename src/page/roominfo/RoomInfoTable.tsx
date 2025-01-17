@@ -180,11 +180,12 @@ export const RoomInfoTable: React.FC = () => {
                             <SearchInput placeholder={'请输入'} fetch={onFind} style={{width: 200, textAlign: "left"}}/>
                         </Form.Item>,
                         <Form.Item<RoomInfoDetailSearchDto> name="createDateRange" label={'创建时间'}
+                                                            rules={[{required: true, message: '请选择时间'}]}
                                                             labelCol={{span: 4}}
                                                             wrapperCol={{span: 4}}>
                             <DatePicker.RangePicker style={{width: 300}}/>
                         </Form.Item>,
-                        <Form.Item<RoomInfoDetailSearchDto> name="updateDateRange" label={'创建时间'}
+                        <Form.Item<RoomInfoDetailSearchDto> name="updateDateRange" label={'更新时间'}
                                                             labelCol={{span: 4}} wrapperCol={{span: 4}}>
                             <DatePicker.RangePicker style={{width: 300}}/>
                         </Form.Item>

@@ -23,7 +23,7 @@ export const ApproveFormDetail: React.FC = () => {
     return <Form form={searchForm} onFinish={onFinishFormToFetch}>
         <AutoRow showBorder={false} perCountEachRow={3} subElements={[
             <Form.Item<ApproveSearchDto> name={"orderNo"} label={`审批单号`} labelCol={{span: 4}}
-                                      wrapperCol={{span: 4}}>
+                                         wrapperCol={{span: 4}}>
                 <Input placeholder={`请输入`} style={{width: 200}}/>
             </Form.Item>,
             <Form.Item<ApproveSearchDto> name={"approveState"} label={`审批状态`} labelCol={{span: 4}}
@@ -46,12 +46,13 @@ export const ApproveFormDetail: React.FC = () => {
             </Form.Item>,
 
             <Form.Item<ApproveSearchDto> name="createDateRange" label={'创建时间'}
-                                      labelCol={{span: 4}}
-                                      wrapperCol={{span: 4}}>
+                                         rules={[{required: true, message: '请选择时间'}]}
+                                         labelCol={{span: 4}}
+                                         wrapperCol={{span: 4}}>
                 <DatePicker.RangePicker style={{width: 300}}/>
             </Form.Item>,
             <Form.Item<ApproveSearchDto> name="updateDateRange" label={'更新时间'}
-                                      labelCol={{span: 4}} wrapperCol={{span: 4}}>
+                                         labelCol={{span: 4}} wrapperCol={{span: 4}}>
                 <DatePicker.RangePicker style={{width: 300}}/>
             </Form.Item>
         ]}/>
