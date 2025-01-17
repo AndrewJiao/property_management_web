@@ -33,7 +33,7 @@ export const appInstance = axios.create({
     },
 });
 appInstance.interceptors.response.use(response => response,
-    async (error) => {
+    (error) => {
         // await ErrorHandler.alertError(new ErrorResult(error.response.status, error.response.statusText, error.response.config.url, error.response.status))
         //拦截所有错误，根据情况给一个默认返回
         // let config = error.config;

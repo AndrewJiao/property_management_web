@@ -16,6 +16,7 @@ import {useForm} from "antd/es/form/Form";
 import {buildDateSearchParam, defaultCurrentMonthRange} from "../../utils";
 import dayjs from "dayjs";
 import {RoomInfoManuallyAdd} from "./RoomInfoManuallyAdd";
+import errorHandler from "../../redux/middleware/ErrorHandler";
 
 
 const columns: TablePageColumn = [
@@ -164,6 +165,7 @@ export const RoomInfoTable: React.FC = () => {
                                   .then(axiosAppendIdToKey)
                                   .then(axiosGetContent)
                                   .then(e => dispatch(roomInfoSlice.actions.putDataResponseUpdate(e.data)))
+                                  .catch(e => errorHandler.alertError(e))
                           }}
                           state={state}
         >
