@@ -34,6 +34,7 @@ export const thunkOwnerInfoDataGet = createAsyncThunk(
                 e.data.data = e.data.data.map(e => ({
                     ...e,
                     "otherBasic.carNumber": e.otherBasic?.carNumber || 0,
+                    "otherBasic.carNumberElectron": e.otherBasic?.carNumberElectron|| 0,
                     "otherBasic.motorCycleNumber": e.otherBasic?.motorCycleNumber || 0,
                 }))
                 return e;

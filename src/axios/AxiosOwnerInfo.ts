@@ -15,14 +15,18 @@ export interface OwnerInfoDto {
     isDelete: boolean,
     comment: string,
     'otherBasic.carNumber': number,
+    'otherBasic.carNumberElectron': number,
     'otherBasic.motorCycleNumber': number,
     otherBasic: OwnerInfoState,
+    roomType: RoomType,
+    roomTypeDesc: string,
 }
 
 
 export interface OwnerInfoSearchDto {
     roomNumber?: string,
     ownerName?: string
+    roomType?: RoomType[]
 }
 
 export interface OwnerInfoUpdateDto {
@@ -31,6 +35,7 @@ export interface OwnerInfoUpdateDto {
     comment: string,
     roomSquare: number | null,
     otherBasic: OwnerInfoState,
+    roomType: RoomType,
 }
 
 export type OwnerInfoInsertDto = OwnerInfoUpdateDto
@@ -43,15 +48,15 @@ export const defaultOwnerInfoInsertDto = {
     otherBasic: {
         carNumber: 0,
         motorCycleNumber: 0,
+        carNumberElectron: 0,
     },
-    // 'otherBasic.carNumber': 0,
-    // 'otherBasic.motorCycleNumber': 0,
 }
 
 
 export interface OwnerInfoState {
     carNumber: number,
     motorCycleNumber: number,
+    carNumberElectron: number,
 }
 
 
@@ -72,7 +77,8 @@ export const REQUEST_OWNER_INFO = {
             ...updateData,
             otherBasic: {
                 carNumber: updateData["otherBasic.carNumber"],
-                motorCycleNumber: updateData["otherBasic.motorCycleNumber"]
+                carNumberElectron: updateData["otherBasic.carNumberElectron"],
+                motorCycleNumber: updateData["otherBasic.motorCycleNumber"],
             }
         }
         return appInstance.put<any, AxiosResponse<AppResult<OwnerInfoDto>>>(`/owner_info/info/${dataId}`, updateDto)
@@ -94,6 +100,11 @@ export const REQUEST_OWNER_INFO = {
 export enum OwnerInfoSearchType {
     RoomNumber = "roomNumber",
     OwnerName = "ownerName",
+}
+
+export enum RoomType {
+    Common = "Common",
+    Business = "Business"
 }
 
 export const AxiosOwnerInfo = {

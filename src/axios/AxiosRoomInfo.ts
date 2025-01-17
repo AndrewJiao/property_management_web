@@ -31,7 +31,6 @@ export const REQUEST_ROOM_INFO = {
         return appInstance.get<any, AxiosResponse<AppResult<R>>>(`/room_info/find`, {
             params: {searchType, searchValue}
         }).then(e => {
-            console.log(`post data = ${JSON.stringify(e)}`);
             return e.data.data;
         })
     },

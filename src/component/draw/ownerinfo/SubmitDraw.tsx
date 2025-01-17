@@ -1,4 +1,4 @@
-import {Button, Col, Drawer, Form, Input, InputNumber, Row, Space, Typography} from "antd";
+import {Button, Col, Drawer, Form, Input, InputNumber, Row, Select, Space, Typography} from "antd";
 import React from "react";
 import {useForm} from "antd/es/form/Form";
 import {OwnerInfoInsertDto} from "../../../axios";
@@ -70,12 +70,27 @@ export const SubmitDraw: React.FC<Props> = ({title, width = 800, open, onClose, 
                             <InputNumber placeholder={`请输入`} addonAfter={"平方米"}/>
                         </Form.Item>
                     </Col>
+                    <Col className={styles['form-input']} span={8}>
+                        <Form.Item<OwnerInfoInsertDto> name={"roomType"} label={`住户类型`}
+                                                       rules={[{required: true, message: "请输入住房类型"}]}>
+                            <Select>
+                                <Select.Option value={"Common"}>住户</Select.Option>
+                                <Select.Option value={"Business"}>商用</Select.Option>
+                            </Select>
+                        </Form.Item>
+                    </Col>
                 </Row>
                 <Row>
                     <Col className={styles['form-input']} span={6}>
                         <Form.Item<OwnerInfoInsertDto> name={["otherBasic", "carNumber"]} label={`汽车数量`}>
                             <InputNumber placeholder={`请输入`}/>
                         </Form.Item>
+                    </Col>
+                    <Col className={styles['form-input']} span={6}>
+                        <Form.Item<OwnerInfoInsertDto> name={["otherBasic", "carNumberElectron"]}
+                                                       label={`汽车数量(电)`}>
+                            <InputNumber placeholder={`请输入`}/>
+                        </Form.Item>,
                     </Col>
                     <Col className={styles['form-input']} span={6}>
                         <Form.Item<OwnerInfoInsertDto> name={["otherBasic", "motorCycleNumber"]} label={`电动车数量`}>

@@ -76,6 +76,7 @@ export const thunkPropertyFeeDelete = createAsyncThunk(
 
         return await REQUEST_PROPERTY_FEE.deleteData(dataId)
             .then((_) => {
+                console.log(`delete dataId = ${dataId}`)
                 return thunkAPI.dispatch(thunkPropertyFeeDataGet(state.request || new PaginateRequest<PropertyFeeDetailSearchDto>()));
             });
     }

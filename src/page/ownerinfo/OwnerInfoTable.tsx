@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {AutoRow, onFindFetch, PageTable, SearchInput, SubmitDraw, TablePageColumn} from "../../component";
-import {Button, Form, FormProps, Input} from "antd";
+import {Button, Form, FormProps, Input, Select} from "antd";
 import {
     ownerInfoSlice,
     thunkOwnerInfoDataGet,
@@ -37,6 +37,12 @@ const columns: TablePageColumn = [
         width: '7%',
     },
     {
+        title: '住户类型',
+        dataIndex: 'roomType',
+        key: 'roomType',
+        width: '7%',
+    },
+    {
         title: '房间大小',
         dataIndex: 'roomSquare',
         key: 'roomSquare',
@@ -66,6 +72,16 @@ const columns: TablePageColumn = [
         key: 'otherBasic.carNumber',
         editable: true,
         width: '7%',
+        columnStyle:'inputNumber',
+        render: (text) => text ? `${text} 辆` : ''
+    },
+    {
+        title: '汽车数量(电)',
+        dataIndex: 'otherBasic.carNumberElectron',
+        key: 'otherBasic.carNumberElectron',
+        editable: true,
+        width: '7%',
+        columnStyle:'inputNumber',
         render: (text) => text ? `${text} 辆` : ''
     },
     {
@@ -74,6 +90,7 @@ const columns: TablePageColumn = [
         key: 'otherBasic.motorCycleNumber',
         editable: true,
         width: '7%',
+        columnStyle:'inputNumber',
         render: (text) => text ? `${text} 辆` : ''
     },
     {
@@ -108,7 +125,7 @@ export const OwnerInfoTable: React.FC = () => {
 
     const onFinishSearch: FormProps<OwnerInfoSearchDto>['onFinish'] = (value) => {
         let searchParam = new PaginateRequest<OwnerInfoSearchDto>();
-        searchParam.searchParam = {ownerName: "", roomNumber: "", ...value};
+        searchParam.searchParam = value
         dispatch(thunkOwnerInfoDataGet(searchParam));
     };
     //开关抽屉
@@ -133,6 +150,7 @@ export const OwnerInfoTable: React.FC = () => {
                            .then(e => {
                                let item = e.data.data;
                                item["otherBasic.carNumber"] = item.otherBasic.carNumber;
+                               item["otherBasic.carNumberElectron"] = item.otherBasic.carNumberElectron;
                                item["otherBasic.motorCycleNumber"] = item.otherBasic.motorCycleNumber;
                                return e;
                            })
@@ -147,13 +165,20 @@ export const OwnerInfoTable: React.FC = () => {
             <div className={styles['search-content']}>
                 <Form form={form} onFinish={onFinishSearch}>
                     <AutoRow showBorder={false} perCountEachRow={4} subElements={[
-                        <Form.Item<OwnerInfoDto> name={"roomNumber"} label={`房号`} labelCol={{span: 4}}
-                                                 wrapperCol={{span: 4}}>
+                        <Form.Item<OwnerInfoSearchDto> name={"roomNumber"} label={`房号`} labelCol={{span: 4}}
+                                                       wrapperCol={{span: 4}}>
                             <Input placeholder={`请输入`} style={{width: 200}}/>
                         </Form.Item>,
-                        <Form.Item<OwnerInfoDto> name={"ownerName"} label={`住户名称`} labelCol={{span: 4}}
+                        <Form.Item<OwnerInfoSearchDto> name={"ownerName"} label={`住户名称`} labelCol={{span: 4}}
                                                  wrapperCol={{span: 4}}>
                             <SearchInput placeholder={'请输入'} fetch={onFind} style={{width: 200, textAlign: "left"}}/>
+                        </Form.Item>,
+                        <Form.Item<OwnerInfoSearchDto> name={"roomType"} label={`住户类型`} labelCol={{span: 4}}
+                                                       wrapperCol={{span: 12}}>
+                            <Select mode={"multiple"}>
+                                <Select.Option value={"Common"}>住户</Select.Option>
+                                <Select.Option value={"Business"}>商用</Select.Option>
+                            </Select>
                         </Form.Item>,
                     ]}/>
                     <div className={styles['button-type']}>
