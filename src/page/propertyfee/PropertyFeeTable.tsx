@@ -28,6 +28,7 @@ import {PropertyFeeInitTopicModal} from "./PropertyFeeInitTopicModal";
 import dayjs from "dayjs";
 import {InitOwnerFeeButton} from "./PropertyFeeInitOwnerFee";
 import {DetailType, useCreateOwnerFeeDataMutation} from "../../redux/ownerfee";
+import errorHandler from "../../redux/middleware/ErrorHandler";
 
 //为费用单号添加按钮
 const RenderButton = (props: { text: string, record: PropertyFeeResultDto }) => {
@@ -52,16 +53,16 @@ const columns: TablePageColumn = [
     {title: '房号', dataIndex: 'roomNumber', key: 'roomNumber', sorter: {multiple: 2}},
     {title: '房主姓名', dataIndex: 'roomOwnerName', key: 'roomOwnerName'},
     {title: '费用单号', dataIndex: 'relatedOrderNumber', key: 'relateOrderNumber', width: '150px',},
-    {title: '管理费', dataIndex: 'managementFee', key: 'managementFee', editable: true},
-    {title: '停车费', dataIndex: 'partFee', key: 'partFee', editable: true},
-    {title: '电梯费', dataIndex: 'liftFee', key: 'liftFee', editable: true},
-    {title: '机房装修费', dataIndex: 'machineRoomRenovationFee', key: 'machineRoomRenovationFee', editable: true},
-    {title: '电费', dataIndex: 'electricFee', key: 'electricFee', editable: true},
-    {title: '电费分摊', dataIndex: 'electricShareFee', key: 'electricShareFee', editable: true},
-    {title: '水费', dataIndex: 'waterFee', key: 'waterFee', editable: true},
-    {title: '水费分摊', dataIndex: 'waterShareFee', key: 'waterShareFee', editable: true},
-    {title: '违约金', dataIndex: 'liquidateFee', key: 'liquidateFee', editable: true},
-    {title: '预存费', dataIndex: 'preStoreFee', key: 'preStoreFee', editable: true},
+    {title: '管理费', dataIndex: 'managementFee', key: 'managementFee', editable: true, columnStyle: 'shortInputNumber'},
+    {title: '停车费', dataIndex: 'partFee', key: 'partFee', editable: true, columnStyle: 'shortInputNumber'},
+    {title: '电梯费', dataIndex: 'liftFee', key: 'liftFee', editable: true, columnStyle: 'shortInputNumber'},
+    {title: '机房装修费', dataIndex: 'machineRoomRenovationFee', key: 'machineRoomRenovationFee', editable: true, columnStyle: 'shortInputNumber'},
+    {title: '电费', dataIndex: 'electricFee', key: 'electricFee', editable: true, columnStyle: 'shortInputNumber'},
+    {title: '电费分摊', dataIndex: 'electricShareFee', key: 'electricShareFee', editable: true, columnStyle: 'shortInputNumber'},
+    {title: '水费', dataIndex: 'waterFee', key: 'waterFee', editable: true, columnStyle: 'shortInputNumber'},
+    {title: '水费分摊', dataIndex: 'waterShareFee', key: 'waterShareFee', editable: true, columnStyle: 'shortInputNumber'},
+    {title: '违约金', dataIndex: 'liquidateFee', key: 'liquidateFee', editable: true, columnStyle: 'shortInputNumber'},
+    {title: '预存费', dataIndex: 'preStoreFee', key: 'preStoreFee', editable: true, columnStyle: 'shortInputNumber'},
     {title: '备注', dataIndex: 'comment', key: 'comment', editable: true},
     {title: '总费用', dataIndex: 'totalFee', key: 'totalFee'},
     {title: '记录版本', dataIndex: 'recordVersion', key: 'recordVersion'},
@@ -133,6 +134,7 @@ export const PropertyFeeTable: React.FC = () => {
                                   .then(axiosAppendIdToKey)
                                   .then(axiosGetContent)
                                   .then(e => dispatch(propertyFeeSlice.actions.putDataResponseUpdate(e.data)))
+                                  .catch(e => errorHandler.alertError(e))
                           }} state={state}>
             <div className={styles['search-content']}>
                 <Form form={searchForm} onFinish={onFinishSearch}>

@@ -51,6 +51,8 @@ export enum DetailType {
     PreStoreFee = "PreStoreFee",
     //结算
     SettlementFee = "SettlementFee",
+    //预存抵扣
+    PreStoreDeduction = "PreStoreDeduction",
 }
 
 export enum DetailTypePlus {
@@ -85,7 +87,11 @@ export const detailTypeSelectProps = (): SelectProps['options'] => {
         {
             label: '结算',
             value: DetailType.SettlementFee
-        }
+        },
+        {
+            label: '预存抵扣',
+            value: DetailType.PreStoreDeduction
+        },
     ]
 }
 

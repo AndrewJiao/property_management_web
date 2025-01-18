@@ -24,8 +24,8 @@ const defaultOwnerInfoState: OwnerInfoState = default_pending();
 export const thunkOwnerInfoDataGet = createAsyncThunk(
     "ownerInfo/getPage",
     async (param: PaginateRequest<OwnerInfoSearchDto>, thunkAPI) => {
-        param.searchParam = param.searchParam || {roomNumber: "", ownerName: ""}
-        if (param.searchParam === undefined) {
+        // param.searchParam = param.searchParam || {roomNumber: "", ownerName: ""}
+        if (!param.searchParam) {
             let state = (thunkAPI.getState() as RootState).ownerInfoSlice;
             param.searchParam = state.request?.searchParam;
         }

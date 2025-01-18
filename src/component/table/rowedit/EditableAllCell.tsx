@@ -13,7 +13,7 @@ interface Props {
     //用于给外部修改dataSource,不传参数代表不编辑了
     onEditingMark: (id?) => void,
     editingKey: string
-    columnStyle?: ('input' | 'inputNumber');
+    columnStyle?: ('input' | 'inputNumber' | 'shortInputNumber');
 }
 
 
@@ -78,9 +78,14 @@ export const EditableAllCell: React.FC<PropsWithChildren<Props>> = ({
                 ]}
             >
                 {
-                    columnStyle === 'inputNumber' ?
-                        <InputNumber defaultValue={record[dataIndex]}/> :
-                        <Input defaultValue={record[dataIndex]}/>
+                    columnStyle === 'inputNumber' && <InputNumber defaultValue={record[dataIndex]}/>
+                }
+                {
+                    columnStyle === 'input' && <Input defaultValue={record[dataIndex]}/>
+                }
+                {
+                    columnStyle === 'shortInputNumber' &&
+                    <InputNumber defaultValue={record[dataIndex]} style={{width: 70}}/>
                 }
             </Form.Item>
         } else {

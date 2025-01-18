@@ -67,7 +67,7 @@ export const REQUEST_OWNER_INFO = {
             {
                 params: {
                     ...param,
-                    param: encode(utf8.encode(JSON.stringify(param.searchParam)))
+                    param: param.searchParam ? encode(utf8.encode(JSON.stringify(param.searchParam))) : null
                 },
             })
     },
