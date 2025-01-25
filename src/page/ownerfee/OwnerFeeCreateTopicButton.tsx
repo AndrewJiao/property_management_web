@@ -24,7 +24,7 @@ export const OwnerFeeCreateTopicButton: React.FC<Props> = ({classNameButton}) =>
     let dispatch = useDispatch();
 
     const onFinishForm = async (value: OwnerFeeDetailCreateDto) => {
-        await postCreateOwnerFee({...value, detailType: DetailType.PreStoreFee})
+        await postCreateOwnerFee({...value, detailType: DetailType.AdjustOrder})
         //触发重新查询
         dispatch(ownerFeeSlice.actions.touchUpdate());
         form.resetFields();
@@ -55,7 +55,7 @@ export const OwnerFeeCreateTopicButton: React.FC<Props> = ({classNameButton}) =>
         } catch (e) {
             open(true)
         }
-    }} name={"增加预存"} className={classNameButton}>
+    }} name={"调整单"} className={classNameButton}>
         <SearchContent/>
     </TopicButton>
 }

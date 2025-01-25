@@ -53,6 +53,8 @@ export enum DetailType {
     SettlementFee = "SettlementFee",
     //预存抵扣
     PreStoreDeduction = "PreStoreDeduction",
+    //调整单
+    AdjustOrder = "AdjustOrder",
 }
 
 export enum DetailTypePlus {
@@ -68,6 +70,7 @@ export interface OwnerFeeDetailCreateDto {
     detailType: StreamAddDetailType,
     amount?: number,
     streamId?: string,
+    settleAmount?: number,
 }
 
 export const detailTypeSelectProps = (): SelectProps['options'] => {
@@ -80,17 +83,21 @@ export const detailTypeSelectProps = (): SelectProps['options'] => {
             label: '滞纳',
             value: DetailType.LiquidatedDamages
         },
-        {
-            label: '预存',
-            value: DetailType.PreStoreFee
-        },
+        // {
+        //     label: '预存',
+        //     value: DetailType.PreStoreFee
+        // },
         {
             label: '结算',
             value: DetailType.SettlementFee
         },
+        // {
+        //     label: '预存抵扣',
+        //     value: DetailType.PreStoreDeduction
+        // },
         {
-            label: '预存抵扣',
-            value: DetailType.PreStoreDeduction
+            label: '调整单',
+            value: DetailType.AdjustOrder
         },
     ]
 }

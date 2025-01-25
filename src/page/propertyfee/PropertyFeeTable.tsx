@@ -73,18 +73,14 @@ const columns: TablePageColumn = [
         dataIndex: 'createTime',
         key: 'createTime',
         render: tableTimeRender,
-        sorter: {
-            multiple: 1
-        },
+        sorter: {multiple: 1},
     },
     {
         title: '更新时间',
         dataIndex: 'updateTime',
         key: 'updateTime',
         render: tableTimeRender,
-        sorter: {
-            multiple: 1
-        },
+        sorter: {multiple: 1},
     },
 ];
 

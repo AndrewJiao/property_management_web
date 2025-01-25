@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {Button, Modal} from 'antd';
 
 interface Props {
@@ -7,6 +7,7 @@ interface Props {
     style?: React.CSSProperties,
     children: React.ReactNode
     className?: string,
+    title?: string
 }
 
 export const TopicButton: React.FC<Props> = ({
@@ -14,7 +15,8 @@ export const TopicButton: React.FC<Props> = ({
                                                  onCompleted,
                                                  name,
                                                  style,
-                                                 className
+                                                 className,
+                                                 title,
                                              }) => {
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
@@ -38,7 +40,7 @@ export const TopicButton: React.FC<Props> = ({
             {name}
         </Button>
         <Modal
-            title={'选择初始化的数据版本'}
+            title={title || '选择初始化的数据版本'}
             open={open}
             onOk={handleOk}
             confirmLoading={confirmLoading}
