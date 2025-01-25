@@ -2,6 +2,7 @@ FROM node:23.5.0 as builder
 LABEL authors="Andrew"
 WORKDIR /app
 COPY package*.json ./
+
 RUN npm ci
 
 COPY src src/
