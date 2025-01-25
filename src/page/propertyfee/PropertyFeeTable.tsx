@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import {AutoRow, onFindFetch, PageRowEditTable, SearchInput, TablePageColumn} from "../../component";
-import {Button, DatePicker, Form, FormProps, Input} from "antd";
+import {Button, DatePicker, Form, FormProps, Input, Select, Switch} from "antd";
 import {
     axiosAppendIdToKey,
     axiosGetContent,
@@ -160,6 +160,14 @@ export const PropertyFeeTable: React.FC = () => {
                         <Form.Item<PropertyFeeDetailSearchDto> name="updateDateRange" label={'更新时间'}
                                                                labelCol={{span: 4}} wrapperCol={{span: 4}}>
                             <DatePicker.RangePicker style={{width: 300}}/>
+                        </Form.Item>,
+                        <Form.Item<PropertyFeeDetailSearchDto> name="isSettleDown" label={'结算状态'}
+                                                               labelCol={{span: 4}} wrapperCol={{span: 4}}>
+                            <Select defaultValue={null}>
+                                <Select.Option value={null}>所有</Select.Option>
+                                <Select.Option value={true}>已结算</Select.Option>
+                                <Select.Option value={false}>未结算</Select.Option>
+                            </Select>
                         </Form.Item>
                     ]}/>
                     <div className={styles['button-type']}>

@@ -72,6 +72,7 @@ export interface PropertyFeeDetailSearchDto extends DateRangeType {
     roomNumber?: string;
     roomOwnerName?: string;
     recordVersion?: string;
+    isSettleDown: boolean | null;
 }
 
 export interface PropertyFeeDetailInitDto {
