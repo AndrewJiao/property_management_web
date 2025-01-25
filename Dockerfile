@@ -3,7 +3,7 @@ LABEL authors="Andrew"
 WORKDIR /app
 COPY package*.json ./
 
-RUN npm ci
+RUN npm run build
 
 COPY src src/
 COPY public public/
