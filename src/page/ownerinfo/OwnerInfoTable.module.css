@@ -12,11 +12,24 @@
     /*background-color: navajowhite;*/
     /*min-height: 100px;*/
 }
+
 .button-type {
     display: flex;
     align-items: center;
     justify-content: left;
     padding-left: 20px;
+    /*padding-bottom: 10px;*/
+    /*padding-top: 10px;*/
+}
+
+.check-box-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    padding-left: 20px;
     padding-bottom: 10px;
-    padding-top: 10px;
+}
+
+.check-box {
+
 }

@@ -9,6 +9,7 @@ export class ErrorResult {
         this.source = source;
         this.status = status;
     }
+
     code?: number;
     message?: string;
     source?: string;

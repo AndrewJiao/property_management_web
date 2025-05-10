@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {AutoRow, onFindFetch, PageTable, SearchInput, SubmitDraw, TablePageColumn} from "../../component";
-import {Button, Form, FormProps, Input, Select} from "antd";
+import {Button, Checkbox, CheckboxProps, Form, FormProps, Input, Select, Switch, SwitchProps} from "antd";
 import {
     ownerInfoSlice,
     thunkOwnerInfoDataGet,
@@ -72,7 +72,7 @@ const columns: TablePageColumn = [
         key: 'otherBasic.carNumber',
         editable: true,
         width: '7%',
-        columnStyle:'inputNumber',
+        columnStyle: 'inputNumber',
         render: (text) => text ? `${text} 辆` : ''
     },
     {
@@ -81,7 +81,7 @@ const columns: TablePageColumn = [
         key: 'otherBasic.carNumberElectron',
         editable: true,
         width: '7%',
-        columnStyle:'inputNumber',
+        columnStyle: 'inputNumber',
         render: (text) => text ? `${text} 辆` : ''
     },
     {
@@ -90,7 +90,7 @@ const columns: TablePageColumn = [
         key: 'otherBasic.motorCycleNumber',
         editable: true,
         width: '7%',
-        columnStyle:'inputNumber',
+        columnStyle: 'inputNumber',
         render: (text) => text ? `${text} 辆` : ''
     },
     {
@@ -125,6 +125,7 @@ export const OwnerInfoTable: React.FC = () => {
 
     const onFinishSearch: FormProps<OwnerInfoSearchDto>['onFinish'] = (value) => {
         let searchParam = new PaginateRequest<OwnerInfoSearchDto>();
+        console.log(`onFinishSearch = ${JSON.stringify(value)}`)
         searchParam.searchParam = value
         dispatch(thunkOwnerInfoDataGet(searchParam));
     };
@@ -139,6 +140,10 @@ export const OwnerInfoTable: React.FC = () => {
         REQUEST_OWNER_INFO.findData(value, OwnerInfoSearchType.OwnerName)
             .then(values => callback(values.map(value => ({value: value, text: value}))))
     }
+    //checkbox
+    const switchVehicleChange: SwitchProps['onChange'] = _ => {
+        form.submit();
+    }
 
     return <>
         <SubmitDraw title={"新增住户"} open={open} onClose={closeDraw} onSave={onSaveDraw}/>
@@ -149,9 +154,9 @@ export const OwnerInfoTable: React.FC = () => {
                        REQUEST_OWNER_INFO.putData(record.id, record)
                            .then(e => {
                                let item = e.data.data;
-                               item["otherBasic.carNumber"] = item.otherBasic.carNumber;
-                               item["otherBasic.carNumberElectron"] = item.otherBasic.carNumberElectron;
-                               item["otherBasic.motorCycleNumber"] = item.otherBasic.motorCycleNumber;
+                               item["otherBasic.carNumber"] = item.otherBasic?.carNumber;
+                               item["otherBasic.carNumberElectron"] = item.otherBasic?.carNumberElectron;
+                               item["otherBasic.motorCycleNumber"] = item.otherBasic?.motorCycleNumber;
                                return e;
                            })
                            .then(axiosAppendIdToKey)
@@ -170,7 +175,7 @@ export const OwnerInfoTable: React.FC = () => {
                             <Input placeholder={`请输入`} style={{width: 200}}/>
                         </Form.Item>,
                         <Form.Item<OwnerInfoSearchDto> name={"ownerName"} label={`住户名称`} labelCol={{span: 4}}
-                                                 wrapperCol={{span: 4}}>
+                                                       wrapperCol={{span: 4}}>
                             <SearchInput placeholder={'请输入'} fetch={onFind} style={{width: 200, textAlign: "left"}}/>
                         </Form.Item>,
                         <Form.Item<OwnerInfoSearchDto> name={"roomType"} label={`住户类型`} labelCol={{span: 4}}
@@ -179,6 +184,10 @@ export const OwnerInfoTable: React.FC = () => {
                                 <Select.Option value={"Common"}>住户</Select.Option>
                                 <Select.Option value={"Business"}>商用</Select.Option>
                             </Select>
+                        </Form.Item>,
+                        <Form.Item<OwnerInfoSearchDto> name={"focusVehicle"} label={'关注车辆'} labelCol={{span: 4}}
+                                                       wrapperCol={{span: 12}}>
+                            <Switch onChange={switchVehicleChange} defaultValue={false}></Switch>
                         </Form.Item>,
                     ]}/>
                     <div className={styles['button-type']}>

@@ -27,6 +27,7 @@ export interface OwnerInfoSearchDto {
     roomNumber?: string,
     ownerName?: string
     roomType?: RoomType[]
+    focusVehicle: boolean
 }
 
 export interface OwnerInfoUpdateDto {
