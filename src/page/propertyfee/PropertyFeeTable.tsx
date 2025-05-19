@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import {AutoRow, onFindFetch, PageRowEditTable, SearchInput, TablePageColumn} from "../../component";
-import {Button, DatePicker, Form, FormProps, Input, Select, Switch} from "antd";
+import {Button, DatePicker, Form, FormProps, Input, Select} from "antd";
 import {
     axiosAppendIdToKey,
     axiosGetContent,
@@ -53,14 +53,38 @@ const columns: TablePageColumn = [
     {title: '房号', dataIndex: 'roomNumber', key: 'roomNumber', sorter: {multiple: 2}},
     {title: '房主姓名', dataIndex: 'roomOwnerName', key: 'roomOwnerName'},
     {title: '费用单号', dataIndex: 'relatedOrderNumber', key: 'relateOrderNumber', width: '150px',},
-    {title: '管理费', dataIndex: 'managementFee', key: 'managementFee', editable: true, columnStyle: 'shortInputNumber'},
+    {
+        title: '管理费',
+        dataIndex: 'managementFee',
+        key: 'managementFee',
+        editable: true,
+        columnStyle: 'shortInputNumber'
+    },
     {title: '停车费', dataIndex: 'partFee', key: 'partFee', editable: true, columnStyle: 'shortInputNumber'},
     {title: '电梯费', dataIndex: 'liftFee', key: 'liftFee', editable: true, columnStyle: 'shortInputNumber'},
-    {title: '机房装修费', dataIndex: 'machineRoomRenovationFee', key: 'machineRoomRenovationFee', editable: true, columnStyle: 'shortInputNumber'},
+    {
+        title: '机房装修费',
+        dataIndex: 'machineRoomRenovationFee',
+        key: 'machineRoomRenovationFee',
+        editable: true,
+        columnStyle: 'shortInputNumber'
+    },
     {title: '电费', dataIndex: 'electricFee', key: 'electricFee', editable: true, columnStyle: 'shortInputNumber'},
-    {title: '电费分摊', dataIndex: 'electricShareFee', key: 'electricShareFee', editable: true, columnStyle: 'shortInputNumber'},
+    {
+        title: '电费分摊',
+        dataIndex: 'electricShareFee',
+        key: 'electricShareFee',
+        editable: true,
+        columnStyle: 'shortInputNumber'
+    },
     {title: '水费', dataIndex: 'waterFee', key: 'waterFee', editable: true, columnStyle: 'shortInputNumber'},
-    {title: '水费分摊', dataIndex: 'waterShareFee', key: 'waterShareFee', editable: true, columnStyle: 'shortInputNumber'},
+    {
+        title: '水费分摊',
+        dataIndex: 'waterShareFee',
+        key: 'waterShareFee',
+        editable: true,
+        columnStyle: 'shortInputNumber'
+    },
     {title: '违约金', dataIndex: 'liquidateFee', key: 'liquidateFee', editable: true, columnStyle: 'shortInputNumber'},
     {title: '预存费', dataIndex: 'preStoreFee', key: 'preStoreFee', editable: true, columnStyle: 'shortInputNumber'},
     {title: '备注', dataIndex: 'comment', key: 'comment', editable: true},
@@ -185,6 +209,7 @@ export const PropertyFeeTable: React.FC = () => {
                                                    onSelectCompleted={initDataVersion}/>
                         <InitOwnerFeeButton style={{marginBottom: 24, marginRight: 20}} name={"生成费用"}/>
                         <Button className={styles['button-styles']} style={{marginBottom: 24}} type="primary"
+                                disabled={state.exportLoading} loading={state.exportLoading}
                                 onClick={() => {
                                     dispatch(thunkPropertyFeeDataExport(new PaginateRequest<PropertyFeeDetailSearchDto>()))
                                 }}>

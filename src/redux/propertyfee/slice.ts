@@ -1,5 +1,5 @@
 import {default_pending, default_reject, default_success, HttpBasicState} from "../HttpBasicState";
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AppResult, axiosAppendIdToKey, axiosGetContent, PaginateRequest,} from "../../axios";
 import {PropertyFeeDetailSearchDto, PropertyFeeResultDto, REQUEST_PROPERTY_FEE} from "../../axios/AxiosPropertyFee";
 import {RootState} from "../store";
@@ -9,13 +9,15 @@ import assert from "node:assert";
 export interface PropertyFeeState extends HttpBasicState {
     result: AppResult<PropertyFeeResultDto[]> | null;
     request?: PaginateRequest<PropertyFeeDetailSearchDto> | null;
+    exportLoading: boolean;
 }
 
 const defaultPropertyFeeState: PropertyFeeState = {
     request: null,
     result: null,
     errorMsg: null,
-    isLoading: true
+    isLoading: true,
+    exportLoading: false
 }
 
 
@@ -43,6 +45,9 @@ export const thunkPropertyFeeDataExport = createAsyncThunk(
     "propertyFee/exportData",
     async (param: PaginateRequest<PropertyFeeDetailSearchDto>, thunkAPI) => {
 
+        //start Loading...
+        thunkAPI.dispatch(propertyFeeSlice.actions.changeExportLoadingFlag(true));
+
         //如果请求中没有条件，则用state的条件附加上
         let state = (thunkAPI.getState() as RootState).propertyFeeSlice;
         if (param.searchParam === undefined) {
@@ -54,6 +59,8 @@ export const thunkPropertyFeeDataExport = createAsyncThunk(
         }
         return await REQUEST_PROPERTY_FEE.exportData(param)
             .then((result) => {
+                //end Loading...
+                thunkAPI.dispatch(propertyFeeSlice.actions.changeExportLoadingFlag(false));
                 let headers = result.headers;
                 FileUtil.saveData(result.data, headers);
             });
@@ -93,21 +100,27 @@ export const propertyFeeSlice = createSlice({
                     state.result.data[index] = action.payload;
                 }
             }
+        },
+        changeExportLoadingFlag: (state, action: PayloadAction<boolean>) => {
+            state.exportLoading = action.payload;
         }
     },
     extraReducers: (builder) => {
         builder
             .addCase(thunkPropertyFeeDataGet.fulfilled,
                 (state, action) => {
-                    return {request: action.payload.request, ...default_success(action.payload.result)};
+                    return {
+                        request: action.payload.request, ...default_success(action.payload.result),
+                        exportLoading: false
+                    };
                 })
             .addCase(thunkPropertyFeeDataGet.rejected,
                 (state, action) => {
-                    return {...state, ...default_reject(action.error.message)}
+                    return {...state, ...default_reject(action.error.message), exportLoading: false};
                 })
             .addCase(thunkPropertyFeeDataGet.pending,
                 (state) => {
-                    return {request: state.request, ...default_pending()};
+                    return {request: state.request, ...default_pending(), exportLoading: false};
                 })
             .addCase(thunkPropertyFeeInit.fulfilled,
                 (state, action) => {
