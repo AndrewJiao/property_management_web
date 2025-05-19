@@ -37,6 +37,7 @@ export const REQUEST_PROPERTY_FEE = {
             `/property_fee/export`,
             {
                 responseType: 'blob',
+                timeout: 1000 * 30,//30s
                 params: {
                     ...param,
                     orderType: param.searchOrder && encode(utf8.encode(JSON.stringify(param.searchOrder))),
