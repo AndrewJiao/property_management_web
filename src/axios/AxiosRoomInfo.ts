@@ -20,8 +20,8 @@ export const REQUEST_ROOM_INFO = {
             })
     },
 
-    initData: () => {
-        return appInstance.post<any, AxiosResponse<AppResult<void>>>(`/room_info/init`)
+    initData: (monthVersion:string) => {
+        return appInstance.post<any, AxiosResponse<AppResult<void>>>(`/room_info/init`, {monthVersion: monthVersion})
     },
 
     putData: (id: string, data: RoomInfoDetailUpdateDto) => {

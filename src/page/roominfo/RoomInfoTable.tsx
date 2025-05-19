@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
-import {AutoRow, onFindFetch, PageRowEditTable, SearchInput, SubmitDraw, TablePageColumn} from "../../component";
-import {Button, DatePicker, Form, FormProps, Input, Space, TimePicker} from "antd";
-import {axiosAppendIdToKey, axiosGetContent, OwnerInfoDto, PaginateRequest} from "../../axios";
+import {AutoRow, onFindFetch, PageRowEditTable, SearchInput, TablePageColumn} from "../../component";
+import {Button, DatePicker, Form, FormProps, Input} from "antd";
+import {axiosAppendIdToKey, axiosGetContent, PaginateRequest} from "../../axios";
 import {useDispatch, useSelector} from "../../redux/hook";
 import {
     RoomInfoData,
@@ -17,6 +17,7 @@ import {buildDateSearchParam, defaultCurrentMonthRange} from "../../utils";
 import dayjs from "dayjs";
 import {RoomInfoManuallyAdd} from "./RoomInfoManuallyAdd";
 import errorHandler from "../../redux/middleware/ErrorHandler";
+import {RoomInfoInitTopicModal} from "./RoomInfoInitTopicModule";
 
 
 const columns: TablePageColumn = [
@@ -148,8 +149,8 @@ export const RoomInfoTable: React.FC = () => {
         dispatch(thunkRoomInfoDataGet(new PaginateRequest<RoomInfoDetailSearchDto>(1, 10, buildDateSearchParam(value))));
     };
 
-    const initData = () => {
-        dispatch(thunkRoomInfoInit())
+    const initData = (v: string) => {
+        dispatch(thunkRoomInfoInit(v))
     }
 
     const onFind: onFindFetch = (value, callback) => {
@@ -204,10 +205,12 @@ export const RoomInfoTable: React.FC = () => {
                             </Button>
                         </Form.Item>
                         <Form.Item>
-                            <Button className={styles['button-styles']} type="primary" htmlType={"button"}
-                                    onClick={initData}>
-                                初始化
-                            </Button>
+                            {/*<Button className={styles['button-styles']} type="primary" htmlType={"button"}*/}
+                            {/*        onClick={initData}>*/}
+                            {/*    初始化*/}
+                            {/*</Button>*/}
+                            <RoomInfoInitTopicModal style={{marginBottom: 24, marginRight: 20}} name={'初始化'}
+                                                       onSelectCompleted={initData}/>
                         </Form.Item>
                         <RoomInfoManuallyAdd className={styles['button-styles']}/>
                     </div>

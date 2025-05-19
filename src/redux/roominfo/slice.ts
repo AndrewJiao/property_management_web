@@ -46,8 +46,8 @@ export const thunkRoomInfoDataGet = createAsyncThunk(
 
 export const thunkRoomInfoInit = createAsyncThunk(
     "roomInfo/init",
-    async (_, thunkAPI) => {
-        return await REQUEST_ROOM_INFO.initData()
+    async (version: string, thunkAPI) => {
+        return await REQUEST_ROOM_INFO.initData(version)
             .then((_) =>
                 thunkAPI.dispatch(thunkRoomInfoDataGet(new PaginateRequest<RoomInfoDetailSearchDto>())))
     }
